@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 /**
- * Event handlers for the SimpleClient application.
+ * Event handlers for the se.kth.id2212.ex1.simple.SimpleClient application.
  */
 public class SimpleClientController implements Initializable {
     private ServerConnection server;

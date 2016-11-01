@@ -14,7 +14,7 @@ public class SimpleClient extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "SimpleClient.fxml"));
+                "se.kth.id2212.ex1.simple.SimpleClient.fxml"));
         Parent rootNode = loader.load();
         Scene scene = new Scene(rootNode);
 
