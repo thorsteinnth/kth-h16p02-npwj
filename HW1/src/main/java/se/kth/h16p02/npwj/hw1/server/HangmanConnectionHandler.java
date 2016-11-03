@@ -30,6 +30,19 @@ public class HangmanConnectionHandler extends Thread
             return;
         }
 
+        /*
+        // Sleep test
+        try
+        {
+            System.out.println("Server connection handler sleeping for 20 sec");
+            Thread.sleep(20000);
+        }
+        catch (InterruptedException ie)
+        {
+            System.out.println("Interrupted exception caught");
+        }
+        */
+
         try
         {
             byte[] msg = new byte[4096];
