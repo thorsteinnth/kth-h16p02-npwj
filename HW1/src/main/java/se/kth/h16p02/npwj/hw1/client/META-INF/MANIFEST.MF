@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: main.java.se.kth.h16p02.npwj.hw1.client.HangmanClient
+
