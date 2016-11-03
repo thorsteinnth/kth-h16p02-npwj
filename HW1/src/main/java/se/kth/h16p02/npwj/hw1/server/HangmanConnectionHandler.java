@@ -1,8 +1,6 @@
 package main.java.se.kth.h16p02.npwj.hw1.server;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class HangmanConnectionHandler extends Thread
@@ -16,13 +14,13 @@ public class HangmanConnectionHandler extends Thread
 
     public void run()
     {
-        BufferedInputStream in;
-        BufferedOutputStream out;
+        BufferedReader br;
+        BufferedWriter bw;
 
         try
         {
-            in = new BufferedInputStream(clientSocket.getInputStream());
-            out = new BufferedOutputStream(clientSocket.getOutputStream());
+            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }
         catch (IOException e)
         {
@@ -30,46 +28,19 @@ public class HangmanConnectionHandler extends Thread
             return;
         }
 
-        /*
-        // Sleep test
         try
         {
-            System.out.println("Server connection handler sleeping for 20 sec");
-            Thread.sleep(20000);
-        }
-        catch (InterruptedException ie)
-        {
-            System.out.println("Interrupted exception caught");
-        }
-        */
-
-        try
-        {
-            byte[] msg = new byte[4096];
-            int bytesRead = 0;
-            int n;
-
-            while ((n = in.read(msg, bytesRead, 256)) != -1)
+            String incomingLine;
+            while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
             {
-                bytesRead += n;
-
-                if (bytesRead == 4096)
-                {
-                    break;
-                }
-                if (in.available() == 0)
-                {
-                    break;
-                }
+                System.out.println("Received: " + incomingLine);
+                bw.write(new StringBuilder(incomingLine).reverse().toString());
+                bw.newLine();
             }
 
-            for (int i = bytesRead; i > 0; i--)
-            {
-                out.write(msg[i - 1]);
-            }
-
-            out.flush();
-
+            // Send a second newline to indicate that we are done sending
+            bw.newLine();
+            bw.flush();
         }
         catch (IOException e)
         {
@@ -78,8 +49,8 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            out.close();
-            in.close();
+            br.close();
+            bw.close();
             clientSocket.close();
         }
         catch (IOException e)

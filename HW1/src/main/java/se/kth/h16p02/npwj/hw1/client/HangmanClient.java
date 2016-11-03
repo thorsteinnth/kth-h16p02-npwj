@@ -1,8 +1,6 @@
 package main.java.se.kth.h16p02.npwj.hw1.client;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -27,34 +25,34 @@ public class HangmanClient
             System.exit(1);
         }
 
-        BufferedInputStream in = null;
-        BufferedOutputStream out = null;
+        BufferedReader br;
+        BufferedWriter bw;
 
         try
         {
-            in = new BufferedInputStream(clientSocket.getInputStream());
-            out = new BufferedOutputStream(clientSocket.getOutputStream());
+            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+            bw.write(args[1]);
+            bw.newLine();
+            // Send a second newline to indicate that we are done sending
+            bw.newLine();
+            bw.flush();
+
+            String incomingLine;
+            while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
+            {
+                System.out.println("Received: " + incomingLine);
+            }
+
+            br.close();
+            bw.close();
+            clientSocket.close();
         }
         catch (IOException e)
         {
             System.out.println(e.toString());
             System.exit(1);
         }
-
-        byte[] toServer = args[1].getBytes();
-        out.write(toServer, 0, toServer.length);
-        out.flush();
-
-        byte[] fromServer = new byte[toServer.length];
-        int n = in.read(fromServer, 0, fromServer.length);
-        if (n != fromServer.length)
-        {
-            System.out.println("Some data are lost ...");
-        }
-        System.out.println(new String(fromServer));
-
-        out.close();
-        in.close();
-        clientSocket.close();
     }
 }
