@@ -5,15 +5,15 @@ import java.util.ArrayList;
 public class Game
 {
     private int id;
-    private int playerId;
+    private Player player;
     private String word;
     private int attemptsLeft;
     private ArrayList<Character> guessedCharacters;
 
-    public Game(int id, int playerId, String word)
+    public Game(int id, Player player, String word)
     {
         this.id = id;
-        this.playerId = playerId;
+        this.player = player;
         this.word = word;
         this.attemptsLeft = 10;
         this.guessedCharacters = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Game
     {
         return "Game{" +
                 "id=" + id +
-                ", playerId=" + playerId +
+                ", player=" + player +
                 ", word='" + word + '\'' +
                 ", attemptsLeft=" + attemptsLeft +
                 ", guessedCharacters=" + guessedCharacters +

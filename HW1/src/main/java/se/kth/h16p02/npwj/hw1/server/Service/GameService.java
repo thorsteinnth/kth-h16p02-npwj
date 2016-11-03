@@ -1,6 +1,7 @@
 package main.java.se.kth.h16p02.npwj.hw1.server.Service;
 
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
+import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,9 +42,9 @@ public class GameService
             return foundGames.get(0);
     }
 
-    public Game addGame(int playerId)
+    public Game addGame(Player player)
     {
-        Game newGame = new Game(getNewGameId(), playerId, getRandomWord());
+        Game newGame = new Game(getNewGameId(), player, getRandomWord());
         AppData.games.add(newGame);
         return newGame;
     }
