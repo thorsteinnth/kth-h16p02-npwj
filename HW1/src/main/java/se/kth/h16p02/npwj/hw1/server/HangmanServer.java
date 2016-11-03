@@ -10,20 +10,23 @@ public class HangmanServer
     {
         boolean listening = true;
         ServerSocket serverSocket = null;
+        final int portNumber = 4444;
 
         try
         {
-            serverSocket = new ServerSocket(4444);
+            serverSocket = new ServerSocket(portNumber);
         } catch (IOException e)
         {
-            System.err.println("Could not listen on port: 4444.");
+            System.err.println("Could not listen on port: " + portNumber);
             System.exit(1);
         }
 
         while (listening)
         {
+            System.out.println("Server listening on port: " + portNumber);
             Socket clientSocket = serverSocket.accept();
             (new HangmanConnectionHandler(clientSocket)).start();
+            System.out.println("Client connection accepted");
         }
 
         serverSocket.close();
