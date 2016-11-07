@@ -21,9 +21,14 @@ public class Player
         return score;
     }
 
-    public void setScore(int score)
+    public void incrementScore()
     {
-        this.score = score;
+        this.score++;
+    }
+
+    public void decrementScore()
+    {
+        this.score--;
     }
 
     @Override

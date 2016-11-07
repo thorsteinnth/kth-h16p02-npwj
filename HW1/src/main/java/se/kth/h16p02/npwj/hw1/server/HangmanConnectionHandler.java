@@ -156,18 +156,20 @@ public class HangmanConnectionHandler extends Thread
 
     private ResGameState guess(ReqGuess request) throws InvalidRequestException
     {
-        // TODO Catch exception
-        int gameId = Integer.parseInt(request.getGameId());
-
         try
         {
-            Game foundGame = this.gameService.getGame(gameId);
-            foundGame.addGuess(request.getGuess());
-            return new ResGameState(foundGame);
+            int gameId = Integer.parseInt(request.getGameId());
+            Game updatedGame = this.gameService.addGuessToGame(gameId, request.getGuess());
+            return new ResGameState(updatedGame);
+        }
+        catch (NumberFormatException ex)
+        {
+            System.err.println("HangmanConnectionHandler.guess(): " + ex.toString());
+            throw new InvalidRequestException();
         }
         catch (GameNotFoundException ex)
         {
-            System.err.println("HangmanConnectionHandler.guess() - Game not found: " + gameId);
+            System.err.println("HangmanConnectionHandler.guess() - Game not found: " + request.getGameId());
             throw new InvalidRequestException();
         }
         catch (IllegalStateException ex)

@@ -48,4 +48,23 @@ public class GameService
         AppData.games.add(newGame);
         return newGame;
     }
+
+    public Game addGuessToGame(int gameId, String guess) throws GameNotFoundException, IllegalStateException
+    {
+        Game game = getGame(gameId);
+
+        Game.GameState oldGameState = game.getGameState();
+        game.addGuess(guess);
+        Game.GameState newGameState = game.getGameState();
+
+        if (oldGameState == Game.GameState.InProgress)
+        {
+            if (newGameState == Game.GameState.Won)
+                game.getPlayer().incrementScore();
+            else if (newGameState == Game.GameState.Lost)
+                game.getPlayer().decrementScore();
+        }
+
+        return game;
+    }
 }
