@@ -37,8 +37,8 @@ public class HangmanClient
             br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-            //bw.write(args[1]);
-            bw.write(getRequestJson());
+            /*
+            bw.write(args[1]);
             bw.newLine();
             // Send a second newline to indicate that we are done sending
             bw.newLine();
@@ -49,6 +49,9 @@ public class HangmanClient
             {
                 System.out.println("Received: " + incomingLine);
             }
+            */
+
+            testCreatePlayerAndGuessWord(br, bw);
 
             br.close();
             bw.close();
@@ -61,10 +64,72 @@ public class HangmanClient
         }
     }
 
-    // TODO Just for testing purposes
-    private static String getRequestJson()
+    private static void sendJson(BufferedWriter bw, String json)
     {
-        //return new Gson().toJson(new ReqCreatePlayerAndStartGame());
-        return new Gson().toJson(new ReqGuess("this is the game id", "this is the guess"));
+        try
+        {
+            bw.write(json);
+            bw.newLine();
+            // Send a second newline to indicate that we are done sending
+            bw.newLine();
+            bw.flush();
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.toString());
+            System.exit(1);
+        }
     }
+
+    private static String receiveMessage(BufferedReader br)
+    {
+        try
+        {
+            StringBuilder sb = new StringBuilder();
+
+            String incomingLine;
+            while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
+            {
+                sb.append(incomingLine);
+            }
+
+            return sb.toString();
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.toString());
+            System.exit(1);
+            return "";
+        }
+    }
+
+    //region Tests
+
+    private static void testCreatePlayerAndGuessWord(BufferedReader br, BufferedWriter bw)
+    {
+        // We assume the word is "Gretar"
+        // We assume the player ID will be 0
+        // We assume the game ID will be 0
+
+        Gson gson = new Gson();
+        String response;
+
+        sendJson(bw, gson.toJson(new ReqCreatePlayerAndStartGame()));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "e")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "a")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "Gretar")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+    }
+
+    //endregion
 }

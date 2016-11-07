@@ -2,7 +2,14 @@ package main.java.se.kth.h16p02.npwj.hw1.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
+import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Player;
+import main.java.se.kth.h16p02.npwj.hw1.server.Service.GameNotFoundException;
+import main.java.se.kth.h16p02.npwj.hw1.server.Service.GameService;
+import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerService;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.*;
+import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResGameState;
+import main.java.se.kth.h16p02.npwj.hw1.shared.responses.Response;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,10 +17,14 @@ import java.net.Socket;
 public class HangmanConnectionHandler extends Thread
 {
     private Socket clientSocket;
+    private PlayerService playerService;
+    private GameService gameService;
 
     public HangmanConnectionHandler(Socket clientSocket)
     {
         this.clientSocket = clientSocket;
+        this.playerService = new PlayerService();
+        this.gameService = new GameService();
     }
 
     public void run()
@@ -34,18 +45,22 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            String incomingLine;
-            while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
+            // TODO Need more elegant way to keep connection open
+            while (true)
             {
-                System.out.println("Received: " + incomingLine);
-                String response = handleRequest(incomingLine);
-                bw.write(response);
-                bw.newLine();
-            }
+                String incomingLine;
+                while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
+                {
+                    System.out.println("Received: " + incomingLine);
+                    String response = handleRequest(incomingLine);
+                    bw.write(response);
+                    bw.newLine();
+                }
 
-            // Send a second newline to indicate that we are done sending
-            bw.newLine();
-            bw.flush();
+                // Send a second newline to indicate that we are done sending
+                bw.newLine();
+                bw.flush();
+            }
         }
         catch (IOException e)
         {
@@ -66,21 +81,20 @@ public class HangmanConnectionHandler extends Thread
 
     private String handleRequest(String incomingRequest)
     {
-        // TODO Should return response object
-
         try
         {
             Request request = deserializeRequest(incomingRequest);
 
             if (request instanceof ReqCreatePlayerAndStartGame)
             {
-                return createPlayerAndStartGame();
+                ResGameState response = createPlayerAndStartGame();
+                return getResponseJson(response);
             }
             else if (request instanceof ReqGuess)
             {
                 ReqGuess req = (ReqGuess) request;
-                System.out.println(req.toString());
-                return req.toString();
+                ResGameState response = guess(req);
+                return getResponseJson(response);
             }
             else
             {
@@ -93,6 +107,8 @@ public class HangmanConnectionHandler extends Thread
             return "Invalid request";
         }
     }
+
+    //region Request deserialization
 
     private RequestType getRequestTypeFromJson(String requestJson)
     {
@@ -112,11 +128,8 @@ public class HangmanConnectionHandler extends Thread
 
     private Request deserializeRequest(String requestJson) throws InvalidRequestException
     {
-        // Get the request type
         RequestType requestType = getRequestTypeFromJson(requestJson);
-        System.out.println("PARSED REQUEST TYPE: " + requestType);
 
-        // Deserialize to appropriate request object
         switch (requestType)
         {
             case CreatePlayerAndStartGame:
@@ -130,9 +143,44 @@ public class HangmanConnectionHandler extends Thread
         }
     }
 
-    private String createPlayerAndStartGame()
+    //endregion
+
+    //region Request handling
+
+    private ResGameState createPlayerAndStartGame()
     {
-        // TODO Return a response object
-        return "This should be a create player and start game response :)";
+        Player newPlayer = this.playerService.addPlayer();
+        Game newGame = this.gameService.addGame(newPlayer);
+        return new ResGameState(newGame);
     }
+
+    private ResGameState guess(ReqGuess request) throws InvalidRequestException
+    {
+        // TODO Catch exception
+        int gameId = Integer.parseInt(request.getGameId());
+
+        try
+        {
+            Game foundGame = this.gameService.getGame(gameId);
+            foundGame.addGuess(request.getGuess());
+            return new ResGameState(foundGame);
+        }
+        catch (GameNotFoundException ex)
+        {
+            System.err.println("HangmanConnectionHandler.guess() - Game not found: " + gameId);
+            throw new InvalidRequestException();
+        }
+        catch (IllegalStateException ex)
+        {
+            System.err.println("HangmanConnectionHandler.guess(): " + ex.toString());
+            throw new InvalidRequestException();
+        }
+    }
+
+    private String getResponseJson(Response response)
+    {
+        return new Gson().toJson(response);
+    }
+
+    //endregion
 }

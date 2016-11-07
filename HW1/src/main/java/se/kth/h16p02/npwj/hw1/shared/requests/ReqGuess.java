@@ -9,8 +9,18 @@ public class ReqGuess extends Request
         this.guess = guess;
     }
 
-    public String guess;
-    public String gameId;
+    private String guess;
+    private String gameId;
+
+    public String getGuess()
+    {
+        return guess;
+    }
+
+    public String getGameId()
+    {
+        return gameId;
+    }
 
     @Override
     public String toString()

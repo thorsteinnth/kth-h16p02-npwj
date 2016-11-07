@@ -26,7 +26,7 @@ public class GameService
         return "Gretar";
     }
 
-    public Game getGame(int gameId)
+    public Game getGame(int gameId) throws GameNotFoundException, IllegalStateException
     {
         List<Game> foundGames =
                 AppData.games
@@ -35,7 +35,7 @@ public class GameService
                         .collect(Collectors.toList());
 
         if (foundGames.size() == 0)
-            return null;
+            throw new GameNotFoundException();
         else if (foundGames.size() > 1)
             throw new IllegalStateException("More than one game found with ID: " + gameId);
         else
