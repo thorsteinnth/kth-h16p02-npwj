@@ -25,7 +25,8 @@ public class Game
     {
         InProgress,
         Won,
-        Lost
+        Lost,
+        Cancelled
     }
 
     public int getId()
@@ -81,8 +82,6 @@ public class Game
         // Can't change game status once the game is lost or won
         // Can only change from InProgress
 
-        // TODO Update player score
-
         if (this.gameState == GameState.InProgress)
         {
             if (wordHasBeenGuessed())
@@ -135,6 +134,14 @@ public class Game
         }
 
         updateGameState();
+    }
+
+    public void cancelGame()
+    {
+        // Only allow cancelling games that are in progress (i.e. not finished)
+
+        if (this.gameState == GameState.InProgress)
+            this.gameState = GameState.Cancelled;
     }
 
     @Override

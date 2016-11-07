@@ -2,6 +2,7 @@ package main.java.se.kth.h16p02.npwj.hw1.client;
 
 import com.google.gson.Gson;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqCreatePlayerAndStartGame;
+import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqEndGame;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqGuess;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqStartGame;
 
@@ -54,6 +55,7 @@ public class HangmanClient
 
             testCreatePlayerAndStartGameAndGuessWord(br, bw);
             //testStartGameAndGuessWord(br, bw);
+            //testCreatePlayerAndStartGameAndGuessWordAndEndGame(br, bw);
 
             br.close();
             bw.close();
@@ -159,6 +161,31 @@ public class HangmanClient
         System.out.println("Received: " + response);
     }
 
+    private static void testCreatePlayerAndStartGameAndGuessWordAndEndGame(BufferedReader br, BufferedWriter bw)
+    {
+        // We assume the word is "Gretar"
+        // We assume the player ID will be 0
+        // We assume the game ID will be 0
+
+        Gson gson = new Gson();
+        String response;
+
+        sendJson(bw, gson.toJson(new ReqCreatePlayerAndStartGame()));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "e")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "a")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqEndGame("0")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+    }
 
     //endregion
 }

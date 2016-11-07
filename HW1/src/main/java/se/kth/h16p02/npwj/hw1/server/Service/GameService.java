@@ -49,6 +49,13 @@ public class GameService
         return newGame;
     }
 
+    public Game endGame(int gameId) throws GameNotFoundException, IllegalStateException
+    {
+        Game game = getGame(gameId);
+        game.cancelGame();
+        return game;
+    }
+
     public Game addGuessToGame(int gameId, String guess) throws GameNotFoundException, IllegalStateException
     {
         Game game = getGame(gameId);

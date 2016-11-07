@@ -5,7 +5,6 @@ public enum RequestType
     CreatePlayerAndStartGame,
     Guess,
     StartGame,
-    RestartGame,
     EndGame,
     Unknown
 }

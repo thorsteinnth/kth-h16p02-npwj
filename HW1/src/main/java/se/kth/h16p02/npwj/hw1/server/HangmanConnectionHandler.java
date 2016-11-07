@@ -100,6 +100,12 @@ public class HangmanConnectionHandler extends Thread
                 ResGameState response = startGame(req);
                 return getResponseJson(response);
             }
+            else if (request instanceof ReqEndGame)
+            {
+                ReqEndGame req = (ReqEndGame) request;
+                ResGameState response = endGame(req);
+                return getResponseJson(response);
+            }
             else if (request instanceof ReqGuess)
             {
                 ReqGuess req = (ReqGuess) request;
@@ -147,6 +153,8 @@ public class HangmanConnectionHandler extends Thread
                 return new Gson().fromJson(requestJson, ReqCreatePlayerAndStartGame.class);
             case StartGame:
                 return new Gson().fromJson(requestJson, ReqStartGame.class);
+            case EndGame:
+                return new Gson().fromJson(requestJson, ReqEndGame.class);
             case Guess:
                 return new Gson().fromJson(requestJson, ReqGuess.class);
             case Unknown:
@@ -184,6 +192,26 @@ public class HangmanConnectionHandler extends Thread
         catch (IllegalStateException|NumberFormatException ex)
         {
             System.err.println("HangmanConnectionHandler.startGame(): " + ex.toString());
+            throw new InvalidRequestException();
+        }
+    }
+
+    private ResGameState endGame(ReqEndGame request) throws InvalidRequestException
+    {
+        try
+        {
+            int gameId = Integer.parseInt(request.getGameId());
+            Game updatedGame = this.gameService.endGame(gameId);
+            return new ResGameState(updatedGame);
+        }
+        catch (GameNotFoundException ex)
+        {
+            System.err.println("HangmanConnectionHandler.endGame() - Game not found: " + request.getGameId());
+            throw new InvalidRequestException();
+        }
+        catch (IllegalStateException|NumberFormatException ex)
+        {
+            System.err.println("HangmanConnectionHandler.endGame(): " + ex.toString());
             throw new InvalidRequestException();
         }
     }
