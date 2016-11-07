@@ -45,7 +45,7 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            // TODO Need more elegant way to keep connection open
+            // TODO Need more elegant way to keep connection open or break out of loop when connection closes
             while (true)
             {
                 String incomingLine;
@@ -162,17 +162,12 @@ public class HangmanConnectionHandler extends Thread
             Game updatedGame = this.gameService.addGuessToGame(gameId, request.getGuess());
             return new ResGameState(updatedGame);
         }
-        catch (NumberFormatException ex)
-        {
-            System.err.println("HangmanConnectionHandler.guess(): " + ex.toString());
-            throw new InvalidRequestException();
-        }
         catch (GameNotFoundException ex)
         {
             System.err.println("HangmanConnectionHandler.guess() - Game not found: " + request.getGameId());
             throw new InvalidRequestException();
         }
-        catch (IllegalStateException ex)
+        catch (IllegalStateException|NumberFormatException ex)
         {
             System.err.println("HangmanConnectionHandler.guess(): " + ex.toString());
             throw new InvalidRequestException();
