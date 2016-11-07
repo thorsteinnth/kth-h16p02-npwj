@@ -6,6 +6,7 @@ import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Player;
 import main.java.se.kth.h16p02.npwj.hw1.server.Service.GameNotFoundException;
 import main.java.se.kth.h16p02.npwj.hw1.server.Service.GameService;
+import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerNotFoundException;
 import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerService;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.*;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResGameState;
@@ -31,6 +32,9 @@ public class HangmanConnectionHandler extends Thread
     {
         BufferedReader br;
         BufferedWriter bw;
+
+        // Create player for testing purposes
+        //this.playerService.addPlayer();
 
         try
         {
@@ -90,6 +94,12 @@ public class HangmanConnectionHandler extends Thread
                 ResGameState response = createPlayerAndStartGame();
                 return getResponseJson(response);
             }
+            else if (request instanceof ReqStartGame)
+            {
+                ReqStartGame req = (ReqStartGame) request;
+                ResGameState response = startGame(req);
+                return getResponseJson(response);
+            }
             else if (request instanceof ReqGuess)
             {
                 ReqGuess req = (ReqGuess) request;
@@ -103,6 +113,7 @@ public class HangmanConnectionHandler extends Thread
         }
         catch (InvalidRequestException ex)
         {
+            // TODO Return a properly formatted error message for the client
             System.err.println("Invalid request: " + incomingRequest);
             return "Invalid request";
         }
@@ -134,6 +145,8 @@ public class HangmanConnectionHandler extends Thread
         {
             case CreatePlayerAndStartGame:
                 return new Gson().fromJson(requestJson, ReqCreatePlayerAndStartGame.class);
+            case StartGame:
+                return new Gson().fromJson(requestJson, ReqStartGame.class);
             case Guess:
                 return new Gson().fromJson(requestJson, ReqGuess.class);
             case Unknown:
@@ -152,6 +165,27 @@ public class HangmanConnectionHandler extends Thread
         Player newPlayer = this.playerService.addPlayer();
         Game newGame = this.gameService.addGame(newPlayer);
         return new ResGameState(newGame);
+    }
+
+    private ResGameState startGame(ReqStartGame request) throws InvalidRequestException
+    {
+        try
+        {
+            int playerId = Integer.parseInt(request.getPlayerId());
+            Player foundPlayer = this.playerService.getPlayer(playerId);
+            Game newGame = this.gameService.addGame(foundPlayer);
+            return new ResGameState(newGame);
+        }
+        catch (PlayerNotFoundException ex)
+        {
+            System.err.println("HangmanConnectionHandler.startGame() - Player not found: " + request.getPlayerId());
+            throw new InvalidRequestException();
+        }
+        catch (IllegalStateException|NumberFormatException ex)
+        {
+            System.err.println("HangmanConnectionHandler.startGame(): " + ex.toString());
+            throw new InvalidRequestException();
+        }
     }
 
     private ResGameState guess(ReqGuess request) throws InvalidRequestException

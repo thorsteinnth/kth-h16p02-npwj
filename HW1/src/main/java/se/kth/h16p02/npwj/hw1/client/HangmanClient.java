@@ -3,6 +3,7 @@ package main.java.se.kth.h16p02.npwj.hw1.client;
 import com.google.gson.Gson;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqCreatePlayerAndStartGame;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqGuess;
+import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqStartGame;
 
 import java.io.*;
 import java.net.Socket;
@@ -51,7 +52,8 @@ public class HangmanClient
             }
             */
 
-            testCreatePlayerAndGuessWord(br, bw);
+            testCreatePlayerAndStartGameAndGuessWord(br, bw);
+            //testStartGameAndGuessWord(br, bw);
 
             br.close();
             bw.close();
@@ -105,7 +107,7 @@ public class HangmanClient
 
     //region Tests
 
-    private static void testCreatePlayerAndGuessWord(BufferedReader br, BufferedWriter bw)
+    private static void testCreatePlayerAndStartGameAndGuessWord(BufferedReader br, BufferedWriter bw)
     {
         // We assume the word is "Gretar"
         // We assume the player ID will be 0
@@ -130,6 +132,33 @@ public class HangmanClient
         response = receiveMessage(br);
         System.out.println("Received: " + response);
     }
+
+    private static void testStartGameAndGuessWord(BufferedReader br, BufferedWriter bw)
+    {
+        // We assume the word is "Gretar"
+        // We assume that there exists a player with ID 0
+        // We assume the game ID will be 0
+
+        Gson gson = new Gson();
+        String response;
+
+        sendJson(bw, gson.toJson(new ReqStartGame("0")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "e")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "a")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        sendJson(bw, gson.toJson(new ReqGuess("0", "Gretar")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+    }
+
 
     //endregion
 }
