@@ -3,7 +3,9 @@ package main.java.se.kth.h16p02.npwj.hw1.server.Service;
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Player;
 
+import java.io.*;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class GameService
@@ -23,7 +25,40 @@ public class GameService
 
     private String getRandomWord()
     {
-        return "Gretar";
+        // Adapted from: http://stackoverflow.com/a/2218067
+        // When we read the first line it has a 100% chance of being chosen as the result.
+        // When we read the 2nd line it has a 50% chance of replacing the first line as the result.
+        // When we read the 3rd line it has a 33% chance of becoming the result.
+        // The fourth line has a 25% chance of becoming the result
+        // etc.
+
+        try
+        {
+            File file = new File(getClass().getResource("words.txt").getFile());
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String chosenLine = null;
+            String readLine;
+            int n = 0;
+            while ((readLine = br.readLine()) != null)
+            {
+                n++;
+
+                // nextInt(bound) returns a pseudorandom int value between zero (inclusive)
+                // and the specified bound (exclusive).
+                // We use a random number generator isolated to the current thread.
+                if (ThreadLocalRandom.current().nextInt(n) == 0)
+                    chosenLine = readLine;
+            }
+            System.out.println("Random word: " + chosenLine);
+
+            return chosenLine;
+        }
+        catch (IOException ex)
+        {
+            System.err.println("GameService.getRandomWord() - error: " + ex.toString());
+            return "Placeholder";
+        }
     }
 
     public Game getGame(int gameId) throws GameNotFoundException, IllegalStateException
