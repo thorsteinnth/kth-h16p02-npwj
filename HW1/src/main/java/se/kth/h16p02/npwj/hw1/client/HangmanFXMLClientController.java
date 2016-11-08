@@ -15,12 +15,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 /**
  * Created by GretarAtli on 03/11/2016.
  */
 public class HangmanFXMLClientController implements Initializable{
+
+    private HangmanServerConnection server;
 
     private static final String PRESS_START_TO_BEGINN = "Please press start to begin the fantastic game of hangman";
     private static final String STARTING_GAME = "Wait!!! We are starting a new game ....";
@@ -35,7 +38,10 @@ public class HangmanFXMLClientController implements Initializable{
     private  Button guessButton;
 
     @FXML
-    private  TextField charTextField;
+    private  TextField guessTextField;
+
+    @FXML
+    private Text infoText;
 
     @FXML
     private  Text nrOfAttemptsLeftText;
@@ -47,59 +53,75 @@ public class HangmanFXMLClientController implements Initializable{
     private Text gameBoardText;
 
     @FXML
-    private TextArea gameTextArea;
+    private TextArea gameBoardTextArea;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         guessButton.setDisable(true);
-        charTextField.setDisable(true);
+        guessTextField.setDisable(true);
+        infoText.setText("");
         nrOfAttemptsLeftText.setText("");
         gameBoardText.setText("");
         charText.setText(PRESS_START_TO_BEGINN);
-        gameTextArea.setDisable(true);
+        gameBoardTextArea.setDisable(true);
     }
 
     @FXML
     private void onStartButtonPress(ActionEvent ae){
         startButton.setDisable(true);
         charText.setText(STARTING_GAME);
-        new HangmanConcurrentService(
-                charTextField,
-                nrOfAttemptsLeftText,
-                charText,
-                gameBoardText,
-                gameTextArea,
-                guessButton).start();
+        new ConnectService().start();
     }
 
     @FXML
     private void onGuessButtonPressed(ActionEvent ae){
         guessButton.setDisable(true);
+        new GuessService().start();
+    }
+
+
+
+    private class ConnectService extends Service<HangmanServerConnection> {
+        private ConnectService() {
+            setOnSucceeded((WorkerStateEvent event) -> {
+                server = getValue();
+                System.out.println("Connection to the server has been established");
+                gameBoardTextArea.setDisable(false);
+                charText.setText(ENTER_CHAR_OR_WORD);
+                guessTextField.setDisable(false);
+                guessButton.setDisable(false);
+                gameBoardText.setText(GAME_BOARD);
+                nrOfAttemptsLeftText.setText(NUMBER_OF_ATTEMPTS_LEFT + 8);
+            });
+        }
+
+        @Override
+        protected Task<HangmanServerConnection> createTask() {
+            return new Task<HangmanServerConnection>() {
+                @Override
+                protected HangmanServerConnection call() throws Exception{
+                    Thread.sleep(5000);
+                    return new HangmanServerConnection("localhost",
+                            Integer.parseInt("4444"));
+                }
+            };
+        }
     }
 
     // Use the concurrent service of javaFX
+    private class GuessService extends Service<String>{
 
-    private static class HangmanConcurrentService extends Service<String>{
+        private GuessService() {
+            setOnSucceeded((WorkerStateEvent event) -> {
+                gameBoardTextArea.setText(getValue());
+                guessButton.setDisable(false);
+                System.out.println(getValue());
 
-        private HangmanConcurrentService(TextField charTextField,
-                                         Text nrOfAttemptsLeftText,
-                                         Text charText,
-                                         Text gameBoardText,
-                                         TextArea gameTextArea,
-                                         Button guessButton) {
-            setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent e){
-                    //DO some work after the service call
-                    gameTextArea.setText("Here we need to add some gameboard");
-                    charTextField.setDisable(false);
-                    guessButton.setDisable(false);
-                    charText.setText((String) e.getSource().getValue());
-                    gameBoardText.setText(GAME_BOARD);
-                    nrOfAttemptsLeftText.setText(NUMBER_OF_ATTEMPTS_LEFT + 8);
+            });
 
-                }
+            setOnFailed((WorkerStateEvent event) -> {
+                System.out.println(getException().getMessage());
             });
         }
 
@@ -108,14 +130,10 @@ public class HangmanFXMLClientController implements Initializable{
             return new Task<String>() {
                 @Override
                 protected String call() throws Exception {
-                    Thread.sleep(5000);
-                    // This is the place to do some network call
-                    return ENTER_CHAR_OR_WORD;
+                    System.out.println("calling the server with string = " + guessTextField.getText());
+                    return server.callServer(guessTextField.getText());
                 }
             };
         }
     }
-
-
-
 }
