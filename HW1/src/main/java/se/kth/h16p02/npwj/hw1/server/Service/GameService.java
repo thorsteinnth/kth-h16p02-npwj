@@ -26,7 +26,7 @@ public class GameService
         return "Gretar";
     }
 
-    public Game getGame(int gameId)
+    public Game getGame(int gameId) throws GameNotFoundException, IllegalStateException
     {
         List<Game> foundGames =
                 AppData.games
@@ -35,7 +35,7 @@ public class GameService
                         .collect(Collectors.toList());
 
         if (foundGames.size() == 0)
-            return null;
+            throw new GameNotFoundException();
         else if (foundGames.size() > 1)
             throw new IllegalStateException("More than one game found with ID: " + gameId);
         else
@@ -47,5 +47,31 @@ public class GameService
         Game newGame = new Game(getNewGameId(), player, getRandomWord());
         AppData.games.add(newGame);
         return newGame;
+    }
+
+    public Game endGame(int gameId) throws GameNotFoundException, IllegalStateException
+    {
+        Game game = getGame(gameId);
+        game.cancelGame();
+        return game;
+    }
+
+    public Game addGuessToGame(int gameId, String guess) throws GameNotFoundException, IllegalStateException
+    {
+        Game game = getGame(gameId);
+
+        Game.GameState oldGameState = game.getGameState();
+        game.addGuess(guess);
+        Game.GameState newGameState = game.getGameState();
+
+        if (oldGameState == Game.GameState.InProgress)
+        {
+            if (newGameState == Game.GameState.Won)
+                game.getPlayer().incrementScore();
+            else if (newGameState == Game.GameState.Lost)
+                game.getPlayer().decrementScore();
+        }
+
+        return game;
     }
 }
