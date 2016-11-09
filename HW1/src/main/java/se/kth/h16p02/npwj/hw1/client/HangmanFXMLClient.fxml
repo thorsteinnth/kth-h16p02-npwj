@@ -22,6 +22,9 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Text fill="#351a8d" strokeType="OUTSIDE" strokeWidth="0.0" text="The game of Hangman" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
@@ -76,6 +79,20 @@
             <Font size="20.0" />
          </font>
       </Text>
+      <Text fx:id="guessedCharactersDef" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="102.21875" GridPane.rowIndex="8">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="guessedCharacters" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+      <Button fx:id="showCaseButton" mnemonicParsing="false" text="Button" textFill="#a63c1f" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="10">
+         <padding>
+            <Insets bottom="5.0" left="200.0" right="200.0" top="5.0" />
+         </padding>
+      </Button>
    </children>
    <padding>
       <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />

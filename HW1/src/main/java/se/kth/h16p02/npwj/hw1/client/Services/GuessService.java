@@ -41,6 +41,7 @@ public class GuessService extends Service<ResGameState>{
         return new Task<ResGameState>() {
             @Override
             protected ResGameState call() throws Exception {
+                Thread.sleep(2000);
                 System.out.println("Guessing");
                 Gson gson = new Gson();
                 String request = gson.toJson(new ReqGuess(gameId, guess));

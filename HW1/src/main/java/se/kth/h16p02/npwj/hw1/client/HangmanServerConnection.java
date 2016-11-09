@@ -64,5 +64,4 @@ public class HangmanServerConnection {
             return "";
         }
     }
-
 }

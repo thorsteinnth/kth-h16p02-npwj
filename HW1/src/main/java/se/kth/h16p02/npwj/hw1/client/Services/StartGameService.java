@@ -38,6 +38,7 @@ public class StartGameService extends Service<ResGameState>{
         return new Task<ResGameState>() {
             @Override
             protected ResGameState call() throws Exception {
+                Thread.sleep(2000);
                 System.out.println("Starting game");
                 Gson gson = new Gson();
                 String request = gson.toJson(new ReqStartGame(playerId));

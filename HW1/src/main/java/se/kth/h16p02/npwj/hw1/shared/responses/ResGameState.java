@@ -2,6 +2,8 @@ package main.java.se.kth.h16p02.npwj.hw1.shared.responses;
 
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
 
+import java.util.ArrayList;
+
 public class ResGameState extends Response
 {
     public ResGameState(Game game)
@@ -14,6 +16,7 @@ public class ResGameState extends Response
         this.numberOfGuessesLeft = game.getAttemptsLeft();
         this.gameState = game.getGameState();
         this.gameStateString = game.getDisplayString();
+        this.guessedCharacters = game.getGuessedCharacters();
     }
 
     private String playerId;
@@ -22,6 +25,7 @@ public class ResGameState extends Response
     private int numberOfGuessesLeft;
     private String gameStateString;
     private Game.GameState gameState;
+    private ArrayList<Character> guessedCharacters;
 
     public String getPlayerId()
     {
@@ -53,6 +57,11 @@ public class ResGameState extends Response
         return gameState;
     }
 
+    public ArrayList<Character> getGuessedCharacters()
+    {
+        return guessedCharacters;
+    }
+
     @Override
     public String toString()
     {
@@ -62,7 +71,8 @@ public class ResGameState extends Response
                 ", gameId='" + gameId + '\'' +
                 ", numberOfGuessesLeft=" + numberOfGuessesLeft +
                 ", gameStateString='" + gameStateString + '\'' +
-                ", gameState=" + gameState +
+                ", gameState=" + gameState + '\'' +
+                ", guessedCharacters=" + guessedCharacters  +
                 '}';
     }
 }

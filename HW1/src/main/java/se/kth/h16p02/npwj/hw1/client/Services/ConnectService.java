@@ -30,7 +30,7 @@ public class ConnectService extends Service<HangmanServerConnection> {
         return new Task<HangmanServerConnection>() {
             @Override
             protected HangmanServerConnection call() throws Exception {
-                //Thread.sleep(5000);
+                Thread.sleep(3000);
                 System.out.println("Running and trying to start a connection");
 
                 return new HangmanServerConnection(serverIP,

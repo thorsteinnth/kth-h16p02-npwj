@@ -39,6 +39,7 @@ public class CreateNewPlayerAndStartGameService extends Service<ResGameState>{
         return new Task<ResGameState>() {
             @Override
             protected ResGameState call() throws Exception {
+                Thread.sleep(2000);
                 Gson gson = new Gson();
                 String request = gson.toJson(new ReqCreatePlayerAndStartGame());
                 String respond = server.callServer(request);

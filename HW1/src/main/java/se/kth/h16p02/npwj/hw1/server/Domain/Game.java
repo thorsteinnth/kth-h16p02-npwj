@@ -49,6 +49,11 @@ public class Game
         return gameState;
     }
 
+    public ArrayList<Character> getGuessedCharacters()
+    {
+        return guessedCharacters;
+    }
+
     public String getDisplayString()
     {
         // Return a string of the form "_ _ X _ _ X _"

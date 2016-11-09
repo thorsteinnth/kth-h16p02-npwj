@@ -23,6 +23,7 @@ public class HangmanFXMLClientController implements Initializable{
     private ResGameState resGameState;
 
     private static final String PRESS_START_TO_BEGINN = "Please press start to begin the fantastic game of hangman";
+    private static final String PRESS_CONNECT_TO_CONTINUE = "Please press connect to continue";
     private static final String STARTING_GAME = "Starting a new game ....";
     private static final String ENDING_GAME = "Ending the game ....";
     private static final String POSTING_GUESS = "Posting the guess ....";
@@ -39,6 +40,8 @@ public class HangmanFXMLClientController implements Initializable{
     private static final String GAME_BOARD = "THE HANGMAN GAME BOARD";
     private static final String PLAYER_WON = "You won";
     private static final String PLAYER_LOST = "You lost";
+    private static final String GUESSED_CHARACTERS_DEF = "Guesses: ";
+    private static final String SHOWCASE_BUTTON = "Showcase button";
 
     @FXML
     private  Button startEndButton;
@@ -65,7 +68,16 @@ public class HangmanFXMLClientController implements Initializable{
     private Text gameBoardText;
 
     @FXML
-    private  Text nrOfAttemptsLeftText;
+    private Text nrOfAttemptsLeftText;
+
+    @FXML
+    private Text guessedCharactersDef;
+
+    @FXML
+    private Text guessedCharacters;
+
+    @FXML
+    private Button showCaseButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,6 +89,10 @@ public class HangmanFXMLClientController implements Initializable{
         nrOfAttemptsLeftText.setText("");
         gameBoardDesText.setText("");
         gameBoardText.setText("");
+        guessedCharactersDef.setText(GUESSED_CHARACTERS_DEF);
+        guessedCharacters.setText("");
+        showCaseButton.setText(SHOWCASE_BUTTON);
+
     }
 
     @FXML
@@ -149,18 +165,31 @@ public class HangmanFXMLClientController implements Initializable{
 
             ConnectServiceInterface onSucceeded = (HangmanServerConnection server) -> {
                 this.server = server;
-                guessText.setText(PRESS_START_TO_BEGINN);
+
+                if(this.resGameState == null){
+                    guessText.setText(PRESS_START_TO_BEGINN);
+                    startEndButton.requestFocus();
+                    startEndButton.setText(START_GAME);
+                    connectionButton.setDisable(false);
+                    startEndButton.setDisable(false);
+                }
+                else {
+                    startEndButton.setText(END_GAME);
+                    guessText.setText(ENTER_CHAR_OR_WORD);
+                    EnableEverything();
+                }
+
                 connectionButton.setText(DISCONNECT);
-                connectionButton.setDisable(false);
-                startEndButton.requestFocus();
-                startEndButton.setText(START_GAME);
-                startEndButton.setDisable(false);
             };
 
             new ConnectService("localhost", "4444", onSucceeded).start();
         }
         else if (connectionButton.getText() == DISCONNECT){
-            //TODO close the connection
+            this.server = null;
+            DisableEverything();
+            connectionButton.setText(CONNECT);
+            connectionButton.setDisable(false);
+            this.guessText.setText(PRESS_CONNECT_TO_CONTINUE);
         }
     }
 
@@ -187,6 +216,7 @@ public class HangmanFXMLClientController implements Initializable{
         this.gameBoardDesText.setText("");
         this.gameBoardText.setText("");
         this.nrOfAttemptsLeftText.setText("");
+        this.guessedCharacters.setText("");
     }
 
     private void setInfoText(boolean withGameId)
@@ -223,7 +253,14 @@ public class HangmanFXMLClientController implements Initializable{
         setInfoText(true);
         this.nrOfAttemptsLeftText.setText(NUMBER_OF_ATTEMPTS_LEFT + resGameState.getNumberOfGuessesLeft());
         this.guessTextField.setText("");
+        this.guessedCharacters.setText(guessedCharactersToString());
     }
+
+    private String guessedCharactersToString()
+    {
+        return resGameState.getGuessedCharacters().toString().replace(""," ").trim();
+    }
+
 
     private void handleGuessRespond ()
     {
