@@ -1,21 +1,18 @@
 package main.java.se.kth.h16p02.npwj.hw1.client;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class HangmanServerConnection {
-    private BufferedInputStream in;
-    private BufferedOutputStream out;
+    private BufferedReader in;
+    private BufferedWriter out;
 
     public HangmanServerConnection (String host, int port) {
         try{
             Socket clientSocket = new Socket(host,port);
-            in = new BufferedInputStream(clientSocket.getInputStream());
-            out = new BufferedOutputStream(clientSocket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }
         catch (UnknownHostException e){
             System.err.println("Don't know about host: " + host + ".");
@@ -33,20 +30,39 @@ public class HangmanServerConnection {
      * Returns the respond from the server
      */
 
-    String callServer(String strToServer) throws IOException {
-        // Send the string to server
-        byte[] msg = strToServer.getBytes();
-        out.write(msg,0,msg.length);
-        out.flush();
-        // Receive respond from server and return it
-        // TODO we need to do something here to handle the different sizes of the incoming msg
-        // TODO This is a problem that I need to fix
+    public String callServer(String jsonToServer) throws IOException {
 
-        byte[] fromServer = new byte[msg.length];
-        int n = in.read(fromServer,0,fromServer.length);
-        if(n != fromServer.length){
-            throw new IOException("Failed to reverse, some data was lost.");
-        }
-        return new String(fromServer);
+        out.write(jsonToServer);
+        out.newLine();
+        // Send a second newline to indicate that we are done sending
+        out.newLine();
+        out.flush();
+
+        String respond = receiveMessage();
+
+        return new String(respond);
     }
+
+    private String receiveMessage()
+    {
+        try
+        {
+            StringBuilder sb = new StringBuilder();
+
+            String incomingLine;
+            while ((incomingLine = in.readLine()) != null && incomingLine.length() > 0)
+            {
+                sb.append(incomingLine);
+            }
+
+            return sb.toString();
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.toString());
+            System.exit(1);
+            return "";
+        }
+    }
+
 }
