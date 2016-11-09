@@ -37,6 +37,8 @@ public class HangmanFXMLClientController implements Initializable{
     private static final String ENTER_CHAR_OR_WORD = "Enter a character or a word";
     private static final String NUMBER_OF_ATTEMPTS_LEFT = "Number of attempts left: ";
     private static final String GAME_BOARD = "THE HANGMAN GAME BOARD";
+    private static final String PLAYER_WON = "You won";
+    private static final String PLAYER_LOST = "You lost";
 
     @FXML
     private  Button startEndButton;
@@ -94,14 +96,14 @@ public class HangmanFXMLClientController implements Initializable{
 
             CommandInterface onSucceed = (resGameState) -> {
                 System.out.println("Ending game complete with resGameState: " + resGameState);
-                InitializeTexts();
+                initializeTexts();
                 this.resGameState = resGameState;
                 this.guessText.setText(PRESS_START_TO_BEGINN);
                 this.startEndButton.setText(START_GAME);
                 this.startEndButton.requestFocus();
                 this.startEndButton.setDisable(false);
                 this.connectionButton.setDisable(false);
-                SetInfoText(false);
+                setInfoText(false);
             };
 
             new EndGameService(this.server, onSucceed, this.resGameState.getGameId()).start();
@@ -178,7 +180,7 @@ public class HangmanFXMLClientController implements Initializable{
         guessButton.setDisable(false);
     }
 
-    private void InitializeTexts ()
+    private void initializeTexts ()
     {
         this.guessText.setText("");
         this.infoText.setText("");
@@ -187,7 +189,7 @@ public class HangmanFXMLClientController implements Initializable{
         this.nrOfAttemptsLeftText.setText("");
     }
 
-    private void SetInfoText(boolean withGameId)
+    private void setInfoText(boolean withGameId)
     {
         if(withGameId){
             this.infoText.setText(
@@ -218,7 +220,7 @@ public class HangmanFXMLClientController implements Initializable{
     private void updatingGameGUI ()
     {
         this.gameBoardText.setText(resGameState.getGameStateString().replace("", " ").trim());
-        SetInfoText(true);
+        setInfoText(true);
         this.nrOfAttemptsLeftText.setText(NUMBER_OF_ATTEMPTS_LEFT + resGameState.getNumberOfGuessesLeft());
         this.guessTextField.setText("");
     }
@@ -227,11 +229,11 @@ public class HangmanFXMLClientController implements Initializable{
     {
         if(this.resGameState.getGameState() == Game.GameState.Won)
         {
-
+            playerWon();
         }
         else if (this.resGameState.getGameState() == Game.GameState.Lost)
         {
-
+            playerLost();
         }
         else if (this.resGameState.getGameState() == Game.GameState.Cancelled)
         {
@@ -244,5 +246,29 @@ public class HangmanFXMLClientController implements Initializable{
             this.guessText.setText(ENTER_CHAR_OR_WORD);
             updatingGameGUI();
         }
+    }
+
+    private void playerWon ()
+    {
+        this.startEndButton.setText(START_GAME);
+        EnableEverything();
+        updatingGameGUI ();
+        this.guessText.setText(PRESS_START_TO_BEGINN);
+        this.guessTextField.setDisable(true);
+        this.guessButton.setDisable(true);
+        this.gameBoardDesText.setText(PLAYER_WON);
+        this.nrOfAttemptsLeftText.setText("");
+    }
+
+    private void playerLost ()
+    {
+        this.startEndButton.setText(START_GAME);
+        EnableEverything();
+        updatingGameGUI ();
+        this.guessText.setText(PRESS_START_TO_BEGINN);
+        this.guessTextField.setDisable(true);
+        this.guessButton.setDisable(true);
+        this.gameBoardDesText.setText(PLAYER_LOST);
+        this.nrOfAttemptsLeftText.setText("");
     }
 }
