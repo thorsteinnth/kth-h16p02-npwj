@@ -59,6 +59,10 @@ public class Game
         // Return a string of the form "_ _ X _ _ X _"
         // Where X is a character that has already been guessed
 
+        // If the game has been lost, return the whole word
+        if (this.gameState == GameState.Lost)
+            return this.word;
+
         char[] displayStringCharacters = this.word.toCharArray();
         for (int i = 0; i < displayStringCharacters.length; i++)
         {

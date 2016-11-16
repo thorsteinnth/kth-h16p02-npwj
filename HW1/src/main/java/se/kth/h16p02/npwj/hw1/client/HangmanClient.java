@@ -10,6 +10,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Test client to test the server.
+ * */
 public class HangmanClient
 {
     public static void main(String[] args) throws IOException

@@ -55,7 +55,11 @@ public class HangmanServerConnection {
                 sb.append(incomingLine);
             }
 
-            return sb.toString();
+            String receivedMessage = sb.toString();
+            System.out.println("Received message:");
+            System.out.println(receivedMessage);
+
+            return receivedMessage;
         }
         catch (IOException ex)
         {
