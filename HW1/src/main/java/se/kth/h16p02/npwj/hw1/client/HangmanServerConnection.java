@@ -1,8 +1,9 @@
 package main.java.se.kth.h16p02.npwj.hw1.client;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
+
 import java.net.UnknownHostException;
 
 public class HangmanServerConnection {
@@ -13,7 +14,10 @@ public class HangmanServerConnection {
 
     public HangmanServerConnection (String host, int port) throws IOException {
         try{
-            clientSocket = new Socket(host,port);
+            clientSocket = new Socket();
+            clientSocket.setSoTimeout(200);
+            clientSocket.connect(new InetSocketAddress(host,port),200);
+
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }

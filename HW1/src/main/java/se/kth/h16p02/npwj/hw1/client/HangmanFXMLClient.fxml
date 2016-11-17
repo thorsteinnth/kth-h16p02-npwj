@@ -7,13 +7,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.se.kth.h16p02.npwj.hw1.client.HangmanFXMLClientController">
+<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.se.kth.h16p02.npwj.hw1.client.HangmanFXMLClientController">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="123.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="246.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="123.0" />
   </columnConstraints>
   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -27,7 +29,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Text fill="#351a8d" strokeType="OUTSIDE" strokeWidth="0.0" text="The game of Hangman" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+      <Text fill="#351a8d" strokeType="OUTSIDE" strokeWidth="0.0" text="The game of Hangman" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
          <font>
             <Font name="Arial Bold" size="21.0" />
          </font>
@@ -35,7 +37,7 @@
             <Insets />
          </GridPane.margin>
       </Text>
-      <Button fx:id="guessButton" mnemonicParsing="false" onAction="#onGuessButtonPressed" text="guess" textFill="#a63c1f" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+      <Button fx:id="guessButton" mnemonicParsing="false" onAction="#onGuessButtonPressed" text="guess" textFill="#a63c1f" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="6">
          <padding>
             <Insets bottom="5.0" left="100.0" right="100.0" top="5.0" />
          </padding>
@@ -43,7 +45,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="startEndButton" mnemonicParsing="false" onAction="#onStartEndButtonPress" text="Start" textAlignment="JUSTIFY" textFill="#a63c1f" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+      <Button fx:id="startEndButton" mnemonicParsing="false" onAction="#onStartEndButtonPress" text="Start" textAlignment="JUSTIFY" textFill="#a63c1f" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -54,32 +56,32 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Text fx:id="nrOfAttemptsLeftText" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of attempts left : " GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-      <TextField fx:id="guessTextField" alignment="CENTER" GridPane.columnSpan="3" GridPane.rowIndex="3">
+      <Text fx:id="nrOfAttemptsLeftText" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of attempts left : " GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+      <TextField fx:id="guessTextField" alignment="CENTER" GridPane.columnSpan="3" GridPane.rowIndex="5">
          <font>
             <Font size="16.0" />
          </font></TextField>
-      <Text fx:id="guessText" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter character or word:" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+      <Text fx:id="guessText" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter character or word:" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Text fx:id="gameBoardDesText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-      <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Player info goes here" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <Text fx:id="gameBoardDesText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+      <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Player info goes here" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font></Text>
-      <Button fx:id="connectionButton" mnemonicParsing="false" onAction="#onConnectionButtonPress" text="Connect" textFill="#119715" GridPane.halignment="CENTER">
+      <Button fx:id="connectionButton" mnemonicParsing="false" onAction="#onConnectionButtonPress" text="Connect" textFill="#119715" GridPane.halignment="CENTER" GridPane.rowIndex="2">
          <padding>
             <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
          </padding>
       </Button>
-      <Text fx:id="gameBoardText" fill="#351a8d" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="6">
+      <Text fx:id="gameBoardText" fill="#351a8d" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="8">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="guessedCharactersDef" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="102.21875" GridPane.rowIndex="8">
+      <Text fx:id="guessedCharactersDef" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="102.21875" GridPane.rowIndex="10">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>
@@ -87,12 +89,16 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="guessedCharacters" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-      <Button fx:id="showCaseButton" mnemonicParsing="false" text="Button" textFill="#a63c1f" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="10">
+      <Text fx:id="guessedCharacters" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+      <Button fx:id="showCaseButton" mnemonicParsing="false" text="Button" textFill="#a63c1f" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="12">
          <padding>
             <Insets bottom="5.0" left="200.0" right="200.0" top="5.0" />
          </padding>
       </Button>
+      <Text fx:id="serverText" strokeType="OUTSIDE" strokeWidth="0.0" text="Server:" GridPane.halignment="CENTER" />
+      <Text fx:id="portText" strokeType="OUTSIDE" strokeWidth="0.0" text="Port:" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+      <TextField fx:id="serverTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+      <TextField fx:id="portTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
    </children>
    <padding>
       <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />

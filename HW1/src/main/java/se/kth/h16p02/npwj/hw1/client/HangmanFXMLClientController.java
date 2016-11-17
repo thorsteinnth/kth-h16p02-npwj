@@ -24,9 +24,19 @@ public class HangmanFXMLClientController implements Initializable{
     private HangmanServerConnection server;
     private ResGameState resGameState;
 
+    private enum IpAndPort
+    {
+        Default,
+        Valid,
+        InValid
+    }
+
+    private static final String SERVER_DEFAULT = "localhost";
+    private static final String PORT_DEFAULT = "4444";
+    private static final String PORT_OR_IP_INVALID = "Invalid format on Server Ip or Port number";
     private static final String PRESS_START_TO_BEGINN = "Please press start to begin the fantastic game of hangman";
     private static final String PRESS_CONNECT_TO_CONTINUE = "Please press connect to continue";
-    private static final String SERVICE_CALL_FAILED = "We lost the connection to the server. Please press connect to continue";
+    private static final String SERVICE_CALL_FAILED = "Server connection failed. Verify Ip and Port and press connect";
     private static final String STARTING_GAME = "Starting a new game ....";
     private static final String ENDING_GAME = "Ending the game ....";
     private static final String POSTING_GUESS = "Posting the guess ....";
@@ -45,6 +55,12 @@ public class HangmanFXMLClientController implements Initializable{
     private static final String PLAYER_LOST = "You lost";
     private static final String GUESSED_CHARACTERS_DEF = "Guesses: ";
     private static final String SHOWCASE_BUTTON = "Showcase button";
+
+    @FXML
+    private TextField serverTextField;
+
+    @FXML
+    private TextField portTextField;
 
     @FXML
     private  Button startEndButton;
@@ -88,6 +104,7 @@ public class HangmanFXMLClientController implements Initializable{
         startEndButton.setDisable(true);
         startEndButton.setText(START_GAME);
         guessTextField.setDisable(true);
+        guessText.setText(PRESS_CONNECT_TO_CONTINUE);
         infoText.setText("");
         nrOfAttemptsLeftText.setText("");
         gameBoardDesText.setText("");
@@ -95,6 +112,8 @@ public class HangmanFXMLClientController implements Initializable{
         guessedCharactersDef.setText(GUESSED_CHARACTERS_DEF);
         guessedCharacters.setText("");
         showCaseButton.setText(SHOWCASE_BUTTON);
+        serverTextField.setText(SERVER_DEFAULT);
+        portTextField.setText(PORT_DEFAULT);
     }
 
     @FXML
@@ -218,6 +237,8 @@ public class HangmanFXMLClientController implements Initializable{
                     }
 
                     connectionButton.setText(DISCONNECT);
+                    serverTextField.setDisable(true);
+                    portTextField.setDisable(true);
                 }
 
                 @Override
@@ -226,7 +247,29 @@ public class HangmanFXMLClientController implements Initializable{
                 }
             };
 
-            new ConnectService("localhost", "4444", connectServiceInterface).start();
+            IpAndPort ipAndPort = verifyServerIPandPort(this.serverTextField.getText(), this.portTextField.getText());
+
+
+            switch (ipAndPort) {
+                case Default:
+                    new ConnectService(SERVER_DEFAULT, PORT_DEFAULT, connectServiceInterface).start();
+                    this.serverTextField.setText(SERVER_DEFAULT);
+                    this.portTextField.setText(PORT_DEFAULT);
+                    break;
+
+                case Valid:
+                    new ConnectService(this.serverTextField.getText(), this.portTextField.getText(), connectServiceInterface).start();
+                    break;
+
+                case InValid:
+                    guessText.setText(PORT_OR_IP_INVALID);
+                    this.connectionButton.setDisable(false);
+                    break;
+
+                default:
+                    System.out.println("Something went wrong in the IpAndPort switch");
+                    break;
+            }
         }
         else if (connectionButton.getText() == DISCONNECT){
             if(this.server != null)
@@ -236,6 +279,24 @@ public class HangmanFXMLClientController implements Initializable{
             connectionButton.setText(CONNECT);
             connectionButton.setDisable(false);
             this.guessText.setText(PRESS_CONNECT_TO_CONTINUE);
+            this.serverTextField.setDisable(false);
+            this.portTextField.setDisable(false);
+        }
+    }
+
+    private IpAndPort verifyServerIPandPort(String serverIP, String port)
+    {
+        if(!serverIP.isEmpty() && !serverIP.equals("") && !port.isEmpty() && !port.equals("")) {
+            try{
+                Integer.valueOf(port);
+                return IpAndPort.Valid;
+            }
+            catch (NumberFormatException e){
+                return IpAndPort.InValid;
+            }
+        }
+        else {
+            return IpAndPort.Default;
         }
     }
 

@@ -37,8 +37,7 @@ public class ConnectService extends Service<HangmanServerConnection> {
                 //Thread.sleep(3000);
                 System.out.println("Running and trying to start a connection");
 
-                return new HangmanServerConnection(serverIP,
-                        Integer.parseInt(portNumber));
+                return new HangmanServerConnection(serverIP, Integer.parseInt(portNumber));
             }
         };
     }
