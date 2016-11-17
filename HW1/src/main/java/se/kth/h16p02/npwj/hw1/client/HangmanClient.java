@@ -143,6 +143,11 @@ public class HangmanClient
         sendJson(bw, gson.toJson(new ReqGuess("0", "Gretar")));
         response = receiveMessage(br);
         System.out.println("Received: " + response);
+
+        // Try sending nonsense
+        sendJson(bw, "{\"guess\":\"Gretar\",\"gameId\":\"0\",\"requestType\":\"Nonsense\"}");
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
     }
 
     private static void testStartGameAndGuessWord(BufferedReader br, BufferedWriter bw)

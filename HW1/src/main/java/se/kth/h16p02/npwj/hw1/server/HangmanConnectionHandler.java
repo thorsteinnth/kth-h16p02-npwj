@@ -10,6 +10,7 @@ import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerNotFoundException;
 import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerService;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.*;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResGameState;
+import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResInvalidRequest;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.Response;
 
 import java.io.*;
@@ -123,9 +124,8 @@ public class HangmanConnectionHandler extends Thread
         }
         catch (InvalidRequestException ex)
         {
-            // TODO Return a properly formatted error message for the client
             System.err.println("Invalid request: " + incomingRequest);
-            return "Invalid request";
+            return getResponseJson(new ResInvalidRequest());
         }
     }
 
