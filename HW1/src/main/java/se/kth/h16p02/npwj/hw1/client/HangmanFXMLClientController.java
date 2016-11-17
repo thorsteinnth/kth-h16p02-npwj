@@ -99,6 +99,9 @@ public class HangmanFXMLClientController implements Initializable{
     private void onStartEndButtonPress(ActionEvent ae){
 
         if(this.startEndButton.getText().equals(START_GAME) && this.resGameState != null){
+            startEndButton.setDisable(true);
+            guessText.setText(STARTING_GAME);
+
             CommandInterface onSucceed = (resGameState) -> {
                 this.resGameState = resGameState;
                 startingGameGUIControl();
@@ -141,7 +144,6 @@ public class HangmanFXMLClientController implements Initializable{
     private void onGuessButtonPressed(ActionEvent ae){
         if(!this.guessTextField.getText().isEmpty() && !this.guessTextField.getText().equals("")) {
             guessButton.setDisable(true);
-            //TODO do stuff before
             DisableEverything();
             this.guessText.setText(POSTING_GUESS);
 
@@ -271,10 +273,6 @@ public class HangmanFXMLClientController implements Initializable{
         else if (this.resGameState.getGameState() == Game.GameState.Lost)
         {
             playerLost();
-        }
-        else if (this.resGameState.getGameState() == Game.GameState.Cancelled)
-        {
-
         }
         else
         {
