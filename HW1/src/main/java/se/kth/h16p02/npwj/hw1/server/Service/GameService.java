@@ -10,19 +10,6 @@ import java.util.stream.Collectors;
 
 public class GameService
 {
-    private int getNewGameId()
-    {
-        int maxId = -1;
-
-        for (Game g : Repository.getGames())
-        {
-            if (g.getId() > maxId)
-                maxId = g.getId();
-        }
-
-        return maxId + 1;
-    }
-
     /**
      * Get a random word.
      * All words are in lower case.
@@ -83,7 +70,7 @@ public class GameService
 
     public Game addGame(Player player)
     {
-        Game newGame = new Game(getNewGameId(), player, getRandomWord());
+        Game newGame = new Game(Repository.getNewGameId(), player, getRandomWord());
         Repository.addGame(newGame);
         return newGame;
     }

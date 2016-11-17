@@ -16,7 +16,7 @@ public class Repository
         games = new ArrayList<>();
     }
 
-    public static void addPlayer(Player player)
+    public static synchronized void addPlayer(Player player)
     {
         players.add(player);
     }
@@ -26,7 +26,20 @@ public class Repository
         return players;
     }
 
-    public static void addGame(Game game)
+    public static synchronized int getNewPlayerId()
+    {
+        int maxId = -1;
+
+        for (Player p : players)
+        {
+            if (p.getId() > maxId)
+                maxId = p.getId();
+        }
+
+        return maxId + 1;
+    }
+
+    public static synchronized void addGame(Game game)
     {
         games.add(game);
     }
@@ -34,5 +47,18 @@ public class Repository
     public static ArrayList<Game> getGames()
     {
         return games;
+    }
+
+    public static synchronized int getNewGameId()
+    {
+        int maxId = -1;
+
+        for (Game g : games)
+        {
+            if (g.getId() > maxId)
+                maxId = g.getId();
+        }
+
+        return maxId + 1;
     }
 }

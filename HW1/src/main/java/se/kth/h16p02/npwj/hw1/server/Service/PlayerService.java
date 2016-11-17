@@ -7,22 +7,9 @@ import java.util.stream.Collectors;
 
 public class PlayerService
 {
-    private int getNewPlayerId()
-    {
-        int maxId = -1;
-
-        for (Player p : Repository.getPlayers())
-        {
-            if (p.getId() > maxId)
-                maxId = p.getId();
-        }
-
-        return maxId + 1;
-    }
-
     public Player addPlayer()
     {
-        Player newPlayer = new Player(getNewPlayerId());
+        Player newPlayer = new Player(Repository.getNewPlayerId());
         Repository.addPlayer(newPlayer);
         return newPlayer;
     }
