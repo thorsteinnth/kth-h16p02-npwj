@@ -21,7 +21,11 @@ public class ConnectService extends Service<HangmanServerConnection> {
 
         setOnSucceeded((WorkerStateEvent event) -> {
             this.connectServiceInterface.onSucceeded(getValue());
+        });
 
+        setOnFailed((WorkerStateEvent event) -> {
+            System.out.println(getException().getMessage());
+            this.connectServiceInterface.onFailure();
         });
     }
 
@@ -30,7 +34,7 @@ public class ConnectService extends Service<HangmanServerConnection> {
         return new Task<HangmanServerConnection>() {
             @Override
             protected HangmanServerConnection call() throws Exception {
-                Thread.sleep(3000);
+                //Thread.sleep(3000);
                 System.out.println("Running and trying to start a connection");
 
                 return new HangmanServerConnection(serverIP,

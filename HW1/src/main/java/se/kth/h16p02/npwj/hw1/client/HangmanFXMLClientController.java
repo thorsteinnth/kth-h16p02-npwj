@@ -16,6 +16,8 @@ import main.java.se.kth.h16p02.npwj.hw1.client.Services.GuessService;
 import main.java.se.kth.h16p02.npwj.hw1.server.Domain.Game;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResGameState;
 
+import javax.activation.CommandMap;
+
 
 public class HangmanFXMLClientController implements Initializable{
 
@@ -24,6 +26,7 @@ public class HangmanFXMLClientController implements Initializable{
 
     private static final String PRESS_START_TO_BEGINN = "Please press start to begin the fantastic game of hangman";
     private static final String PRESS_CONNECT_TO_CONTINUE = "Please press connect to continue";
+    private static final String SERVICE_CALL_FAILED = "We lost the connection to the server. Please press connect to continue";
     private static final String STARTING_GAME = "Starting a new game ....";
     private static final String ENDING_GAME = "Ending the game ....";
     private static final String POSTING_GUESS = "Posting the guess ....";
@@ -92,7 +95,6 @@ public class HangmanFXMLClientController implements Initializable{
         guessedCharactersDef.setText(GUESSED_CHARACTERS_DEF);
         guessedCharacters.setText("");
         showCaseButton.setText(SHOWCASE_BUTTON);
-
     }
 
     @FXML
@@ -102,41 +104,65 @@ public class HangmanFXMLClientController implements Initializable{
             startEndButton.setDisable(true);
             guessText.setText(STARTING_GAME);
 
-            CommandInterface onSucceed = (resGameState) -> {
-                this.resGameState = resGameState;
-                startingGameGUIControl();
+            CommandInterface commandInterface = new CommandInterface() {
+                @Override
+                public void onSucceeded(ResGameState newResGameState) {
+                    resGameState = newResGameState;
+                    startingGameGUIControl();
+                }
+
+                @Override
+                public void onFailure() {
+                    onServiceCallFailure();
+                }
             };
 
-            new StartGameService(this.server, onSucceed, this.resGameState.getPlayerId()).start();
+            new StartGameService(this.server, commandInterface, this.resGameState.getPlayerId()).start();
         }
         else if(this.startEndButton.getText().equals(END_GAME) && this.resGameState != null){
             guessText.setText(ENDING_GAME);
             DisableEverything();
 
-            CommandInterface onSucceed = (resGameState) -> {
-                System.out.println("Ending game complete with resGameState: " + resGameState);
-                initializeTexts();
-                this.resGameState = resGameState;
-                this.guessText.setText(PRESS_START_TO_BEGINN);
-                this.startEndButton.setText(START_GAME);
-                this.startEndButton.requestFocus();
-                this.startEndButton.setDisable(false);
-                this.connectionButton.setDisable(false);
-                setInfoText(false);
+            CommandInterface commandInterface = new CommandInterface() {
+                @Override
+                public void onSucceeded(ResGameState newResGameState) {
+                    System.out.println("Ending game complete with resGameState: " + resGameState);
+                    initializeTexts();
+                    resGameState = newResGameState;
+                    guessText.setText(PRESS_START_TO_BEGINN);
+                    startEndButton.setText(START_GAME);
+                    startEndButton.requestFocus();
+                    startEndButton.setDisable(false);
+                    connectionButton.setDisable(false);
+                    setInfoText(false);
+                }
+
+                @Override
+                public void onFailure() {
+                    onServiceCallFailure();
+                }
             };
 
-            new EndGameService(this.server, onSucceed, this.resGameState.getGameId()).start();
+            new EndGameService(this.server, commandInterface, this.resGameState.getGameId()).start();
         }
         else {
             startEndButton.setDisable(true);
             guessText.setText(STARTING_GAME);
 
-            CommandInterface onSucceed = (resGameState) -> {
-                this.resGameState = resGameState;
-                startingGameGUIControl();
+            CommandInterface commandInterface = new CommandInterface() {
+                @Override
+                public void onSucceeded(ResGameState newResGameState) {
+                    resGameState = newResGameState;
+                    startingGameGUIControl();
+                }
+
+                @Override
+                public void onFailure() {
+                    onServiceCallFailure();
+                }
             };
 
-            new CreateNewPlayerAndStartGameService(this.server, onSucceed).start();
+            new CreateNewPlayerAndStartGameService(this.server, commandInterface).start();
         }
     }
 
@@ -147,12 +173,20 @@ public class HangmanFXMLClientController implements Initializable{
             DisableEverything();
             this.guessText.setText(POSTING_GUESS);
 
-            CommandInterface onSucceed = (resGameState) -> {
-                this.resGameState = resGameState;
-                handleGuessRespond();
+            CommandInterface commandInterface = new CommandInterface() {
+                @Override
+                public void onSucceeded(ResGameState newResGameState) {
+                    resGameState = newResGameState;
+                    handleGuessRespond();
+                }
+
+                @Override
+                public void onFailure() {
+                    onServiceCallFailure();
+                }
             };
 
-            new GuessService(this.server, onSucceed, this.resGameState.getGameId(), this.guessTextField.getText()).start();
+            new GuessService(this.server, commandInterface, this.resGameState.getGameId(), this.guessTextField.getText()).start();
         }
     }
 
@@ -165,34 +199,56 @@ public class HangmanFXMLClientController implements Initializable{
             guessText.setText(CONNECTING_TO_SERVER);
             connectionButton.setDisable(true);
 
-            ConnectServiceInterface onSucceeded = (HangmanServerConnection server) -> {
-                this.server = server;
+            ConnectServiceInterface connectServiceInterface = new ConnectServiceInterface() {
+                @Override
+                public void onSucceeded(HangmanServerConnection newServer) {
+                    server = newServer;
 
-                if(this.resGameState == null){
-                    guessText.setText(PRESS_START_TO_BEGINN);
-                    startEndButton.requestFocus();
-                    startEndButton.setText(START_GAME);
-                    connectionButton.setDisable(false);
-                    startEndButton.setDisable(false);
-                }
-                else {
-                    startEndButton.setText(END_GAME);
-                    guessText.setText(ENTER_CHAR_OR_WORD);
-                    EnableEverything();
+                    if(resGameState == null){
+                        guessText.setText(PRESS_START_TO_BEGINN);
+                        startEndButton.requestFocus();
+                        startEndButton.setText(START_GAME);
+                        connectionButton.setDisable(false);
+                        startEndButton.setDisable(false);
+                    }
+                    else {
+                        startEndButton.setText(END_GAME);
+                        guessText.setText(ENTER_CHAR_OR_WORD);
+                        EnableEverything();
+                    }
+
+                    connectionButton.setText(DISCONNECT);
                 }
 
-                connectionButton.setText(DISCONNECT);
+                @Override
+                public void onFailure() {
+                    onServiceCallFailure();
+                }
             };
 
-            new ConnectService("localhost", "4444", onSucceeded).start();
+            new ConnectService("localhost", "4444", connectServiceInterface).start();
         }
         else if (connectionButton.getText() == DISCONNECT){
+            if(this.server != null)
+                this.server.closeConnection();
             this.server = null;
             DisableEverything();
             connectionButton.setText(CONNECT);
             connectionButton.setDisable(false);
             this.guessText.setText(PRESS_CONNECT_TO_CONTINUE);
         }
+    }
+
+    private void onServiceCallFailure()
+    {
+        if(this.server != null)
+            this.server.closeConnection();
+        this.server = null;
+        this.resGameState = null;
+        DisableEverything();
+        connectionButton.setText(CONNECT);
+        connectionButton.setDisable(false);
+        this.guessText.setText(SERVICE_CALL_FAILED);
     }
 
     private void DisableEverything ()
