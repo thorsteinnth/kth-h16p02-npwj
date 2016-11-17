@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="hangman_guiclient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/hangman_guiclient_jar</output-path>
+    <root id="archive" name="hangman_guiclient.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/meta/guiclient/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="HW1" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
