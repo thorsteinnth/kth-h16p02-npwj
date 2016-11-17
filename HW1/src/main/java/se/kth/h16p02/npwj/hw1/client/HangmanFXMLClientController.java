@@ -36,7 +36,7 @@ public class HangmanFXMLClientController implements Initializable{
     private static final String PORT_OR_IP_INVALID = "Invalid format on Server Ip or Port number";
     private static final String PRESS_START_TO_BEGINN = "Please press start to begin the fantastic game of hangman";
     private static final String PRESS_CONNECT_TO_CONTINUE = "Please press connect to continue";
-    private static final String SERVICE_CALL_FAILED = "Server connection failed. Verify Ip and Port and press connect";
+    private static final String SERVICE_CALL_FAILED = "Server connection failed. Verify IP and port and press connect";
     private static final String STARTING_GAME = "Starting a new game ....";
     private static final String ENDING_GAME = "Ending the game ....";
     private static final String POSTING_GUESS = "Posting the guess ....";
@@ -120,6 +120,9 @@ public class HangmanFXMLClientController implements Initializable{
     private void onStartEndButtonPress(ActionEvent ae){
 
         if(this.startEndButton.getText().equals(START_GAME) && this.resGameState != null){
+
+            // We are starting a game, but it isn't our first game
+
             startEndButton.setDisable(true);
             guessText.setText(STARTING_GAME);
 
@@ -139,6 +142,9 @@ public class HangmanFXMLClientController implements Initializable{
             new StartGameService(this.server, commandInterface, this.resGameState.getPlayerId()).start();
         }
         else if(this.startEndButton.getText().equals(END_GAME) && this.resGameState != null){
+
+            // We are currently in a game, and want to end it
+
             guessText.setText(ENDING_GAME);
             DisableEverything();
 
@@ -165,6 +171,9 @@ public class HangmanFXMLClientController implements Initializable{
             new EndGameService(this.server, commandInterface, this.resGameState.getGameId()).start();
         }
         else {
+
+            // We want to start our first game
+
             startEndButton.setDisable(true);
             guessText.setText(STARTING_GAME);
 
@@ -214,6 +223,9 @@ public class HangmanFXMLClientController implements Initializable{
 
         System.out.println("The connection button pressed event handler with connection button text set to: " + connectionButton.getText());
         if(connectionButton.getText().equals(CONNECT)){
+
+            // Connect to server
+
             System.out.println("Inside the connection button press");
             guessText.setText(CONNECTING_TO_SERVER);
             connectionButton.setDisable(true);
@@ -272,6 +284,9 @@ public class HangmanFXMLClientController implements Initializable{
             }
         }
         else if (connectionButton.getText() == DISCONNECT){
+
+            // Disconnect from server
+
             if(this.server != null)
                 this.server.closeConnection();
             this.server = null;
