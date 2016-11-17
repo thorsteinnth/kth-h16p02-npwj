@@ -51,10 +51,13 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            // Keep connection open indefinitely (until client closes it)
+            // Keep connection open indefinitely and read from it (until client closes it)
             while (true)
             {
                 String incomingLine;
+
+                // Keep reading until we receive null or we receive an empty line (indicating that
+                // we have received a complete message)
                 while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
                 {
                     System.out.println("Received: " + incomingLine);
