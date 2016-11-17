@@ -57,7 +57,8 @@ public class HangmanConnectionHandler extends Thread
                 String incomingLine;
 
                 // Keep reading until we receive null or we receive an empty line (indicating that
-                // we have received a complete message)
+                // we have received everything that the client intends to send)
+                // We assume each line from the client is a full message that we can handle and respond to
                 while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
                 {
                     System.out.println("Received: " + incomingLine);

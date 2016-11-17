@@ -22,6 +22,7 @@ public class GameService
         // When we read the 3rd line it has a 33% chance of becoming the result.
         // The fourth line has a 25% chance of becoming the result
         // etc.
+        // https://en.wikipedia.org/wiki/Reservoir_sampling
 
         try
         {
