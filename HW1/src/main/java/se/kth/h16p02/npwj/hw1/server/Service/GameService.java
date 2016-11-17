@@ -26,7 +26,7 @@ public class GameService
 
         try
         {
-            File file = new File(getClass().getResource("words.txt").getFile());
+            File file = getWordsFile();
             BufferedReader br = new BufferedReader(new FileReader(file));
 
             String chosenLine = null;
@@ -51,6 +51,39 @@ public class GameService
             System.err.println("GameService.getRandomWord() - error: " + ex.toString());
             return "placeholder";
         }
+    }
+
+    private File getWordsFile() throws IOException
+    {
+        // NOTE:
+        // Was unable to access the words.txt file when application packaged in JAR.
+        // Workaround for this is to access words.txt as a stream, create a temporary file
+        // and load the stream into that, then use the temporary file.
+
+        // Old, clean, method:
+        //return new File(getClass().getClassLoader().getResource("words.txt").getFile());
+
+        InputStream in = getClass().getResourceAsStream("/words.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        File file = File.createTempFile("tempfile", ".tmp");
+        // Requests that the file or directory denoted by this abstract pathname
+        // be deleted when the virtual machine terminates.
+        file.deleteOnExit();
+
+        OutputStream out = new FileOutputStream(file);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+
+        String incomingLine;
+        while ((incomingLine = br.readLine()) != null)
+        {
+            bw.write(incomingLine);
+            bw.newLine();
+        }
+
+        bw.flush();
+
+        return file;
     }
 
     public Game getGame(int gameId) throws GameNotFoundException, IllegalStateException
