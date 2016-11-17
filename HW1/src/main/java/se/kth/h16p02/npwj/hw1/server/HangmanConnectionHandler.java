@@ -14,6 +14,7 @@ import main.java.se.kth.h16p02.npwj.hw1.shared.responses.Response;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class HangmanConnectionHandler extends Thread
 {
@@ -49,7 +50,7 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            // TODO Need more elegant way to keep connection open or break out of loop when connection closes
+            // Keep connection open indefinitely (until client closes it)
             while (true)
             {
                 String incomingLine;
@@ -69,10 +70,13 @@ public class HangmanConnectionHandler extends Thread
         catch (IOException e)
         {
             System.out.println(e.toString());
+            if (e instanceof SocketException && e.getMessage().equals("Broken pipe"))
+                System.out.println("Client (probably) closed the connection");
         }
 
         try
         {
+            // Make sure everything is closed on our side
             br.close();
             bw.close();
             clientSocket.close();
