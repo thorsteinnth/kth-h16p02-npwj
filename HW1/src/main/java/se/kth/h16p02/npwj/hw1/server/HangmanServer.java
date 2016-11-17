@@ -14,13 +14,29 @@ public class HangmanServer
 
         boolean listening = true;
         ServerSocket serverSocket = null;
-        final int portNumber = 4444;
+
+        int portNumber = 4444;  // Default port number
+
+        // Get port number from args, if any
+        if (args.length == 1)
+        {
+            try
+            {
+                portNumber = Integer.valueOf(args[0]);
+            }
+            catch (NumberFormatException ex)
+            {
+                System.err.println(ex.toString());
+            }
+        }
 
         try
         {
             serverSocket = new ServerSocket(portNumber);
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
+            System.err.println(e.toString());
             System.err.println("Could not listen on port: " + portNumber);
             System.exit(1);
         }
