@@ -23,6 +23,10 @@ public class GameService
         return maxId + 1;
     }
 
+    /**
+     * Get a random word.
+     * All words are in lower case.
+     * */
     private String getRandomWord()
     {
         // Adapted from: http://stackoverflow.com/a/2218067
@@ -50,14 +54,14 @@ public class GameService
                 if (ThreadLocalRandom.current().nextInt(n) == 0)
                     chosenLine = readLine;
             }
-            System.out.println("Random word: " + chosenLine);
+            System.out.println("Random word: " + chosenLine.toLowerCase());
 
-            return chosenLine;
+            return chosenLine.toLowerCase();
         }
         catch (IOException ex)
         {
             System.err.println("GameService.getRandomWord() - error: " + ex.toString());
-            return "Placeholder";
+            return "placeholder";
         }
     }
 
@@ -96,7 +100,7 @@ public class GameService
         Game game = getGame(gameId);
 
         Game.GameState oldGameState = game.getGameState();
-        game.addGuess(guess);
+        game.addGuess(guess.toLowerCase()); // Make sure the guess is in lower case
         Game.GameState newGameState = game.getGameState();
 
         if (oldGameState == Game.GameState.InProgress)
