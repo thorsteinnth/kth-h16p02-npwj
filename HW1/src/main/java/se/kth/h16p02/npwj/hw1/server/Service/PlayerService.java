@@ -9,9 +9,7 @@ public class PlayerService
 {
     public Player addPlayer()
     {
-        Player newPlayer = new Player(Repository.getNewPlayerId());
-        Repository.addPlayer(newPlayer);
-        return newPlayer;
+        return Repository.addPlayer();
     }
 
     public Player getPlayer(int playerId) throws PlayerNotFoundException, IllegalStateException

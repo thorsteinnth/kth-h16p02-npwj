@@ -70,9 +70,7 @@ public class GameService
 
     public Game addGame(Player player)
     {
-        Game newGame = new Game(Repository.getNewGameId(), player, getRandomWord());
-        Repository.addGame(newGame);
-        return newGame;
+        return Repository.addGame(player, getRandomWord());
     }
 
     public Game endGame(int gameId) throws GameNotFoundException, IllegalStateException

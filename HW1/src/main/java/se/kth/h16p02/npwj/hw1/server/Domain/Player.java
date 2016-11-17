@@ -2,7 +2,7 @@ package main.java.se.kth.h16p02.npwj.hw1.server.Domain;
 
 public class Player
 {
-    private int id;
+    private final int id;
     private int score;
 
     public Player(int id)
