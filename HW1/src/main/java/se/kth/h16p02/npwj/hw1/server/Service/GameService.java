@@ -10,19 +10,6 @@ import java.util.stream.Collectors;
 
 public class GameService
 {
-    private int getNewGameId()
-    {
-        int maxId = -1;
-
-        for (Game g : AppData.games)
-        {
-            if (g.getId() > maxId)
-                maxId = g.getId();
-        }
-
-        return maxId + 1;
-    }
-
     /**
      * Get a random word.
      * All words are in lower case.
@@ -68,7 +55,7 @@ public class GameService
     public Game getGame(int gameId) throws GameNotFoundException, IllegalStateException
     {
         List<Game> foundGames =
-                AppData.games
+                Repository.getGames()
                         .stream()
                         .filter(game -> game.getId() == gameId)
                         .collect(Collectors.toList());
@@ -83,9 +70,7 @@ public class GameService
 
     public Game addGame(Player player)
     {
-        Game newGame = new Game(getNewGameId(), player, getRandomWord());
-        AppData.games.add(newGame);
-        return newGame;
+        return Repository.addGame(player, getRandomWord());
     }
 
     public Game endGame(int gameId) throws GameNotFoundException, IllegalStateException

@@ -7,30 +7,15 @@ import java.util.stream.Collectors;
 
 public class PlayerService
 {
-    private int getNewPlayerId()
-    {
-        int maxId = -1;
-
-        for (Player p : AppData.players)
-        {
-            if (p.getId() > maxId)
-                maxId = p.getId();
-        }
-
-        return maxId + 1;
-    }
-
     public Player addPlayer()
     {
-        Player newPlayer = new Player(getNewPlayerId());
-        AppData.players.add(newPlayer);
-        return newPlayer;
+        return Repository.addPlayer();
     }
 
     public Player getPlayer(int playerId) throws PlayerNotFoundException, IllegalStateException
     {
         List<Player> foundPlayers =
-                AppData.players
+                Repository.getPlayers()
                         .stream()
                         .filter(player -> player.getId() == playerId)
                         .collect(Collectors.toList());
