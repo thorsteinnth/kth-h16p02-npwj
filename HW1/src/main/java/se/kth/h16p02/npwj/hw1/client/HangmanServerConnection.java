@@ -12,11 +12,12 @@ public class HangmanServerConnection {
     private BufferedReader in;
     private BufferedWriter out;
 
-    public HangmanServerConnection (String host, int port) throws IOException {
-        try{
+    public HangmanServerConnection (String host, int port) throws IOException
+    {
+        try
+        {
             clientSocket = new Socket();
-            clientSocket.setSoTimeout(200);
-            clientSocket.connect(new InetSocketAddress(host,port),200);
+            clientSocket.connect(new InetSocketAddress(host, port), 200);
 
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));

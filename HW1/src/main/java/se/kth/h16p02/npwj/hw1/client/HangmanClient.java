@@ -7,6 +7,7 @@ import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqGuess;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.ReqStartGame;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -41,7 +42,9 @@ public class HangmanClient
 
         try
         {
-            clientSocket = new Socket(host, portNumber);
+            clientSocket = new Socket();
+            clientSocket.connect(new InetSocketAddress(host, portNumber), 200);
+
             System.out.println("Connected to host and port: " + host + " " + portNumber);
         }
         catch (UnknownHostException e)
