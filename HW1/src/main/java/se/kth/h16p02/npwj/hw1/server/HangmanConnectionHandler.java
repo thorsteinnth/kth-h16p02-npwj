@@ -39,7 +39,7 @@ public class HangmanConnectionHandler extends Thread
         //this.playerService.addPlayer();
 
         try
-        {
+        { 
             br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }
