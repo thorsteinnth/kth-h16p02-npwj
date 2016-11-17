@@ -10,10 +10,12 @@ import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerNotFoundException;
 import main.java.se.kth.h16p02.npwj.hw1.server.Service.PlayerService;
 import main.java.se.kth.h16p02.npwj.hw1.shared.requests.*;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResGameState;
+import main.java.se.kth.h16p02.npwj.hw1.shared.responses.ResInvalidRequest;
 import main.java.se.kth.h16p02.npwj.hw1.shared.responses.Response;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class HangmanConnectionHandler extends Thread
 {
@@ -49,7 +51,7 @@ public class HangmanConnectionHandler extends Thread
 
         try
         {
-            // TODO Need more elegant way to keep connection open or break out of loop when connection closes
+            // Keep connection open indefinitely (until client closes it)
             while (true)
             {
                 String incomingLine;
@@ -69,10 +71,13 @@ public class HangmanConnectionHandler extends Thread
         catch (IOException e)
         {
             System.out.println(e.toString());
+            if (e instanceof SocketException && e.getMessage().equals("Broken pipe"))
+                System.out.println("Client (probably) closed the connection");
         }
 
         try
         {
+            // Make sure everything is closed on our side
             br.close();
             bw.close();
             clientSocket.close();
@@ -119,9 +124,8 @@ public class HangmanConnectionHandler extends Thread
         }
         catch (InvalidRequestException ex)
         {
-            // TODO Return a properly formatted error message for the client
             System.err.println("Invalid request: " + incomingRequest);
-            return "Invalid request";
+            return getResponseJson(new ResInvalidRequest());
         }
     }
 

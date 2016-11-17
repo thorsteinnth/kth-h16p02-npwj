@@ -15,7 +15,7 @@ public class Game
     {
         this.id = id;
         this.player = player;
-        this.attemptsLeft = 10;
+        this.attemptsLeft = word.length() * 2;
         this.word = word;
         this.guessedCharacters = new ArrayList<>();
         this.gameState = GameState.InProgress;

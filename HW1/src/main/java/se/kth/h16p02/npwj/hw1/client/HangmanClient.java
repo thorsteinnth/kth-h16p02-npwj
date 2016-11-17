@@ -19,18 +19,39 @@ public class HangmanClient
     {
         Socket clientSocket = null;
 
+        // Parse command line args
+        // We are expecting 2 arguments (host port) or none
+
+        String host = "localhost"; // Default host
+        int portNumber = 4444; // Default port
+
+        if (args.length == 2)
+        {
+            host = args[0];
+
+            try
+            {
+                portNumber = Integer.valueOf(args[1]);
+            }
+            catch (NumberFormatException ex)
+            {
+                System.err.println(ex.toString());
+            }
+        }
+
         try
         {
-            clientSocket = new Socket(args[0], 4444);
+            clientSocket = new Socket(host, portNumber);
+            System.out.println("Connected to host and port: " + host + " " + portNumber);
         }
         catch (UnknownHostException e)
         {
-            System.err.println("Don't know about host: " + args[0] + ".");
+            System.err.println("Don't know about host: " + host + ".");
             System.exit(1);
         }
         catch (IOException e)
         {
-            System.err.println("Couldn't get I/O for " + "the connection to: " + args[0] + "");
+            System.err.println("Couldn't get I/O for " + "the connection to: " + host + " " + portNumber);
             System.exit(1);
         }
 
@@ -41,20 +62,6 @@ public class HangmanClient
         {
             br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
-            /*
-            bw.write(args[1]);
-            bw.newLine();
-            // Send a second newline to indicate that we are done sending
-            bw.newLine();
-            bw.flush();
-
-            String incomingLine;
-            while ((incomingLine = br.readLine()) != null && incomingLine.length() > 0)
-            {
-                System.out.println("Received: " + incomingLine);
-            }
-            */
 
             testCreatePlayerAndStartGameAndGuessWord(br, bw);
             //testStartGameAndGuessWord(br, bw);
@@ -134,6 +141,11 @@ public class HangmanClient
         System.out.println("Received: " + response);
 
         sendJson(bw, gson.toJson(new ReqGuess("0", "Gretar")));
+        response = receiveMessage(br);
+        System.out.println("Received: " + response);
+
+        // Try sending nonsense
+        sendJson(bw, "{\"guess\":\"Gretar\",\"gameId\":\"0\",\"requestType\":\"Nonsense\"}");
         response = receiveMessage(br);
         System.out.println("Received: " + response);
     }
