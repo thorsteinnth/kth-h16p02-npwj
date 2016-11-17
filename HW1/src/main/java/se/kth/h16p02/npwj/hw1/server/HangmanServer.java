@@ -1,6 +1,6 @@
 package main.java.se.kth.h16p02.npwj.hw1.server;
 
-import main.java.se.kth.h16p02.npwj.hw1.server.Service.AppData;
+import main.java.se.kth.h16p02.npwj.hw1.server.Service.Repository;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,7 +10,7 @@ public class HangmanServer
 {
     public static void main(String[] args) throws IOException
     {
-        new AppData();
+        new Repository();
 
         boolean listening = true;
         ServerSocket serverSocket = null;
