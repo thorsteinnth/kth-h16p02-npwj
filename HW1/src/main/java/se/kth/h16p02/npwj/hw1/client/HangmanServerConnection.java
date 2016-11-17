@@ -2,25 +2,28 @@ package main.java.se.kth.h16p02.npwj.hw1.client;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class HangmanServerConnection {
+
+    private Socket clientSocket;
     private BufferedReader in;
     private BufferedWriter out;
 
-    public HangmanServerConnection (String host, int port) {
+    public HangmanServerConnection (String host, int port) throws IOException {
         try{
-            Socket clientSocket = new Socket(host,port);
+            clientSocket = new Socket(host,port);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }
         catch (UnknownHostException e){
             System.err.println("Don't know about host: " + host + ".");
-            System.exit(1);
+            throw e;
         }
         catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to: " + host + ".");
-            System.exit(1);
+            throw e;
         }
     }
 
@@ -30,23 +33,37 @@ public class HangmanServerConnection {
      * Returns the respond from the server
      */
 
-    public String callServer(String jsonToServer) throws IOException {
+    public String callServer(String jsonToServer) throws IOException, InterruptedException {
+        try {
+            out.write(jsonToServer);
+            out.newLine();
+            // Send a second newline to indicate that we are done sending
+            out.newLine();
+            out.flush();
 
-        out.write(jsonToServer);
-        out.newLine();
-        // Send a second newline to indicate that we are done sending
-        out.newLine();
-        out.flush();
+            String respond = receiveMessage();
 
-        String respond = receiveMessage();
-
-        return new String(respond);
+            return new String(respond);
+        }
+        catch (IOException|InterruptedException ex){
+            System.out.println(ex.toString());
+            throw ex;
+        }
     }
 
-    private String receiveMessage()
+    /**
+     * This function handles the respond from the server
+     * It returns the respond as a string
+     * NOTE: This function throws Exception instead of IOException because
+     * java fx wa not catching Java IOException for unknowns reason
+     */
+    private String receiveMessage() throws IOException, InterruptedException
     {
         try
         {
+            //HACK ask teacher
+            Thread.sleep(5);
+
             StringBuilder sb = new StringBuilder();
 
             String incomingLine;
@@ -61,11 +78,20 @@ public class HangmanServerConnection {
 
             return receivedMessage;
         }
-        catch (IOException ex)
+        catch (IOException|InterruptedException ex)
         {
             System.out.println(ex.toString());
-            System.exit(1);
-            return "";
+            throw ex;
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            clientSocket.close();
+            System.out.println("Client connection successfully closed ");
+        }
+        catch (IOException e){
+            System.out.println("client connection failed to close");
         }
     }
 }

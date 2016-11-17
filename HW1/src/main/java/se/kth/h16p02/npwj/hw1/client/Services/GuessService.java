@@ -33,6 +33,7 @@ public class GuessService extends Service<ResGameState>{
 
         setOnFailed((WorkerStateEvent event) -> {
             System.out.println(getException().getMessage());
+            this.commandInterface.onFailure();
         });
     }
 

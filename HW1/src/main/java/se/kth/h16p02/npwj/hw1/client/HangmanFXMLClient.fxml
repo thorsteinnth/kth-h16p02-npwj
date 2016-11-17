@@ -59,7 +59,7 @@
          <font>
             <Font size="16.0" />
          </font></TextField>
-      <Text fx:id="guessText" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter character or word:" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+      <Text fx:id="guessText" fill="#a63c1f" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter character or word:" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
          <font>
             <Font size="14.0" />
          </font>
