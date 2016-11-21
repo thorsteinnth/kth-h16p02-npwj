@@ -95,7 +95,7 @@
             <Insets bottom="5.0" left="200.0" right="200.0" top="5.0" />
          </padding>
       </Button>
-      <Text fx:id="serverText" strokeType="OUTSIDE" strokeWidth="0.0" text="Server:" GridPane.halignment="CENTER" />
+      <Text fx:id="serverText" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Ip:" GridPane.halignment="CENTER" />
       <Text fx:id="portText" strokeType="OUTSIDE" strokeWidth="0.0" text="Port:" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
       <TextField fx:id="serverTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" />
       <TextField fx:id="portTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
