@@ -44,6 +44,7 @@ public class MyBuffer extends UnicastRemoteObject implements RemoteBuffer {
             }
             
             Naming.rebind("rmi://localhost/buffer", new MyBuffer());
+            System.out.println("Buffer is up and running");
         
         } catch (RemoteException | MalformedURLException re) {
             System.out.println(re);
