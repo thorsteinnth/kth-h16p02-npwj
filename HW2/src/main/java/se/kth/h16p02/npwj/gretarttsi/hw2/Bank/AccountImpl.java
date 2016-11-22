@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.shared;
+package se.kth.h16p02.npwj.gretarttsi.hw2.Bank;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;

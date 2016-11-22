@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.shared;
+package se.kth.h16p02.npwj.gretarttsi.hw2.Bank;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -25,8 +25,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
     }
 
     @Override
-    public synchronized Account newAccount(String name) throws RemoteException,
-            RejectedException {
+    public synchronized Account newAccount(String name) throws RemoteException, RejectedException {
         AccountImpl account = (AccountImpl) accounts.get(name);
         if (account != null) {
             System.out.println("Account [" + name + "] exists!!!");
