@@ -58,6 +58,7 @@ public class MyServer extends UnicastRemoteObject implements ServerInterface {
                 LocateRegistry.createRegistry(REGISTRY_PORT_NUMBER);
             }
             Naming.rebind("rmi://localhost/chat", new MyServer());
+            System.out.println("MyServer is up and running");
             
         } catch (RemoteException | MalformedURLException re) {
             System.out.println(re);
