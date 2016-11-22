@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.Bank;
+package se.kth.h16p02.npwj.gretarttsi.hw2.bank;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;

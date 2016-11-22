@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.Bank;
+package se.kth.h16p02.npwj.gretarttsi.hw2.bank;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
