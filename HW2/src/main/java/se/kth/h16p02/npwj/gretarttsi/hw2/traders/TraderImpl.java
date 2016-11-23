@@ -14,19 +14,19 @@ import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
-public class TraderImpl extends UnicastRemoteObject implements Trader{
-
+public class TraderImpl extends UnicastRemoteObject implements Trader
+{
     private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String HOME = "Home";
     private static final String MARKETPLACE = "Marketplace";
     private static final String BANK = "Bank";
 
-    BufferedReader consoleIn;
-    Account account;
-    Bank bankobj;
+    private BufferedReader consoleIn;
+    private Account account;
+    private Bank bankobj;
     private String bankname;
-    String clientname;
+    private String username;
 
     enum HomeCommandName{
         bank,
@@ -61,12 +61,13 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
 
-    public TraderImpl(String clientName) throws RemoteException
+    public TraderImpl(String username) throws RemoteException
     {
         super();
 
-        this.clientname = clientName;
+        this.username = username;
         this.bankname = DEFAULT_BANK_NAME;
+
         try
         {
             try
@@ -77,6 +78,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             {
                 LocateRegistry.createRegistry(1099);
             }
+
             bankobj = (Bank) Naming.lookup(bankname);
         }
         catch (Exception e)
@@ -84,7 +86,14 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             System.out.println("The runtime failed: " + e.getMessage());
             System.exit(0);
         }
+
         System.out.println("Connected to bank: " + bankname);
+    }
+
+    @Override
+    public String getUsername()
+    {
+        return this.username;
     }
 
     @Override
@@ -108,7 +117,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
     {
         while (true)
         {
-            System.out.print(clientname + "@" + HOME + ">");
+            System.out.print(username + "@" + HOME + ">");
             try
             {
                 String userInput = consoleIn.readLine();
@@ -138,7 +147,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
         while (run)
         {
-            System.out.print(clientname + "@" + bankname + ">");
+            System.out.print(username + "@" + bankname + ">");
             try
             {
                 String userInput = consoleIn.readLine();
@@ -414,54 +423,56 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
         }
 
-        // all further commands require a name to be specified
-        String userName = command.getUserName();
-        if (userName == null) {
-            userName = clientname;
-        }
-
-        if (userName == null) {
-            System.out.println("name is not specified");
+        if (username == null || username == "")
+        {
+            System.out.println("username is not specified");
             return true;
         }
 
-        switch (command.getCommandName()) {
+        switch (command.getCommandName())
+        {
             case newAccount:
-                clientname = userName;
-                bankobj.newAccount(userName);
+                bankobj.newAccount(username);
                 return true;
             case deleteAccount:
-                clientname = userName;
-                bankobj.deleteAccount(userName);
+                bankobj.deleteAccount(username);
                 return true;
         }
 
-        // all further commands require a Account reference
-        Account acc = bankobj.getAccount(userName);
-        if (acc == null) {
-            System.out.println("No account for " + userName);
+        // All further commands require a Account reference
+        Account acc = bankobj.getAccount(username);
+        if (acc == null)
+        {
+            System.out.println("No account for " + username);
             return true;
-        } else {
+        }
+        else
+        {
             account = acc;
-            clientname = userName;
         }
 
-        switch (command.getCommandName()) {
+        switch (command.getCommandName())
+        {
             case getAccount:
                 System.out.println(account);
                 break;
+
             case deposit:
                 account.deposit(command.getAmount());
                 break;
+
             case withdraw:
                 account.withdraw(command.getAmount());
                 break;
+
             case balance:
                 System.out.println("balance: $" + account.getBalance());
                 break;
+
             default:
                 System.out.println("Illegal command");
         }
+
         return true;
     }
 
