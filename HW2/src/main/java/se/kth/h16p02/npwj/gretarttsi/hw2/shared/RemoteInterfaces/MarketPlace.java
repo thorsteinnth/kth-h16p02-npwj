@@ -10,7 +10,7 @@ public interface MarketPlace extends Remote
 
     void register(Trader trader) throws RemoteException;
 
-    void unregister(Trader trader) throws RemoteException;
+    void deregister(Trader trader) throws RemoteException;
 
     void sell(Trader trader, Item item) throws RemoteException;
 

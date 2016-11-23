@@ -9,33 +9,33 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
-    MarketPlaceImpl() throws RemoteException{
+    public MarketPlaceImpl() throws RemoteException{
         super();
     }
 
     @Override
     public void wish(Trader trader, Item item) throws RemoteException {
-        System.out.println("Trader making a wish");
+        System.out.println("Trader " + trader + " making a wish for item " + item);
     }
 
     @Override
     public void register(Trader trader) throws RemoteException {
-        System.out.println("Trader making a wish");
+        System.out.println("Trader registering");
     }
 
     @Override
-    public void unregister(Trader trader) throws RemoteException {
-        System.out.println("Trader making a wish");
+    public void deregister(Trader trader) throws RemoteException {
+        System.out.println("Trader deregistering");
     }
 
     @Override
     public void sell(Trader trader, Item item) throws RemoteException {
-        System.out.println("Trader making a wish");
+        System.out.println("Trader " + trader + " selling: " + item);
     }
 
     @Override
     public void buy(Trader trader, Item item) throws RemoteException {
-        System.out.println("Trader making a wish");
+        System.out.println("Trader " + trader + " buying: " + item);
     }
 
     @Override
