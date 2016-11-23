@@ -1,7 +1,5 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketPlace.MarketPlaceImpl;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketPlace.TraderAlreadyExistsException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 import se.kth.h16p02.npwj.gretarttsi.hw2.traders.TraderImpl;

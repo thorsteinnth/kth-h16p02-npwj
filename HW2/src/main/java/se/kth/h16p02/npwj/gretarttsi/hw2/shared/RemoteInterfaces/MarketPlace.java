@@ -5,7 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketPlace.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderAlreadyExistsException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 
 public interface MarketPlace extends Remote
