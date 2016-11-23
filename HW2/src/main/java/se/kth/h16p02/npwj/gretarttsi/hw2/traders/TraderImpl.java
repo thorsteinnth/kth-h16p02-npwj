@@ -28,16 +28,35 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
     private String bankname;
     String clientname;
 
-    static enum HomeCommandName{
-        bank, marketPlace, home, help
+    enum HomeCommandName{
+        bank,
+        marketPlace,
+        home,
+        help
     }
 
-    static enum BankCommandName {
-        newAccount, getAccount, deleteAccount, deposit, withdraw, balance, quit, help, list;
+    enum BankCommandName {
+        newAccount,
+        getAccount,
+        deleteAccount,
+        deposit,
+        withdraw,
+        balance,
+        quit,
+        help,
+        list;
     };
 
-    static enum marketplaceCommandName {
-        register, unregister, status, inspect, sell, buy, wish, help, quit
+    enum MarketplaceCommandName {
+        register,
+        unregister,
+        status,
+        inspect,
+        sell,
+        buy,
+        wish,
+        help,
+        quit
     }
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
@@ -207,9 +226,64 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
     //endregion
 
     //region Marketplace command line function
-    private marketplaceCommandName marketplaceParse()
+    private MarketPlaceCommand marketplaceParse(String userInput)
     {
+        if (userInput == null)
+        {
+            return null;
+        }
 
+        StringTokenizer tokenizer = new StringTokenizer(userInput);
+        if (tokenizer.countTokens() == 0)
+        {
+            return null;
+        }
+
+        MarketplaceCommandName commandName = null;
+        String productName = null;
+        float amount = 0;
+        int userInputTokenNo = 1;
+
+        while (tokenizer.hasMoreTokens())
+        {
+            switch (userInputTokenNo)
+            {
+                case 1:
+                    try
+                    {
+                        String commandNameString = tokenizer.nextToken();
+                        commandName = MarketplaceCommandName.valueOf(MarketplaceCommandName.class, commandNameString);
+                    }
+                    catch (IllegalArgumentException commandDoesNotExist)
+                    {
+                        System.out.println("Illegal command");
+                        return null;
+                    }
+                    break;
+
+                case 2:
+                    productName = tokenizer.nextToken();
+                    break;
+
+                case 3:
+                    try
+                    {
+                        amount = Float.parseFloat(tokenizer.nextToken());
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        System.out.println("Illegal amount");
+                        return null;
+                    }
+                    break;
+
+                default:
+                    System.out.println("Illegal command");
+                    return null;
+            }
+            userInputTokenNo++;
+        }
+        return new MarketPlaceCommand(commandName, productName, amount);
     }
 
     private boolean marketPlaceExecute()
@@ -217,6 +291,31 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
         return true;
     }
     //endregion
+
+
+    private class MarketPlaceCommand {
+        private MarketplaceCommandName commandName;
+        private String productName;
+        private float amount;
+
+        private MarketplaceCommandName getCommandName() {
+            return commandName;
+        }
+
+        private String getProductName() {
+            return productName;
+        }
+
+        private float getAmount() {
+            return amount;
+        }
+
+        private MarketPlaceCommand(MarketplaceCommandName commandName, String productName, float amount) {
+            this.commandName = commandName;
+            this.productName = productName;
+            this.amount = amount;
+        }
+    }
 
     //region Bank Command line function
     private BankCommand bankParse(String userInput)
@@ -389,7 +488,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             this.amount = amount;
         }
     }
-
     //endregion
 
 }
