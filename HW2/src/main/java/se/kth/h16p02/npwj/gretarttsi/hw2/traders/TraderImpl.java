@@ -24,6 +24,12 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
     private String bankname;
     String clientname;
 
+    static enum location{
+        bank,
+        marketPlace,
+        home
+    }
+
     static enum CommandName {
         newAccount, getAccount, deleteAccount, deposit, withdraw, balance, quit, help, list;
     };
