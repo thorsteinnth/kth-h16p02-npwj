@@ -20,6 +20,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String HOME = "Home";
     private static final String MARKETPLACE = "Marketplace";
+    private static final String PRODUCT_ERROR = "Product name is not specified";
+    private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String BANK = "Bank";
 
     private BufferedReader consoleIn;
@@ -42,7 +44,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         deposit,
         withdraw,
         balance,
-        quit,
+        exit,
         help,
         list;
     };
@@ -56,7 +58,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         buy,
         wish,
         help,
-        quit
+        exit
     }
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
@@ -142,16 +144,18 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         while (run)
         {
-            System.out.print(clientname + "@" + bankname + ">");
+            System.out.print(username + "@" + MARKETPLACE + ">");
             try
             {
                 String userInput = consoleIn.readLine();
-                run = bankExecute(bankParse(userInput));
+                run = marketPlaceExecute(marketplaceParse(userInput));
             }
+            /*
             catch (RejectedException re)
             {
                 System.out.println(re);
             }
+            */
             catch (IOException e)
             {
                 e.printStackTrace();
@@ -241,7 +245,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 return;
 
             case marketPlace:
-                System.out.println("MarketPlace not ready. Coming real soon");
+                runMarketplace();
                 return;
 
             case bank:
@@ -268,7 +272,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         MarketplaceCommandName commandName = null;
         String productName = null;
-        float amount = 0;
+        float amount = -1;
         int userInputTokenNo = 1;
 
         while (tokenizer.hasMoreTokens())
@@ -313,14 +317,77 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return new MarketPlaceCommand(commandName, productName, amount);
     }
 
-    private boolean marketPlaceExecute(MarketPlaceCommand command)
+    private boolean marketPlaceExecute(MarketPlaceCommand command) throws RemoteException
     {
-        System.out.println(command.toString());
+        if(command == null)
+        {
+            return true;
+        }
+
+        // commands using only one argument
+        switch (command.commandName)
+        {
+            case unregister:
+                System.out.println("Not implemented yeat");
+                return true;
+
+            case register:
+                System.out.println("Not implemented yeat");
+                return true;
+
+            case status:
+                System.out.println("Not implemented yeat");
+                return true;
+
+            case inspect:
+                System.out.println("Not implemented yeat");
+                return true;
+
+            case help:
+                for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
+                    System.out.println(commandName);
+                }
+                return true;
+
+            case exit:
+                return false;
+        }
+
+        //commands using two arguments
+        if(command.productName == null || command.productName == "")
+        {
+            System.out.println(PRODUCT_ERROR);
+        }
+
+        if(command.commandName == MarketplaceCommandName.sell)
+        {
+            System.out.println("Sell Not implemented yeat");
+            return true;
+        }
+
+        //commands using two arguments
+        if(command.amount < 0)
+        {
+            System.out.println(AMOUNT_ERROR);
+        }
+
+        // commands using three arguments
+        switch (command.commandName)
+        {
+            case buy:
+                System.out.println("Buy not implemented yeat");
+                return true;
+
+            case wish:
+                System.out.println("Wish not implemented yeat");
+                return true;
+
+            default:
+                System.out.println("Illegal command");
+        }
 
         return true;
     }
-    //endregion
-
 
     private class MarketPlaceCommand {
         private MarketplaceCommandName commandName;
@@ -352,6 +419,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                     "amount: " +  Float.toString(this.amount);
         }
     }
+    //endregion
 
     //region Bank Command line function
     private BankCommand bankParse(String userInput)
@@ -438,7 +506,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 }
                 return true;
 
-            case quit:
+            case exit:
                 runHome();
                 return false;
 
