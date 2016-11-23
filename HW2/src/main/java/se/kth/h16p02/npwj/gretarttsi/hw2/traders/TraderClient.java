@@ -1,5 +1,11 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.traders;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class TraderClient
 {
     private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
@@ -8,35 +14,28 @@ public class TraderClient
     public TraderClient() {
     }
 
-    public static void main(String[] args)
+    public static void main (String[] args)
     {
-        if ((args.length > 1) || (args.length > 0 && args[0].equals("-h"))) {
-            System.out.println(USAGE);
-            System.exit(1);
-        }
+        BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
+        String clientName = "";
 
-        String bankName;
-        if (args.length > 0)
-        {
-            bankName = args[0];
-            try
-            {
-                new TraderImpl(bankName).run();
+        while (clientName == "") {
+
+            System.out.print("Please insert a username: ");
+            try {
+                String userInput = consoleIn.readLine();
+
+                if(userInput != null && userInput != "") {
+                    clientName = userInput;
+                    new TraderImpl(clientName).run();
+                    break;
+                }
             }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            try
-            {
-                new TraderImpl().run();
-            }
-            catch (Exception e)
-            {
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+
 }

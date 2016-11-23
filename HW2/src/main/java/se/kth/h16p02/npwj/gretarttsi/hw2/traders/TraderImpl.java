@@ -9,7 +9,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
@@ -19,41 +18,48 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
     private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
+    private static final String HOME = "Home";
+    private static final String MARKETPLACE = "Marketplace";
+    private static final String BANK = "Bank";
+
+    BufferedReader consoleIn;
     Account account;
     Bank bankobj;
     private String bankname;
     String clientname;
 
-    static enum location{
-        bank,
-        marketPlace,
-        home
-    }
+    static enum HomeCommandName{ bank, marketPlace, home, help}
 
-    static enum CommandName {
+    static enum BankCommandName {
         newAccount, getAccount, deleteAccount, deposit, withdraw, balance, quit, help, list;
     };
 
-    public TraderImpl(String bankName) throws RemoteException{
+    //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
+
+    public TraderImpl(String clientName) throws RemoteException
+    {
         super();
 
-        this.bankname = bankName;
-        try {
-            try {
+        this.clientname = clientName;
+        this.bankname = DEFAULT_BANK_NAME;
+        try
+        {
+            try
+            {
                 LocateRegistry.getRegistry(1099).list();
-            } catch (RemoteException e) {
+            }
+            catch (RemoteException e)
+            {
                 LocateRegistry.createRegistry(1099);
             }
             bankobj = (Bank) Naming.lookup(bankname);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println("The runtime failed: " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Connected to bank: " + bankname);
-    }
-
-    public TraderImpl() throws RemoteException{
-        this(DEFAULT_BANK_NAME);
     }
 
     @Override
@@ -66,91 +72,221 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
     }
 
-    public void run() {
-        BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
+    public void run()
+    {
+        this.consoleIn = new BufferedReader(new InputStreamReader(System.in));
 
-        while (true) {
-            System.out.print(clientname + "@" + bankname + ">");
-            try {
+        runHome();
+    }
+
+    private void runHome()
+    {
+        while (true)
+        {
+            System.out.print(clientname + "@" + HOME + ">");
+            try
+            {
                 String userInput = consoleIn.readLine();
-                execute(parse(userInput));
-            } catch (RejectedException re) {
+                homeExecute(homeParse(userInput));
+            }
+            /*
+            catch (RejectedException re)
+            {
                 System.out.println(re);
-            } catch (IOException e) {
+            }
+            */
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
     }
 
-    private Command parse(String userInput) {
-        if (userInput == null) {
+    private void runBank()
+    {
+        boolean run = true;
+
+        while (run)
+        {
+            System.out.print(clientname + "@" + bankname + ">");
+            try
+            {
+                String userInput = consoleIn.readLine();
+                run = bankExecute(bankParse(userInput));
+            }
+            catch (RejectedException re)
+            {
+                System.out.println(re);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private HomeCommandName homeParse(String userInput)
+    {
+        if (userInput == null)
+        {
             return null;
         }
 
         StringTokenizer tokenizer = new StringTokenizer(userInput);
-        if (tokenizer.countTokens() == 0) {
+        if (tokenizer.countTokens() == 0)
+        {
             return null;
         }
 
-        CommandName commandName = null;
-        String userName = null;
-        float amount = 0;
+        HomeCommandName commandName = null;
         int userInputTokenNo = 1;
 
-        while (tokenizer.hasMoreTokens()) {
-            switch (userInputTokenNo) {
+        while (tokenizer.hasMoreTokens())
+        {
+            switch (userInputTokenNo)
+            {
                 case 1:
-                    try {
+                    try
+                    {
                         String commandNameString = tokenizer.nextToken();
-                        commandName = CommandName.valueOf(CommandName.class, commandNameString);
-                    } catch (IllegalArgumentException commandDoesNotExist) {
+                        commandName = BankCommandName.valueOf(HomeCommandName.class, commandNameString);
+                    }
+                    catch (IllegalArgumentException commandDoesNotExist)
+                    {
                         System.out.println("Illegal command");
                         return null;
                     }
                     break;
-                case 2:
-                    userName = tokenizer.nextToken();
-                    break;
-                case 3:
-                    try {
-                        amount = Float.parseFloat(tokenizer.nextToken());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Illegal amount");
-                        return null;
-                    }
-                    break;
+
                 default:
                     System.out.println("Illegal command");
                     return null;
             }
             userInputTokenNo++;
         }
-        return new Command(commandName, userName, amount);
+        return commandName;
     }
 
-    void execute(Command command) throws RemoteException, RejectedException {
-        if (command == null) {
+    private void homeExecute ( HomeCommandName commandName)
+    {
+        if (commandName == null)
+        {
             return;
         }
 
-        switch (command.getCommandName()) {
+        switch (commandName)
+        {
+            case help:
+                for (HomeCommandName homeCommandName : HomeCommandName.values()) {
+                    System.out.println(homeCommandName);
+                }
+                return;
+
+            case marketPlace:
+                System.out.println("MarketPlace not ready. Coming real soon");
+                return;
+
+            case bank:
+                runBank();
+                return;
+
+        }
+    }
+
+    //region Bank Command line function
+    private BankCommand bankParse(String userInput)
+    {
+        if (userInput == null)
+        {
+            return null;
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(userInput);
+        if (tokenizer.countTokens() == 0)
+        {
+            return null;
+        }
+
+        BankCommandName commandName = null;
+        String userName = null;
+        float amount = 0;
+        int userInputTokenNo = 1;
+
+        while (tokenizer.hasMoreTokens())
+        {
+            switch (userInputTokenNo)
+            {
+                case 1:
+                    try
+                    {
+                        String commandNameString = tokenizer.nextToken();
+                        commandName = BankCommandName.valueOf(BankCommandName.class, commandNameString);
+                    }
+                    catch (IllegalArgumentException commandDoesNotExist)
+                    {
+                        System.out.println("Illegal command");
+                        return null;
+                    }
+                    break;
+
+                case 2:
+                    userName = tokenizer.nextToken();
+                    break;
+
+                case 3:
+                    try
+                    {
+                        amount = Float.parseFloat(tokenizer.nextToken());
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        System.out.println("Illegal amount");
+                        return null;
+                    }
+                    break;
+
+                default:
+                    System.out.println("Illegal command");
+                    return null;
+            }
+            userInputTokenNo++;
+        }
+        return new BankCommand(commandName, userName, amount);
+    }
+
+    boolean bankExecute(BankCommand command) throws RemoteException, RejectedException
+    {
+        if (command == null)
+        {
+            return true;
+        }
+
+        switch (command.getCommandName())
+        {
             case list:
-                try {
-                    for (String accountHolder : bankobj.listAccounts()) {
+                try
+                {
+                    for (String accountHolder : bankobj.listAccounts())
+                    {
                         System.out.println(accountHolder);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
                 }
-                return;
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    return true;
+                }
+                return true;
+
             case quit:
-                System.exit(0);
+                runHome();
+                return false;
+
             case help:
-                for (CommandName commandName : CommandName.values()) {
+                for (BankCommandName commandName : BankCommandName.values()) {
                     System.out.println(commandName);
                 }
-                return;
+                return true;
 
         }
 
@@ -162,25 +298,25 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
         if (userName == null) {
             System.out.println("name is not specified");
-            return;
+            return true;
         }
 
         switch (command.getCommandName()) {
             case newAccount:
                 clientname = userName;
                 bankobj.newAccount(userName);
-                return;
+                return true;
             case deleteAccount:
                 clientname = userName;
                 bankobj.deleteAccount(userName);
-                return;
+                return true;
         }
 
         // all further commands require a Account reference
         Account acc = bankobj.getAccount(userName);
         if (acc == null) {
             System.out.println("No account for " + userName);
-            return;
+            return true;
         } else {
             account = acc;
             clientname = userName;
@@ -202,12 +338,13 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             default:
                 System.out.println("Illegal command");
         }
+        return true;
     }
 
-    private class Command {
+    private class BankCommand {
         private String userName;
         private float amount;
-        private CommandName commandName;
+        private BankCommandName commandName;
 
         private String getUserName() {
             return userName;
@@ -217,15 +354,17 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             return amount;
         }
 
-        private CommandName getCommandName() {
+        private BankCommandName getCommandName() {
             return commandName;
         }
 
-        private Command(CommandName commandName, String userName, float amount) {
+        private BankCommand(BankCommandName commandName, String userName, float amount) {
             this.commandName = commandName;
             this.userName = userName;
             this.amount = amount;
         }
     }
+
+    //endregion
 
 }
