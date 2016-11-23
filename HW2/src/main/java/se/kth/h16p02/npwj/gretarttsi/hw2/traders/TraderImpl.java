@@ -9,26 +9,35 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
-public class TraderImpl extends UnicastRemoteObject implements Trader{
-
+public class TraderImpl extends UnicastRemoteObject implements Trader
+{
     private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
-    Account account;
-    Bank bankobj;
+    private Account account;
+    private Bank bankobj;
     private String bankname;
-    String clientname;
+    private String clientname;
 
-    static enum CommandName {
-        newAccount, getAccount, deleteAccount, deposit, withdraw, balance, quit, help, list;
-    };
+    enum CommandName
+    {
+        newAccount,
+        getAccount,
+        deleteAccount,
+        deposit,
+        withdraw,
+        balance,
+        quit,
+        help,
+        list
+    }
 
-    public TraderImpl(String bankName) throws RemoteException{
+    public TraderImpl(String bankName) throws RemoteException
+    {
         super();
 
         this.bankname = bankName;
@@ -198,7 +207,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
         }
     }
 
-    private class Command {
+    private class Command
+    {
         private String userName;
         private float amount;
         private CommandName commandName;
