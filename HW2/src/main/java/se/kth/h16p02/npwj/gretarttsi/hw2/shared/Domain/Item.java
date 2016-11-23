@@ -23,4 +23,14 @@ public class Item {
     public float getPrice(){
         return this.price;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

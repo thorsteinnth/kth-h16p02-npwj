@@ -4,8 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 
-public interface MarketPlace extends Remote{
-
+public interface MarketPlace extends Remote
+{
     void wish(Trader trader, Item item) throws RemoteException;
 
     void register(Trader trader) throws RemoteException;
