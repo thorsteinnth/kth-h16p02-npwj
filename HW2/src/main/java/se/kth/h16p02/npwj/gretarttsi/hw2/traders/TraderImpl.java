@@ -28,11 +28,17 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
     private String bankname;
     String clientname;
 
-    static enum HomeCommandName{ bank, marketPlace, home, help}
+    static enum HomeCommandName{
+        bank, marketPlace, home, help
+    }
 
     static enum BankCommandName {
         newAccount, getAccount, deleteAccount, deposit, withdraw, balance, quit, help, list;
     };
+
+    static enum marketplaceCommandName {
+        register, unregister, status, inspect, sell, buy, wish, help, quit
+    }
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
 
@@ -102,6 +108,11 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
         }
     }
 
+    private void runMarketplace()
+    {
+
+    }
+
     private void runBank()
     {
         boolean run = true;
@@ -125,6 +136,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
         }
     }
 
+    //region Home command line function
     private HomeCommandName homeParse(String userInput)
     {
         if (userInput == null)
@@ -192,6 +204,19 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
         }
     }
+    //endregion
+
+    //region Marketplace command line function
+    private marketplaceCommandName marketplaceParse()
+    {
+
+    }
+
+    private boolean marketPlaceExecute()
+    {
+        return true;
+    }
+    //endregion
 
     //region Bank Command line function
     private BankCommand bankParse(String userInput)
