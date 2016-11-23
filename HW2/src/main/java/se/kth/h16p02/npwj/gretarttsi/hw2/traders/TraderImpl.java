@@ -32,7 +32,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
     enum HomeCommandName{
         bank,
-        marketPlace,
+        marketplace,
         home,
         help
     }
@@ -244,7 +244,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 }
                 return;
 
-            case marketPlace:
+            case marketplace:
                 runMarketplace();
                 return;
 
