@@ -5,10 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemNotFoundException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
@@ -23,7 +20,7 @@ public interface MarketPlace extends Remote
     /**
      * Register client (trader)
      * */
-    boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException;
+    boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException;
 
     /**
      * Deregister client (trader)
@@ -43,7 +40,7 @@ public interface MarketPlace extends Remote
     /**
      * Buy item
      * */
-    boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException;
+    boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException, BankAccountNotFoundException;
 
     /**
      * Inspect what items are available on the marketplace

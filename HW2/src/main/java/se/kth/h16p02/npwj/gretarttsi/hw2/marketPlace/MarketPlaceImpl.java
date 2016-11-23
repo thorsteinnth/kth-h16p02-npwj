@@ -72,7 +72,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException
+    public boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException, BankAccountNotFoundException
     {
         if (!this.repository.isTraderRegistered(trader))
         {
@@ -90,9 +90,9 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.getAccount(trader.getUsername());
         if (sellerAccount == null)
-            return false;
+            throw new BankAccountNotFoundException("Could not find bank account for seller");
         if (buyerAccount == null)
-            return false;
+            throw new BankAccountNotFoundException("Could not find bank account for buyer");
 
         sellerAccount.withdraw(saleItem.getItem().getPrice().floatValue());
         buyerAccount.deposit(saleItem.getItem().getPrice().floatValue());
@@ -114,9 +114,11 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     //region Registration handling
 
     @Override
-    public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException
+    public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException
     {
-        // TODO Check if the user has a bank account
+        if (this.bank.getAccount(trader.getUsername()) == null)
+            throw new BankAccountNotFoundException("Could not find bank account for user: " + trader.getUsername());
+
         return this.repository.registerTrader(trader);
     }
 

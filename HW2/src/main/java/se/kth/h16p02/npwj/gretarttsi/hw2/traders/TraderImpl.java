@@ -11,10 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemNotFoundException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
@@ -41,6 +38,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String REJECTED = "Rejected";
     private static final String REGISTRATION_SUCCESS = "User successfully registered";
     private static final String DEREGISTRATION_SUCCESS = "User successfully deregistered";
+    private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";
 
     private BufferedReader consoleIn;
     private Account account;
@@ -371,6 +369,11 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                     System.out.println(TRADER_ALREADY_EXIST);
                     return false;
                 }
+                catch (BankAccountNotFoundException e)
+                {
+                    System.out.println(BANKACCOUNT_NOT_FOUND);
+                    return true;
+                }
 
             case inspect:
                 ArrayList<SaleItem> saleItems = this.marketplaceobj.inspectAvailableItems();
@@ -435,6 +438,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 catch (RejectedException e)
                 {
                     System.out.println(REJECTED);
+                }
+                catch (BankAccountNotFoundException e)
+                {
+                    System.out.println(e.getMessage());
                 }
                 return true;
 
@@ -518,10 +525,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                     break;
 
                 case 2:
-                    userName = tokenizer.nextToken();
-                    break;
-
-                case 3:
                     try
                     {
                         amount = Float.parseFloat(tokenizer.nextToken());
@@ -539,7 +542,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             }
             userInputTokenNo++;
         }
-        return new BankCommand(commandName, userName, amount);
+        return new BankCommand(commandName, this.username, amount);
     }
 
     boolean bankExecute(BankCommand command) throws RemoteException, RejectedException
@@ -548,6 +551,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         {
             return true;
         }
+
+        System.out.println(command);
 
         switch (command.getCommandName())
         {
@@ -631,7 +636,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return true;
     }
 
-    private class BankCommand {
+    private class BankCommand
+    {
         private String userName;
         private float amount;
         private BankCommandName commandName;
@@ -648,10 +654,20 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             return commandName;
         }
 
-        private BankCommand(BankCommandName commandName, String userName, float amount) {
+        private BankCommand(BankCommandName commandName, String userName, float amount)
+        {
             this.commandName = commandName;
             this.userName = userName;
             this.amount = amount;
+        }
+
+        @Override
+        public String toString() {
+            return "BankCommand{" +
+                    "userName='" + userName + '\'' +
+                    ", amount=" + amount +
+                    ", commandName=" + commandName +
+                    '}';
         }
     }
     //endregion
