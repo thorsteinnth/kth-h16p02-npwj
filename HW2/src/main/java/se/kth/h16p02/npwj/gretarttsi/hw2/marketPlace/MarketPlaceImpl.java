@@ -7,6 +7,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
@@ -37,9 +38,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public void inspectAvailableItems() throws RemoteException
+    public ArrayList<Item> inspectAvailableItems() throws RemoteException
     {
         System.out.println("Should list available items");
+        return new ArrayList<>();
     }
 
     //region Registration handling

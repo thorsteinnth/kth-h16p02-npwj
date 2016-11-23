@@ -3,6 +3,8 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 
 public interface MarketPlace extends Remote
@@ -40,5 +42,5 @@ public interface MarketPlace extends Remote
     /**
      * Inspect what items are available on the marketplace
      * */
-    void inspectAvailableItems() throws RemoteException;
+    ArrayList<Item> inspectAvailableItems() throws RemoteException;
 }
