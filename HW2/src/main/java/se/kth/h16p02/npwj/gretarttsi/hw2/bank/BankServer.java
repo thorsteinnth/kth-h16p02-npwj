@@ -5,11 +5,12 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
 
-public class Server {
-    private static final String USAGE = "java bankrmi.Server <bank_rmi_url>";
+public class BankServer
+{
+    private static final String USAGE = "java bankrmi.BankServer <bank_rmi_url>";
     private static final String BANK = "Nordea";
 
-    public Server(String bankName) {
+    public BankServer(String bankName) {
         try {
             Bank bankobj = new BankImpl(bankName);
             // Register the newly created object at rmiregistry.
@@ -38,6 +39,6 @@ public class Server {
             bankName = BANK;
         }
 
-        new Server(bankName);
+        new BankServer(bankName);
     }
 }

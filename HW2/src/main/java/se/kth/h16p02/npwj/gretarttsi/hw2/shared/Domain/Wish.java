@@ -23,4 +23,13 @@ public class Wish {
         return this.specifiedPrice;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Wish{" +
+                "id=" + id +
+                ", item=" + item +
+                ", specifiedPrice=" + specifiedPrice +
+                '}';
+    }
 }
