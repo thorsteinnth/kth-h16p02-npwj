@@ -11,9 +11,12 @@ import java.util.ArrayList;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
+    private MarketPlaceRepository repository;
+
     public MarketPlaceImpl() throws RemoteException
     {
         super();
+        this.repository = new MarketPlaceRepository();
     }
 
     @Override
@@ -47,22 +50,21 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     //region Registration handling
 
     @Override
-    public void register(Trader trader) throws RemoteException
+    public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException
     {
-        System.out.println("Trader registering");
+        return this.repository.registerTrader(trader);
     }
 
     @Override
-    public void deregister(Trader trader) throws RemoteException
+    public boolean deregister(Trader trader) throws RemoteException
     {
-        System.out.println("Trader deregistering");
+        return this.repository.deregisterTrader(trader);
     }
 
     @Override
     public boolean checkIfRegistered(Trader trader) throws RemoteException
     {
-        System.out.println("Should check if trader is registered");
-        return false;
+        return this.repository.isTraderRegistered(trader);
     }
 
     //endregion
