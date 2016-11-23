@@ -20,27 +20,27 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace 
 
     @Override
     public void wish(Trader trader, Item item) throws RemoteException {
-        System.out.println("Client making a wish");
+        System.out.println("TraderClient making a wish");
     }
 
     @Override
     public void register(Trader trader) throws RemoteException {
-        System.out.println("Client making a wish");
+        System.out.println("TraderClient making a wish");
     }
 
     @Override
     public void unregister(Trader trader) throws RemoteException {
-        System.out.println("Client making a wish");
+        System.out.println("TraderClient making a wish");
     }
 
     @Override
     public void sell(Trader trader, Item item) throws RemoteException {
-        System.out.println("Client making a wish");
+        System.out.println("TraderClient making a wish");
     }
 
     @Override
     public void buy(Trader trader, Item item) throws RemoteException {
-        System.out.println("Client making a wish");
+        System.out.println("TraderClient making a wish");
     }
 
     @Override

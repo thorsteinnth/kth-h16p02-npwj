@@ -17,7 +17,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 public class TraderImpl extends UnicastRemoteObject implements Trader{
 
-    private static final String USAGE = "java bankrmi.Client <bank_url>";
+    private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
     Account account;
     Bank bankobj;
