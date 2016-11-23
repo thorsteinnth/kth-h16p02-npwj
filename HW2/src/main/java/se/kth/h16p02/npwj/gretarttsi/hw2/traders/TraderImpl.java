@@ -129,7 +129,25 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
 
     private void runMarketplace()
     {
+        boolean run = true;
 
+        while (run)
+        {
+            System.out.print(clientname + "@" + bankname + ">");
+            try
+            {
+                String userInput = consoleIn.readLine();
+                run = bankExecute(bankParse(userInput));
+            }
+            catch (RejectedException re)
+            {
+                System.out.println(re);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void runBank()
@@ -286,8 +304,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
         return new MarketPlaceCommand(commandName, productName, amount);
     }
 
-    private boolean marketPlaceExecute()
+    private boolean marketPlaceExecute(MarketPlaceCommand command)
     {
+        System.out.println(command.toString());
+
         return true;
     }
     //endregion
@@ -314,6 +334,13 @@ public class TraderImpl extends UnicastRemoteObject implements Trader{
             this.commandName = commandName;
             this.productName = productName;
             this.amount = amount;
+        }
+
+        public String toString()
+        {
+            return "command name: " + this.commandName.toString() + " " +
+                    "product name: " + this.productName + " " +
+                    "amount: " +  Float.toString(this.amount);
         }
     }
 
