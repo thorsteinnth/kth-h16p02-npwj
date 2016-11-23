@@ -1,20 +1,23 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MarketPlaceRepository
 {
-    private ArrayList<Item> items;
     private ArrayList<Trader> traders;
+    private ArrayList<SaleItem> saleItems;
 
     public MarketPlaceRepository()
     {
-        this.items = new ArrayList<>();
         this.traders = new ArrayList<>();
+        this.saleItems = new ArrayList<>();
     }
 
     //region Traders
@@ -68,5 +71,64 @@ public class MarketPlaceRepository
     //endregion
 
     //region Items
+
+    public boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException
+    {
+        if(!isItemUnique(item))
+        {
+           throw new ItemAlreadyExistsException("Item already exists in marketplace " + item.toString());
+        }
+
+        this.saleItems.add(new SaleItem(item,trader));
+
+        return false;
+    }
+
+    public boolean removeSaleItem(SaleItem saleItem)
+    {
+        this.saleItems.remove(saleItem);
+
+        return true;
+    }
+
+    public ArrayList<SaleItem> getAllSaleItems()
+    {
+        return this.saleItems;
+    }
+
+    public boolean itemExists(Item item)
+    {
+        return !isItemUnique(item);
+    }
+
+    public SaleItem findSaleItem(Item item) throws ItemNotFoundException
+    {
+        List<SaleItem> foundSaleItems =
+                this.saleItems
+                        .stream()
+                        .filter(si -> si.getItem().equals(item))
+                        .collect(Collectors.toList());
+
+        if (foundSaleItems.size() == 0)
+            throw new ItemNotFoundException(item.toString());
+        else if (foundSaleItems.size() > 1)
+            throw new IllegalStateException("More than one item found: " + item);
+        else
+            return foundSaleItems.get(0);
+    }
+
+    private boolean isItemUnique(Item item)
+    {
+        for(SaleItem saleItem : this.saleItems)
+        {
+            if(item.equals(saleItem.getItem()))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     //endregion
 }

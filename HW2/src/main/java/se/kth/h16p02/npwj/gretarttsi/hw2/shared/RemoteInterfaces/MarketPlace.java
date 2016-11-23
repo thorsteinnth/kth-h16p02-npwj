@@ -5,8 +5,13 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 
 public interface MarketPlace extends Remote
 {
@@ -33,15 +38,15 @@ public interface MarketPlace extends Remote
     /**
      * Put item up for sale
      * */
-    void sell(Trader trader, Item item) throws RemoteException;
+    boolean sell(Trader trader, Item item) throws RemoteException, ItemAlreadyExistsException, TraderNotFoundException;
 
     /**
      * Buy item
      * */
-    void buy(Trader trader, Item item) throws RemoteException;
+    boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException;
 
     /**
      * Inspect what items are available on the marketplace
      * */
-    ArrayList<Item> inspectAvailableItems() throws RemoteException;
+    ArrayList<SaleItem> inspectAvailableItems() throws RemoteException;
 }

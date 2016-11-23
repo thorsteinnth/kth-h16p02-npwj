@@ -1,23 +1,17 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Item
+public class Item implements Serializable
 {
-    private final int id;
     private final String name;
     private BigDecimal price;
 
-    public Item (int id, String name, BigDecimal price)
+    public Item (String name, BigDecimal price)
     {
-        this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    public int getId()
-    {
-        return id;
     }
 
     public String getName()
@@ -31,11 +25,28 @@ public class Item
     }
 
     @Override
-    public String toString()
-    {
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (!name.equals(item.name)) return false;
+        return price.equals(item.price);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + price.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
         return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", price=" + price +
                 '}';
     }

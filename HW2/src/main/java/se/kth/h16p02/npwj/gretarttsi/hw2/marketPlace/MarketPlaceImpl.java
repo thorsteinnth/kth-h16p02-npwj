@@ -1,22 +1,54 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
+    private static final String DEFAULT_BANK_NAME = "Nordea";
+
     private MarketPlaceRepository repository;
+    private Bank bank;
 
     public MarketPlaceImpl() throws RemoteException
     {
         super();
         this.repository = new MarketPlaceRepository();
+
+        try
+        {
+            try
+            {
+                LocateRegistry.getRegistry(1099).list();
+            }
+            catch (RemoteException e)
+            {
+                LocateRegistry.createRegistry(1099);
+            }
+
+            this.bank = (Bank) Naming.lookup(DEFAULT_BANK_NAME);
+        }
+        catch (NotBoundException|MalformedURLException e)
+        {
+            System.err.println("The runtime failed: " + e.getMessage());
+            System.exit(0);
+        }
+
+        System.out.println("Marketplace connection to bank established");
     }
 
     @Override
@@ -29,22 +61,54 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public void sell(Trader trader, Item item) throws RemoteException
+    public boolean sell(Trader trader, Item item) throws RemoteException, ItemAlreadyExistsException, TraderNotFoundException
     {
-        System.out.println("Trader " + trader + " selling: " + item);
+        if (!this.repository.isTraderRegistered(trader))
+        {
+            throw new TraderNotFoundException ("Trader not found in marketplace");
+        }
+
+        return this.repository.addSaleItem(trader, item);
     }
 
     @Override
-    public void buy(Trader trader, Item item) throws RemoteException
+    public boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException
     {
-        System.out.println("Trader " + trader + " buying: " + item);
+        if (!this.repository.isTraderRegistered(trader))
+        {
+            throw new TraderNotFoundException ("Trader not found in marketplace");
+        }
+
+        if (!this.repository.itemExists(item))
+        {
+            throw new ItemNotFoundException("Item not found: " + item);
+        }
+
+        SaleItem saleItem = this.repository.findSaleItem(item);
+
+        // TODO Throw could not find bank account exceptions
+        Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
+        Account buyerAccount = bank.getAccount(trader.getUsername());
+        if (sellerAccount == null)
+            return false;
+        if (buyerAccount == null)
+            return false;
+
+        sellerAccount.withdraw(saleItem.getItem().getPrice().floatValue());
+        buyerAccount.deposit(saleItem.getItem().getPrice().floatValue());
+
+        Trader seller = saleItem.getTrader();
+        seller.itemSoldNotification(saleItem.getItem().getName());
+
+        this.repository.removeSaleItem(saleItem);
+
+        return true;
     }
 
     @Override
-    public ArrayList<Item> inspectAvailableItems() throws RemoteException
+    public ArrayList<SaleItem> inspectAvailableItems() throws RemoteException
     {
-        System.out.println("Should list available items");
-        return new ArrayList<>();
+        return this.repository.getAllSaleItems();
     }
 
     //region Registration handling
@@ -52,6 +116,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException
     {
+        // TODO Check if the user has a bank account
         return this.repository.registerTrader(trader);
     }
 

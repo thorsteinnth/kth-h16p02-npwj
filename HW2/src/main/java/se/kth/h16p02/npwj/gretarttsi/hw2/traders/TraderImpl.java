@@ -3,15 +3,24 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.traders;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.ItemNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.TraderNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 public class TraderImpl extends UnicastRemoteObject implements Trader
@@ -23,10 +32,20 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String BANK = "Bank";
+    private static final String WISH_LIST_AVAILABLE = "the item {0} that you have in your wish list is now available in the marketplace";
+    private static final String ITEM_SOLD = "Your item {0} has been sold on the marketplace. Deposit has been made to your account";
+    private static final String ITEM_ALREADY_EXIST = "The Item {0} already exist in the marketplace at this cost";
+    private static final String ITEM_NOT_FOUND = "This item is not for sale in the marketplace. You can add it to your wishlist";
+    private static final String TRADER_ALREADY_EXIST = "Trader with this username already exist";
+    private static final String TRADER_NOT_FOUND = "User not registered";
+    private static final String REJECTED = "Rejected";
+    private static final String REGISTRATION_SUCCESS = "User successfully registered";
+    private static final String DEREGISTRATION_SUCCESS = "User successfully deregistered";
 
     private BufferedReader consoleIn;
     private Account account;
     private Bank bankobj;
+    private MarketPlace marketplaceobj;
     private String bankname;
     private String username;
 
@@ -52,7 +71,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     enum MarketplaceCommandName {
         register,
         unregister,
-        status,
         inspect,
         sell,
         buy,
@@ -82,6 +100,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             }
 
             bankobj = (Bank) Naming.lookup(bankname);
+            marketplaceobj = (MarketPlace)Naming.lookup("MarketPlace");
+
         }
         catch (Exception e)
         {
@@ -90,6 +110,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
 
         System.out.println("Connected to bank: " + bankname);
+        System.out.println("Connection to marketplace");
     }
 
     @Override
@@ -99,13 +120,13 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     }
 
     @Override
-    public void wishIsAvailable(String item) {
-
+    public void wishListAvailableNotification(String itemName) throws RemoteException {
+        System.out.println(String.format(WISH_LIST_AVAILABLE,itemName));
     }
 
     @Override
-    public void itemSold(String item) {
-
+    public void itemSoldNotification(String itemName) throws RemoteException {
+        System.out.println(String.format(ITEM_SOLD,itemName));
     }
 
     public void run()
@@ -328,19 +349,32 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         switch (command.commandName)
         {
             case unregister:
-                System.out.println("Not implemented yeat");
-                return true;
+                if (this.marketplaceobj.deregister(this))
+                {
+                    System.out.println(DEREGISTRATION_SUCCESS);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
 
             case register:
-                System.out.println("Not implemented yeat");
-                return true;
-
-            case status:
-                System.out.println("Not implemented yeat");
-                return true;
+                try
+                {
+                    this.marketplaceobj.register(this);
+                    System.out.println(REGISTRATION_SUCCESS);
+                    return true;
+                }
+                catch (TraderAlreadyExistsException e)
+                {
+                    System.out.println(TRADER_ALREADY_EXIST);
+                    return false;
+                }
 
             case inspect:
-                System.out.println("Not implemented yeat");
+                ArrayList<SaleItem> saleItems = this.marketplaceobj.inspectAvailableItems();
+                System.out.println(getAvailbleItemsDisplayString(saleItems));
                 return true;
 
             case help:
@@ -361,7 +395,18 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         if(command.commandName == MarketplaceCommandName.sell)
         {
-            System.out.println("Sell Not implemented yeat");
+            try
+            {
+                marketplaceobj.sell(this, new Item(command.productName, new BigDecimal(command.amount)));
+            }
+            catch (ItemAlreadyExistsException e)
+            {
+                System.out.println(String.format(ITEM_ALREADY_EXIST, command.getProductName()));
+            }
+            catch (TraderNotFoundException e)
+            {
+                System.out.println(TRADER_NOT_FOUND);
+            }
             return true;
         }
 
@@ -375,11 +420,26 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         switch (command.commandName)
         {
             case buy:
-                System.out.println("Buy not implemented yeat");
+                try
+                {
+                    this.marketplaceobj.buy(this, new Item(command.productName, new BigDecimal(command.getAmount())));
+                }
+                catch (TraderNotFoundException e)
+                {
+                    System.out.println(TRADER_NOT_FOUND);
+                }
+                catch (ItemNotFoundException e)
+                {
+                    System.out.println(ITEM_NOT_FOUND);
+                }
+                catch (RejectedException e)
+                {
+                    System.out.println(REJECTED);
+                }
                 return true;
 
             case wish:
-                System.out.println("Wish not implemented yeat");
+                System.out.println("WishListItem not implemented yeat");
                 return true;
 
             default:
@@ -593,6 +653,24 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             this.userName = userName;
             this.amount = amount;
         }
+    }
+    //endregion
+
+    //region Display functions
+
+    private String getAvailbleItemsDisplayString (ArrayList<SaleItem> saleItems)
+    {
+        if (saleItems.size() == 0)
+            return "No items available";
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(SaleItem saleItem : saleItems)
+        {
+            stringBuilder.append(saleItem.getItem().getName() + " - " + "Price: " + saleItem.getItem().getPrice() + "\n");
+        }
+
+        return stringBuilder.toString();
     }
     //endregion
 
