@@ -46,6 +46,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private MarketPlace marketplaceobj;
     private String bankname;
     private String username;
+    private State state;
 
     enum HomeCommandName{
         bank,
@@ -75,6 +76,13 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         wish,
         help,
         exit
+    }
+
+    enum State
+    {
+        bank,
+        marketplace,
+        home
     }
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
@@ -120,11 +128,29 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     @Override
     public void wishListAvailableNotification(String itemName) throws RemoteException {
         System.out.println(String.format(WISH_LIST_AVAILABLE,itemName));
+        runConsolOutput(state);
     }
 
     @Override
     public void itemSoldNotification(String itemName) throws RemoteException {
         System.out.println(String.format(ITEM_SOLD,itemName));
+        runConsolOutput(state);
+    }
+
+    public void runConsolOutput(State state)
+    {
+        switch(state)
+        {
+            case home:
+                System.out.print(username + "@" + HOME + ">");
+                break;
+            case bank:
+                System.out.print(username + "@" + bankname + ">");
+                break;
+            case marketplace:
+                System.out.print(username + "@" + MARKETPLACE + ">");
+                break;
+        }
     }
 
     public void run()
@@ -138,7 +164,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     {
         while (true)
         {
-            System.out.print(username + "@" + HOME + ">");
+            state = State.home;
+            runConsolOutput(state);
             try
             {
                 String userInput = consoleIn.readLine();
@@ -163,7 +190,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         while (run)
         {
-            System.out.print(username + "@" + MARKETPLACE + ">");
+            state = State.marketplace;
+            runConsolOutput(state);
             try
             {
                 String userInput = consoleIn.readLine();
@@ -188,7 +216,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         while (run)
         {
-            System.out.print(username + "@" + bankname + ">");
+            state = State.bank;
+            runConsolOutput(state);
             try
             {
                 String userInput = consoleIn.readLine();
