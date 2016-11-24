@@ -30,7 +30,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String BANK = "Bank";
-    private static final String WISH_LIST_AVAILABLE = " The item %s that you have in your wish list is now available in the marketplace";
+    private static final String WISH_LIST_AVAILABLE = "The item %s that you have in your wish list is now available in the marketplace";
     private static final String ITEM_SOLD = "Your item %s has been sold on the marketplace. Deposit has been made to your account";
     private static final String ITEM_ALREADY_EXIST = "The Item %s already exist in the marketplace at this cost";
     private static final String ITEM_NOT_FOUND = "This item is not for sale in the marketplace. You can add it to your wishlist";
