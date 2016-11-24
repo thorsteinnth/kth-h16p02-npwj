@@ -95,7 +95,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException, BankAccountNotFoundException
+    public boolean buy(Trader trader, Item item) throws
+            RemoteException,
+            TraderNotFoundException,
+            ItemNotFoundException,
+            RejectedException,
+            BankAccountNotFoundException,
+            BuyException
     {
         if (!this.repository.isTraderRegistered(trader))
         {
@@ -108,6 +114,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         SaleItem saleItem = this.repository.findSaleItem(item);
+
+        
 
         Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.getAccount(trader.getUsername());

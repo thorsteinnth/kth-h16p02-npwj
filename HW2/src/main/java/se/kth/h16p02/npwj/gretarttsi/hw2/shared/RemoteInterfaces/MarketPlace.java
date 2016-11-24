@@ -46,7 +46,13 @@ public interface MarketPlace extends Remote
     /**
      * Buy item
      * */
-    boolean buy(Trader trader, Item item) throws RemoteException, TraderNotFoundException, ItemNotFoundException, RejectedException, BankAccountNotFoundException;
+    boolean buy(Trader trader, Item item) throws
+            RemoteException,
+            TraderNotFoundException,
+            ItemNotFoundException,
+            RejectedException,
+            BankAccountNotFoundException,
+            BuyException;
 
     /**
      * Inspect what items are available on the marketplace
