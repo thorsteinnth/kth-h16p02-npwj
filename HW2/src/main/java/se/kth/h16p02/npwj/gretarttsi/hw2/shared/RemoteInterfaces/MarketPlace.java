@@ -5,6 +5,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.bank.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
@@ -52,7 +53,8 @@ public interface MarketPlace extends Remote
             ItemNotFoundException,
             RejectedException,
             BankAccountNotFoundException,
-            BuyException;
+            BuyException,
+            InsufficientFundsException;
 
     /**
      * Inspect what items are available on the marketplace

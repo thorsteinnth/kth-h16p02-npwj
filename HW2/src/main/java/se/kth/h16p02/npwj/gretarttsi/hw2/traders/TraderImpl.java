@@ -11,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.bank.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
@@ -23,13 +24,11 @@ import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 public class TraderImpl extends UnicastRemoteObject implements Trader
 {
-    private static final String USAGE = "java bankrmi.TraderClient <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String HOME = "Home";
     private static final String MARKETPLACE = "Marketplace";
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
-    private static final String BANK = "Bank";
     private static final String WISH_LIST_AVAILABLE = "The item %s that you have in your wish list is now available in the marketplace";
     private static final String ITEM_SOLD = "Your item %s has been sold on the marketplace. Deposit has been made to your account";
     private static final String ITEM_ALREADY_EXIST = "The Item %s already exist in the marketplace at this cost";
@@ -45,6 +44,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String SELLING_SUCCESSFUL = "You are now selling %s for the price of %s";
     private static final String SELLING_FAILURE = "Unable to sell item";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
+    private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
 
     private BufferedReader consoleIn;
     private Account account;
@@ -255,6 +255,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             catch (RejectedException re)
             {
                 System.out.println(re);
+            }
+            catch (InsufficientFundsException ex)
+            {
+                System.out.println(INSUFFICIENT_FUNDS);
             }
             catch (IOException e)
             {
@@ -518,6 +522,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 {
                     System.out.println(e.getMessage());
                 }
+                catch (InsufficientFundsException ex)
+                {
+                    System.out.println(INSUFFICIENT_FUNDS);
+                }
                 return true;
 
             case wish:
@@ -632,7 +640,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return new BankCommand(commandName, this.username, amount);
     }
 
-    boolean bankExecute(BankCommand command) throws RemoteException, RejectedException
+    boolean bankExecute(BankCommand command) throws RemoteException, RejectedException, InsufficientFundsException
     {
         if (command == null)
         {
