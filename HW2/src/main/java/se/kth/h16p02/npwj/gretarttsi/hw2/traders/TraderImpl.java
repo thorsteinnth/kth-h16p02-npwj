@@ -58,19 +58,21 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         bank,
         marketplace,
         home,
-        help
+        help,
+        ls
     }
 
     enum BankCommandName {
-        newAccount,
-        getAccount,
-        deleteAccount,
+        newaccount,
+        getaccount,
+        deleteaccount,
         deposit,
         withdraw,
         balance,
         exit,
         help,
-        list;
+        list,
+        ls
     };
 
     enum MarketplaceCommandName {
@@ -82,7 +84,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         wish,
         getwishes,
         help,
-        exit
+        exit,
+        ls
     }
 
     enum State
@@ -177,6 +180,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
     }
 
+    //region Run functions
+
     public void run()
     {
         this.consoleIn = new BufferedReader(new InputStreamReader(System.in));
@@ -257,6 +262,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             }
         }
     }
+    //endregion functions
 
     //region Home command line function
     private HomeCommandName homeParse(String userInput)
@@ -310,6 +316,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         switch (commandName)
         {
+            case ls:
             case help:
                 for (HomeCommandName homeCommandName : HomeCommandName.values()) {
                     System.out.println(homeCommandName);
@@ -437,6 +444,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 ArrayList<WishListItem> wishListItems = this.marketplaceobj.getTradersWishes(this);
                 System.out.println(getTradersWishesDisplayString(wishListItems));
                 return true;
+
+            case ls:
             case help:
                 for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
                     System.out.println(commandName);
@@ -647,6 +656,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 runHome();
                 return false;
 
+            case ls:
             case help:
                 for (BankCommandName commandName : BankCommandName.values()) {
                     System.out.println(commandName);
@@ -663,10 +673,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         switch (command.getCommandName())
         {
-            case newAccount:
+            case newaccount:
                 bankobj.newAccount(username);
                 return true;
-            case deleteAccount:
+            case deleteaccount:
                 bankobj.deleteAccount(username);
                 return true;
         }
@@ -685,7 +695,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         switch (command.getCommandName())
         {
-            case getAccount:
+            case getaccount:
                 System.out.println(account);
                 break;
 
