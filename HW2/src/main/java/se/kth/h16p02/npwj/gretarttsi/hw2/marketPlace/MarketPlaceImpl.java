@@ -137,6 +137,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean deregister(Trader trader) throws RemoteException
     {
+        this.repository.removeTradersWishListItems(trader);
         return this.repository.deregisterTrader(trader);
     }
 
