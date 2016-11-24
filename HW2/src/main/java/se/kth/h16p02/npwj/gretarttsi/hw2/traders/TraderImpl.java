@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
@@ -41,6 +42,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";
     private static final String BUY_SUCCESSFUL = "Congratulation you bought %s for the price of %s";
     private static final String SELLING_SUCCESSFUL = "Congratulation you are now selling %s for the price of %s";
+    private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
 
     private BufferedReader consoleIn;
     private Account account;
@@ -76,6 +78,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         sell,
         buy,
         wish,
+        getWishes,
         help,
         exit
     }
@@ -430,6 +433,9 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 System.out.println(getAvailbleItemsDisplayString(saleItems));
                 return true;
 
+            case getWishes:
+                System.out.println(getTradersWishesDisplayString(this.marketplaceobj.getTradersWishes(this)));
+
             case help:
                 for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
                     System.out.println(commandName);
@@ -739,6 +745,23 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
 
         return stringBuilder.toString();
+    }
+
+    private String getTradersWishesDisplayString(ArrayList<WishListItem> wishListItems)
+    {
+        if(wishListItems.size() > 0)
+        {
+            StringBuilder wishListItemsString = new StringBuilder();
+            for(WishListItem wishListItem: wishListItems)
+            {
+                wishListItemsString.append(wishListItem.toString() + "\n");
+            }
+            return wishListItemsString.toString();
+        }
+        else
+        {
+            return NO_WISHES_REGISTERED;
+        }
     }
     //endregion
 

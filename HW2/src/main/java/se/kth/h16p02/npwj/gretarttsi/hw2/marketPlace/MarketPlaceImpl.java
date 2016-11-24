@@ -59,8 +59,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
                 + " adding item to wishlist with max price " + item.getPrice()
                 + ": "+ item.getName()
         );
-        
+
         this.repository.addWishListItem(trader,item);
+    }
+
+    @Override
+    public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException {
+        return this.repository.getTradersWishes(trader);
     }
 
     @Override
@@ -138,6 +143,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         return this.repository.isTraderRegistered(trader);
     }
+
+
 
     //endregion
 }

@@ -180,5 +180,13 @@ public class MarketPlaceRepository
         return null;
     }
 
+    public ArrayList<WishListItem> getTradersWishes(Trader trader)
+    {
+        return wishListItems = this.wishListItems
+                .stream()
+                .filter(wi -> wi.getTrader().equals(trader))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
     //endregion
 }
