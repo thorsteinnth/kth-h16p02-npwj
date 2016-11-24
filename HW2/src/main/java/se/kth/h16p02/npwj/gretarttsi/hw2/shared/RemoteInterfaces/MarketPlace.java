@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 
 public interface MarketPlace extends Remote
@@ -16,6 +17,11 @@ public interface MarketPlace extends Remote
      * Add item to wishlist
      * */
     void addItemToWishlist(Trader trader, Item item, BigDecimal maxPrice) throws RemoteException;
+
+    /**
+     * Find all trader´s wishes
+     * */
+    ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException;
 
     /**
      * Register client (trader)

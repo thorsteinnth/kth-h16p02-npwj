@@ -2,6 +2,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
@@ -58,8 +59,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
                 + " adding item to wishlist with max price " + item.getPrice()
                 + ": "+ item.getName()
         );
-        
+
         this.repository.addWishListItem(trader,item);
+    }
+
+    @Override
+    public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException {
+        return this.repository.getTradersWishes(trader);
     }
 
     @Override
@@ -132,6 +138,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         return this.repository.isTraderRegistered(trader);
     }
+
+
 
     //endregion
 }
