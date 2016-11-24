@@ -52,9 +52,6 @@ public class Item implements Serializable
     }
 
     public String toDisplayString() {
-        return "Item{" +
-                "name='" + name.toString() +
-                ", price=" + price.toString() +
-                '}';
+        return name.toString() + " " + price.toString();
     }
 }

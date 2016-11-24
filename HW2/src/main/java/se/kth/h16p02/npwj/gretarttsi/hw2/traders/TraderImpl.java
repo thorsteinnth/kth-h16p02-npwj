@@ -436,8 +436,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
             case getwishes:
                 ArrayList<WishListItem> wishListItems = this.marketplaceobj.getTradersWishes(this);
-                System.out.println("answer to wishlistitemsize " +  wishListItems.size());
-
+                System.out.println(getTradersWishesDisplayString(wishListItems));
+                return true;
             case help:
                 for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
                     System.out.println(commandName);
@@ -476,6 +476,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         if(command.amount < 0)
         {
             System.out.println(AMOUNT_ERROR);
+            return true;
         }
 
         // commands using three arguments
@@ -759,16 +760,15 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return stringBuilder.toString();
     }
 
-    private String getTradersWishesDisplayString(ArrayList<WishListItem> wishListItems) throws RemoteException
+    private String getTradersWishesDisplayString(ArrayList<WishListItem> wishListItems)
     {
-        System.out.println("the number of item on wish list: " + wishListItems.size());
 
         if(wishListItems.size() > 0)
         {
             StringBuilder wishListItemsString = new StringBuilder();
             for(WishListItem wishListItem: wishListItems)
             {
-                wishListItemsString.append(wishListItem.toDisplayString() + "\n");
+                wishListItemsString.append(wishListItem.getItem().toDisplayString() + "\n");
             }
             return wishListItemsString.toString();
         }
