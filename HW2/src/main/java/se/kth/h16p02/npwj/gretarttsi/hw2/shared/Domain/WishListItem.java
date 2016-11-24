@@ -35,23 +35,14 @@ public class WishListItem implements Serializable
         return item.equals(that.item);
     }
 
-    public boolean equalsWithoutPrice(Object o)
+    public boolean equalsWithoutPrice(Object o) throws RemoteException
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         WishListItem that = (WishListItem) o;
 
-        try
-        {
-            if (!trader.getUsername().equals(that.trader.getUsername())) return false;
-        }
-        catch (RemoteException ex)
-        {
-            System.err.println(ex);
-            return false;
-        }
-
+        if (!trader.getUsername().equals(that.trader.getUsername())) return false;
         return item.getName().equals(that.item.getName());
     }
 

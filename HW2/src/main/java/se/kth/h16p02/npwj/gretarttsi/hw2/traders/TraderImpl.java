@@ -632,8 +632,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             return true;
         }
 
-        System.out.println(command);
-
         switch (command.getCommandName())
         {
             case list:
