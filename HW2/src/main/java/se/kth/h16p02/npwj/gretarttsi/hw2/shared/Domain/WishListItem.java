@@ -2,6 +2,8 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
+import java.rmi.RemoteException;
+
 public class WishListItem {
     private final Trader trader;
     private final Item item;
@@ -62,6 +64,13 @@ public class WishListItem {
         return "WishListItem{" +
                 "trader=" + trader +
                 ", item=" + item +
+                '}';
+    }
+
+    public String toDisplayString() throws RemoteException{
+        return "WishListItem{" +
+                "trader=" + trader.getUsername() +
+                ", item=" + item.toDisplayString() +
                 '}';
     }
 }

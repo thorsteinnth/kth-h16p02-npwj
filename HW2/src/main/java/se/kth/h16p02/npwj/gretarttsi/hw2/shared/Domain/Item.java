@@ -50,4 +50,11 @@ public class Item implements Serializable
                 ", price=" + price +
                 '}';
     }
+
+    public String toDisplayString() {
+        return "Item{" +
+                "name='" + name.toString() +
+                ", price=" + price.toString() +
+                '}';
+    }
 }
