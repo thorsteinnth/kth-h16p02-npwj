@@ -75,7 +75,7 @@ public class MarketPlaceRepository
 
     //region Items
 
-    public boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException
+    public synchronized boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException
     {
         if (!isItemUnique(item))
         {
@@ -87,24 +87,24 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public boolean removeSaleItem(SaleItem saleItem)
+    public synchronized boolean removeSaleItem(SaleItem saleItem)
     {
         this.saleItems.remove(saleItem);
 
         return true;
     }
 
-    public ArrayList<SaleItem> getAllSaleItems()
+    public synchronized ArrayList<SaleItem> getAllSaleItems()
     {
         return this.saleItems;
     }
 
-    public boolean itemExists(Item item)
+    public synchronized boolean itemExists(Item item)
     {
         return !isItemUnique(item);
     }
 
-    public SaleItem findSaleItem(Item item) throws ItemNotFoundException
+    public synchronized SaleItem findSaleItem(Item item) throws ItemNotFoundException
     {
         List<SaleItem> foundSaleItems =
                 this.saleItems
@@ -120,7 +120,7 @@ public class MarketPlaceRepository
             return foundSaleItems.get(0);
     }
 
-    private boolean isItemUnique(Item item)
+    private synchronized boolean isItemUnique(Item item)
     {
         for(SaleItem saleItem : this.saleItems)
         {
@@ -137,7 +137,7 @@ public class MarketPlaceRepository
 
     //region WishListItem
 
-    public boolean addWishListItem(Trader trader, Item item) throws RemoteException
+    public synchronized boolean addWishListItem(Trader trader, Item item) throws RemoteException
     {
         WishListItem newWishListItem = new WishListItem(trader, item);
 
@@ -156,13 +156,13 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public boolean removeWishListItem(WishListItem wishListItem)
+    public synchronized boolean removeWishListItem(WishListItem wishListItem)
     {
         this.wishListItems.remove(wishListItem);
         return true;
     }
 
-    public boolean removeTradersWishListItems(Trader trader)
+    public synchronized boolean removeTradersWishListItems(Trader trader)
     {
         ArrayList<WishListItem> wishListItems = getTradersWishes(trader);
 
@@ -173,12 +173,12 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public WishListItem findWishListItem(Trader trader, Item item) throws RemoteException
+    public synchronized WishListItem findWishListItem(Trader trader, Item item) throws RemoteException
     {
         return findWishListItem(new WishListItem(trader, item));
     }
 
-    public ArrayList<Trader> getTradersThatHaveItemInWishListForGreaterOrSamePrice(Item item)
+    public synchronized ArrayList<Trader> getTradersThatHaveItemInWishListForGreaterOrSamePrice(Item item)
     {
         ArrayList<Trader> tradersWithItemInWishlistForGreaterOrSamePrice = new ArrayList<>();
         ArrayList<WishListItem> wishListEntriesForItemName = getWishlistItemsByItemName(item);
@@ -195,7 +195,7 @@ public class MarketPlaceRepository
         return tradersWithItemInWishlistForGreaterOrSamePrice;
     }
 
-    private WishListItem findWishListItem(WishListItem wishListItem) throws RemoteException
+    private synchronized WishListItem findWishListItem(WishListItem wishListItem) throws RemoteException
     {
         for(WishListItem listItem : this.wishListItems)
         {
@@ -208,7 +208,7 @@ public class MarketPlaceRepository
         return null;
     }
 
-    private ArrayList<WishListItem> getWishlistItemsByItemName(Item item)
+    private synchronized ArrayList<WishListItem> getWishlistItemsByItemName(Item item)
     {
         ArrayList<WishListItem> foundWishListItems = new ArrayList<>();
 
@@ -221,7 +221,7 @@ public class MarketPlaceRepository
         return foundWishListItems;
     }
 
-    public ArrayList<WishListItem> getTradersWishes(Trader trader)
+    public synchronized ArrayList<WishListItem> getTradersWishes(Trader trader)
     {
         ArrayList<WishListItem> wishListItems = this.wishListItems
                 .stream()
