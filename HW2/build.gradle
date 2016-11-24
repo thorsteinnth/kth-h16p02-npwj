@@ -14,3 +14,38 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+jar {
+    baseName='bankserver'
+
+    // Exclude stuff we don't need in the jar
+    exclude('META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF')
+
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw2.bank.BankServer'
+    }
+}
+
+task marketplacejar(type: Jar) {
+
+    from sourceSets.main.output
+
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+    baseName = 'marketplaceserver'
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.MarketPlaceServer'
+    }
+}
+
+task traderclientjar(type: Jar) {
+
+    from sourceSets.main.output
+
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+    baseName = 'traderclient'
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw2.traders.TraderClient'
+    }
+}
+
+assemble.dependsOn(marketplacejar)
+assemble.dependsOn(traderclientjar)
