@@ -78,7 +78,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         sell,
         buy,
         wish,
-        getWishes,
+        getwishes,
         help,
         exit
     }
@@ -433,7 +433,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 System.out.println(getAvailbleItemsDisplayString(saleItems));
                 return true;
 
-            case getWishes:
+            case getwishes:
                 System.out.println(getTradersWishesDisplayString(this.marketplaceobj.getTradersWishes(this)));
 
             case help:
