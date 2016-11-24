@@ -109,6 +109,11 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         this.repository.removeSaleItem(saleItem);
 
+        // Remove the item from the buyer's wish list if it is there
+        WishListItem foundWishListItem = this.repository.findWishListItem(trader, item);
+        if (foundWishListItem != null)
+            this.repository.removeWishListItem(foundWishListItem);
+
         return true;
     }
 

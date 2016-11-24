@@ -505,7 +505,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 return true;
 
             case wish:
-                System.out.println("WishListItem not implemented yeat");
+                // TODO add item to wish list
                 return true;
 
             default:
