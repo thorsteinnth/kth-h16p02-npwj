@@ -41,6 +41,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String DEREGISTRATION_SUCCESS = "User successfully deregistered";
     private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";
     private static final String BUY_SUCCESSFUL = "Congratulation you bought %s for the price of %s";
+    private static final String ADD_TO_WISHLIST_SUCCESSFUL = "Item has been added to wish list";
     private static final String SELLING_SUCCESSFUL = "Congratulation you are now selling %s for the price of %s";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
 
@@ -504,7 +505,15 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 return true;
 
             case wish:
-                // TODO add item to wish list
+                try
+                {
+                    this.marketplaceobj.addItemToWishlist(this, new Item(command.productName, new BigDecimal(command.getAmount())));
+                    System.out.println(ADD_TO_WISHLIST_SUCCESSFUL);
+                }
+                catch (TraderNotFoundException ex)
+                {
+                    System.out.println(TRADER_NOT_FOUND);
+                }
                 return true;
 
             default:

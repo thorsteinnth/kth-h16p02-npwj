@@ -16,7 +16,7 @@ public interface MarketPlace extends Remote
     /**
      * Add item to wishlist
      * */
-    void addItemToWishlist(Trader trader, Item item, BigDecimal maxPrice) throws RemoteException;
+    boolean addItemToWishlist(Trader trader, Item item) throws RemoteException, TraderNotFoundException;
 
     /**
      * Find all trader´s wishes

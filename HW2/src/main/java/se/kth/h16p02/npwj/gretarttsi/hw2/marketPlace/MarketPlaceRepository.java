@@ -187,6 +187,6 @@ public class MarketPlaceRepository
                 .filter(wi -> wi.getTrader().equals(trader))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-    
+
     //endregion
 }
