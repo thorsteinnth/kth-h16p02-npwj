@@ -43,6 +43,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String BUY_SUCCESSFUL = "You bought %s for the price of %s";
     private static final String ADD_TO_WISHLIST_SUCCESSFUL = "Item has been added to wish list";
     private static final String SELLING_SUCCESSFUL = "You are now selling %s for the price of %s";
+    private static final String SELLING_FAILURE = "Unable to sell item";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
 
     private BufferedReader consoleIn;
@@ -90,8 +91,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         marketplace,
         home
     }
-
-    //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
 
     @Override
     public boolean equals(Object o) {
@@ -466,8 +465,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         {
             try
             {
-                marketplaceobj.sell(this, new Item(command.productName, new BigDecimal(command.amount)));
-                System.out.println(String.format(SELLING_SUCCESSFUL,command.productName,String.valueOf(command.getAmount())));
+                if (marketplaceobj.sell(this, new Item(command.productName, new BigDecimal(command.amount))))
+                    System.out.println(String.format(SELLING_SUCCESSFUL,command.productName,String.valueOf(command.getAmount())));
+                else
+                    System.out.println(SELLING_FAILURE);
             }
             catch (ItemAlreadyExistsException e)
             {

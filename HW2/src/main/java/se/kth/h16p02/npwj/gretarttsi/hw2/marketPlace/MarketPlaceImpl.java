@@ -75,7 +75,20 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
             throw new TraderNotFoundException ("Trader not found in marketplace");
         }
 
-        return this.repository.addSaleItem(trader, item);
+        if (this.repository.addSaleItem(trader, item))
+        {
+            // Item successfully put up for sale
+            // Notify everyone that has this item on their wishlist, for the same or greater price
+            ArrayList<Trader> tradersToNotify = this.repository.getTradersThatHaveItemInWishListForGreaterOrSamePrice(item);
+            for (Trader traderToNotify : tradersToNotify)
+                traderToNotify.wishListAvailableNotification(item.getName());
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @Override

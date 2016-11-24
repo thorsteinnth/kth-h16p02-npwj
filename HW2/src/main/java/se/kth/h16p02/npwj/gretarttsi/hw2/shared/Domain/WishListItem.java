@@ -10,6 +10,12 @@ public class WishListItem implements Serializable
     private final Trader trader;
     private final Item item;
 
+    /**
+     * WishListItem
+     * Trader is the trader that owns this wish list item
+     * Item is the item that he is wishing for. The price of the item is the max price that
+     * the trader is willing to pay for the item.
+     * */
     public WishListItem(Trader trader, Item item)
     {
         this.trader = trader;

@@ -77,14 +77,14 @@ public class MarketPlaceRepository
 
     public boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException
     {
-        if(!isItemUnique(item))
+        if (!isItemUnique(item))
         {
            throw new ItemAlreadyExistsException("Item already exists in marketplace " + item.toString());
         }
 
         this.saleItems.add(new SaleItem(item,trader));
 
-        return false;
+        return true;
     }
 
     public boolean removeSaleItem(SaleItem saleItem)
@@ -167,17 +167,47 @@ public class MarketPlaceRepository
         return findWishListItem(new WishListItem(trader, item));
     }
 
+    public ArrayList<Trader> getTradersThatHaveItemInWishListForGreaterOrSamePrice(Item item)
+    {
+        ArrayList<Trader> tradersWithItemInWishlistForGreaterOrSamePrice = new ArrayList<>();
+        ArrayList<WishListItem> wishListEntriesForItemName = getWishlistItemsByItemName(item);
+
+        for (WishListItem wishListEntryForItem : wishListEntriesForItemName)
+        {
+            if (wishListEntryForItem.getItem().getPrice().compareTo(item.getPrice()) >= 0)
+            {
+                // Wish list entry price is less than or equal to the price of the item
+                tradersWithItemInWishlistForGreaterOrSamePrice.add(wishListEntryForItem.getTrader());
+            }
+        }
+
+        return tradersWithItemInWishlistForGreaterOrSamePrice;
+    }
+
     private WishListItem findWishListItem(WishListItem wishListItem) throws RemoteException
     {
         for(WishListItem listItem : this.wishListItems)
         {
-            if(listItem.equalsWithoutPrice(wishListItem))
+            if (listItem.equalsWithoutPrice(wishListItem))
             {
                 return listItem;
             }
         }
 
         return null;
+    }
+
+    private ArrayList<WishListItem> getWishlistItemsByItemName(Item item)
+    {
+        ArrayList<WishListItem> foundWishListItems = new ArrayList<>();
+
+        for (WishListItem wlItem : this.wishListItems)
+        {
+            if (item.getName().equals(wlItem.getItem().getName()))
+                foundWishListItems.add(wlItem);
+        }
+
+        return foundWishListItems;
     }
 
     public ArrayList<WishListItem> getTradersWishes(Trader trader)
