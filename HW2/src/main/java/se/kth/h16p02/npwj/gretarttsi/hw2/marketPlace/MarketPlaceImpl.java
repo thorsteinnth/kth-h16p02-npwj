@@ -1,5 +1,6 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.bank.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
@@ -101,7 +102,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
             ItemNotFoundException,
             RejectedException,
             BankAccountNotFoundException,
-            BuyException
+            BuyException,
+            InsufficientFundsException
     {
         if (!this.repository.isTraderRegistered(trader))
         {
@@ -115,11 +117,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         SaleItem saleItem = this.repository.findSaleItem(item);
 
-        if(trader.equals(saleItem.getTrader()))
+        // Check if the seller and buyer are the same person
+        if (trader.equals(saleItem.getTrader()))
         {
             throw new BuyException("Cannot buy an item that you are selling");
         }
 
+        // Get the relevant bank accounts
         Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.getAccount(trader.getUsername());
         if (sellerAccount == null)
@@ -127,12 +131,33 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         if (buyerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for buyer");
 
-        sellerAccount.deposit(saleItem.getItem().getPrice().floatValue());
-        buyerAccount.withdraw(saleItem.getItem().getPrice().floatValue());
+        // "Transaction" for moving money around
+        boolean depositDone = false;
+        boolean withdrawDone = false;
+        float itemPrice = saleItem.getItem().getPrice().floatValue();
+        try
+        {
+            sellerAccount.deposit(itemPrice);
+            depositDone = true;
+            buyerAccount.withdraw(itemPrice);
+            withdrawDone = true;
+        }
+        catch (Exception ex)
+        {
+            // Rollback changes
+            if (depositDone)
+                sellerAccount.withdraw(itemPrice);
+            if (withdrawDone)
+                buyerAccount.deposit(itemPrice);
 
+            throw ex;
+        }
+
+        // Send sale notification to seller
         Trader seller = saleItem.getTrader();
         seller.itemSoldNotification(saleItem.getItem().getName());
 
+        // Remove sale item from the market repository
         this.repository.removeSaleItem(saleItem);
 
         // Remove the item from the buyer's wish list if it is there
