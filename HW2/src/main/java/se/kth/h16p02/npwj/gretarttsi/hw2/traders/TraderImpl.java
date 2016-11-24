@@ -514,6 +514,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 {
                     System.out.println(e.getMessage());
                 }
+                catch (BuyException e)
+                {
+                    System.out.println(e.getMessage());
+                }
                 return true;
 
             case wish:

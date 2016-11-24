@@ -115,7 +115,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         SaleItem saleItem = this.repository.findSaleItem(item);
 
-        
+        if(trader.equals(saleItem.getTrader()))
+        {
+            throw new BuyException("Cannot buy an item that you are selling");
+        }
 
         Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.getAccount(trader.getUsername());
