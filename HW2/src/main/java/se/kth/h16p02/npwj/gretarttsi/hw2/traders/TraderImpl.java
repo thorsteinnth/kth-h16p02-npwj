@@ -435,6 +435,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
             case getwishes:
                 System.out.println(getTradersWishesDisplayString(this.marketplaceobj.getTradersWishes(this)));
+                return true;
 
             case help:
                 for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
