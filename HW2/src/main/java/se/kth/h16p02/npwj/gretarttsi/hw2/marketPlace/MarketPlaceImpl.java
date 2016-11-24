@@ -86,7 +86,6 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         SaleItem saleItem = this.repository.findSaleItem(item);
 
-        // TODO Throw could not find bank account exceptions
         Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.getAccount(trader.getUsername());
         if (sellerAccount == null)
