@@ -1,35 +1,56 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain;
 
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
+
 public class WishListItem {
-    private final int id;
+    private final Trader trader;
     private final Item item;
-    private float specifiedPrice;
+    //private float specifiedPrice;
 
-    public WishListItem(int id, Item item, float specifiedPrice) {
-        this.id = id;
+    public WishListItem(Trader trader, Item item, float specifiedPrice) {
+        this.trader = trader;
         this.item = item;
-        this.specifiedPrice = specifiedPrice;
+        //this.specifiedPrice = specifiedPrice;
     }
 
-    public int getId(){
-        return this.id;
+    public Trader getTrader() {
+        return trader;
     }
 
-    public Item getName(){
-        return this.item;
+    public Item getItem() {
+        return item;
     }
 
-    public float getSpecifiedPrice(){
-        return this.specifiedPrice;
+    /*
+    public float getSpecifiedPrice() {
+        return specifiedPrice;
+    }
+    */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WishListItem that = (WishListItem) o;
+
+        if (!trader.equals(that.trader)) return false;
+        return item.equals(that.item);
+
     }
 
     @Override
-    public String toString()
-    {
+    public int hashCode() {
+        int result = trader.hashCode();
+        result = 31 * result + item.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
         return "WishListItem{" +
-                "id=" + id +
+                "trader=" + trader +
                 ", item=" + item +
-                ", specifiedPrice=" + specifiedPrice +
                 '}';
     }
 }

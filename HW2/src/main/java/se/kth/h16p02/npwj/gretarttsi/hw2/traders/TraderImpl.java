@@ -29,9 +29,9 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String BANK = "Bank";
-    private static final String WISH_LIST_AVAILABLE = "the item {0} that you have in your wish list is now available in the marketplace";
-    private static final String ITEM_SOLD = "Your item {0} has been sold on the marketplace. Deposit has been made to your account";
-    private static final String ITEM_ALREADY_EXIST = "The Item {0} already exist in the marketplace at this cost";
+    private static final String WISH_LIST_AVAILABLE = "the item %s that you have in your wish list is now available in the marketplace";
+    private static final String ITEM_SOLD = "Your item %s has been sold on the marketplace. Deposit has been made to your account";
+    private static final String ITEM_ALREADY_EXIST = "The Item %s already exist in the marketplace at this cost";
     private static final String ITEM_NOT_FOUND = "This item is not for sale in the marketplace. You can add it to your wishlist";
     private static final String TRADER_ALREADY_EXIST = "Trader with this username already exist";
     private static final String TRADER_NOT_FOUND = "User not registered";
@@ -39,6 +39,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String REGISTRATION_SUCCESS = "User successfully registered";
     private static final String DEREGISTRATION_SUCCESS = "User successfully deregistered";
     private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";
+    private static final String BUY_SUCCESSFUL = "Congratulation you bought %s for the price of %s";
+    private static final String SELLING_SUCCESSFUL = "Congratulation you are now selling %s for the price of %s";
 
     private BufferedReader consoleIn;
     private Account account;
@@ -86,6 +88,25 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     }
 
     //TODO breyta command line virkni hjá bankanum þannig að þegar ýtt er á quit þá er farið aftur á home.
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        TraderImpl trader = (TraderImpl) o;
+
+        return username.equals(trader.username);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + username.hashCode();
+        return result;
+    }
 
     public TraderImpl(String username) throws RemoteException
     {
@@ -430,6 +451,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             try
             {
                 marketplaceobj.sell(this, new Item(command.productName, new BigDecimal(command.amount)));
+                System.out.println(String.format(SELLING_SUCCESSFUL,command.productName,String.valueOf(command.getAmount())));
             }
             catch (ItemAlreadyExistsException e)
             {
@@ -455,6 +477,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 try
                 {
                     this.marketplaceobj.buy(this, new Item(command.productName, new BigDecimal(command.getAmount())));
+                    System.out.println(String.format(BUY_SUCCESSFUL,command.productName,String.valueOf(command.getAmount())));
                 }
                 catch (TraderNotFoundException e)
                 {

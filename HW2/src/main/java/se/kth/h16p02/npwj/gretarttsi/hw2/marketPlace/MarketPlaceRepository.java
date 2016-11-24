@@ -2,6 +2,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
 import java.rmi.RemoteException;
@@ -13,11 +14,13 @@ public class MarketPlaceRepository
 {
     private ArrayList<Trader> traders;
     private ArrayList<SaleItem> saleItems;
+    private ArrayList<WishListItem> wishListItems;
 
     public MarketPlaceRepository()
     {
         this.traders = new ArrayList<>();
         this.saleItems = new ArrayList<>();
+        this.wishListItems = new ArrayList<>();
     }
 
     //region Traders
@@ -127,6 +130,32 @@ public class MarketPlaceRepository
             }
         }
 
+        return true;
+    }
+
+    //endregion
+
+    //region WishListItem
+    public boolean addWishListItem(Trader trader, Item item) throws WishListItemAlreadyExistsException
+    {
+        return true;
+    }
+
+    public boolean removeWishListItem(WishListItem wishListItem)
+    {
+        this.wishListItems.remove(wishListItem);
+        return true;
+    }
+
+    public boolean wishListItemExists(Trader trader, Item item)
+    {
+        for(WishListItem wishListItem : this.wishListItems)
+        {
+            if(trader.equals(wishListItem.getTrader()) && item.equals(wishListItem.getItem()))
+            {
+                return false:
+            }
+        }
         return true;
     }
 

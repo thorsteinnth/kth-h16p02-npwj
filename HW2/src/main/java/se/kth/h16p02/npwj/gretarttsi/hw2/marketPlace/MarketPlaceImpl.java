@@ -93,8 +93,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         if (buyerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for buyer");
 
-        sellerAccount.withdraw(saleItem.getItem().getPrice().floatValue());
-        buyerAccount.deposit(saleItem.getItem().getPrice().floatValue());
+        sellerAccount.deposit(saleItem.getItem().getPrice().floatValue());
+        buyerAccount.withdraw(saleItem.getItem().getPrice().floatValue());
 
         Trader seller = saleItem.getTrader();
         seller.itemSoldNotification(saleItem.getItem().getName());
@@ -109,8 +109,6 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         return this.repository.getAllSaleItems();
     }
-
-    //region Registration handling
 
     @Override
     public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException
