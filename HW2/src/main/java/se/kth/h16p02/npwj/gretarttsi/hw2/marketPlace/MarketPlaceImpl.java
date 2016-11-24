@@ -53,14 +53,14 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public void addItemToWishlist(Trader trader, Item item, BigDecimal maxPrice) throws RemoteException
+    public boolean addItemToWishlist(Trader trader, Item item) throws RemoteException, TraderNotFoundException
     {
-        System.out.println("Trader " + trader
-                + " adding item to wishlist with max price " + item.getPrice()
-                + ": "+ item.getName()
-        );
+        if (!this.repository.isTraderRegistered(trader))
+        {
+            throw new TraderNotFoundException ("Trader not found in marketplace");
+        }
 
-        this.repository.addWishListItem(trader,item);
+        return this.repository.addWishListItem(trader,item);
     }
 
     @Override
