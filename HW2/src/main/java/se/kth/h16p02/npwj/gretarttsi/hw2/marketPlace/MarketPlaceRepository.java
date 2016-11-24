@@ -137,7 +137,7 @@ public class MarketPlaceRepository
 
     //region WishListItem
 
-    public boolean addWishListItem(Trader trader, Item item)
+    public boolean addWishListItem(Trader trader, Item item) throws RemoteException
     {
         WishListItem newWishListItem = new WishListItem(trader, item);
 
@@ -162,12 +162,12 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public WishListItem findWishListItem(Trader trader, Item item)
+    public WishListItem findWishListItem(Trader trader, Item item) throws RemoteException
     {
         return findWishListItem(new WishListItem(trader, item));
     }
 
-    private WishListItem findWishListItem(WishListItem wishListItem)
+    private WishListItem findWishListItem(WishListItem wishListItem) throws RemoteException
     {
         for(WishListItem listItem : this.wishListItems)
         {

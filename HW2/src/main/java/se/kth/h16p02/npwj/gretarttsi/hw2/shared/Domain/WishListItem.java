@@ -2,17 +2,18 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
-public class WishListItem {
+public class WishListItem implements Serializable
+{
     private final Trader trader;
     private final Item item;
-    //private float specifiedPrice;
 
-    public WishListItem(Trader trader, Item item) {
+    public WishListItem(Trader trader, Item item)
+    {
         this.trader = trader;
         this.item = item;
-        //this.specifiedPrice = specifiedPrice;
     }
 
     public Trader getTrader() {
@@ -23,12 +24,6 @@ public class WishListItem {
         return item;
     }
 
-    /*
-    public float getSpecifiedPrice() {
-        return specifiedPrice;
-    }
-    */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,18 +33,17 @@ public class WishListItem {
 
         if (!trader.equals(that.trader)) return false;
         return item.equals(that.item);
-
     }
 
-    public boolean equalsWithoutPrice(Object o)
+    public boolean equalsWithoutPrice(Object o) throws RemoteException
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         WishListItem that = (WishListItem) o;
 
-        if (!trader.equals(that.trader)) return false;
-        return item.getName() == that.item.getName();
+        if (!trader.getUsername().equals(that.trader.getUsername())) return false;
+        return item.getName().equals(that.item.getName());
     }
 
     @Override
