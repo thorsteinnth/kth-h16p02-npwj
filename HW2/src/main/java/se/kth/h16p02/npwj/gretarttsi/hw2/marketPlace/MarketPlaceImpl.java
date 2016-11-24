@@ -65,7 +65,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
     @Override
     public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException {
-        return this.repository.getTradersWishes(trader);
+
+        System.out.println("Getting traders wishes");
+        ArrayList<WishListItem>  wishListItems = this.repository.getTradersWishes(trader);
+        return wishListItems;
     }
 
     @Override

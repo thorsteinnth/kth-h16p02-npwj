@@ -435,16 +435,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 return true;
 
             case getwishes:
-                try{
-                    System.out.println(getTradersWishesDisplayString(this.marketplaceobj.getTradersWishes(this)));
-                }
-                catch (RemoteException re)
-                {
-                    System.out.println(re.getStackTrace());
-                }
-                finally {
-                    return true;
-                }
+                ArrayList<WishListItem> wishListItems = this.marketplaceobj.getTradersWishes(this);
+                System.out.println("answer to wishlistitemsize " +  wishListItems.size());
 
             case help:
                 for (MarketplaceCommandName commandName : MarketplaceCommandName.values()) {
@@ -771,6 +763,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
     private String getTradersWishesDisplayString(ArrayList<WishListItem> wishListItems) throws RemoteException
     {
+        System.out.println("the number of item on wish list: " + wishListItems.size());
+
         if(wishListItems.size() > 0)
         {
             StringBuilder wishListItemsString = new StringBuilder();

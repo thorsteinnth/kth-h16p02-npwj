@@ -69,7 +69,7 @@ public class WishListItem {
 
     public String toDisplayString() throws RemoteException{
         return "WishListItem{" +
-                "trader=" + trader.getUsername() +
+                "trader=" + trader.getUsername().toString() +
                 ", item=" + item.toDisplayString() +
                 '}';
     }
