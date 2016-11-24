@@ -64,7 +64,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
     @Override
     public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException {
-        return this.repository.getTradersWishes(trader);
+
+        System.out.println("Getting traders wishes");
+        ArrayList<WishListItem>  wishListItems = this.repository.getTradersWishes(trader);
+        return wishListItems;
     }
 
     @Override
@@ -147,6 +150,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean deregister(Trader trader) throws RemoteException
     {
+        this.repository.removeTradersWishListItems(trader);
         return this.repository.deregisterTrader(trader);
     }
 

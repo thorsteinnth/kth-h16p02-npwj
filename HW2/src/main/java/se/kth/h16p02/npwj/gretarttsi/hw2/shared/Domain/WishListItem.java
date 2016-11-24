@@ -69,7 +69,7 @@ public class WishListItem implements Serializable
 
     public String toDisplayString() throws RemoteException{
         return "WishListItem{" +
-                "trader=" + trader.getUsername() +
+                "trader=" + trader.getUsername().toString() +
                 ", item=" + item.toDisplayString() +
                 '}';
     }

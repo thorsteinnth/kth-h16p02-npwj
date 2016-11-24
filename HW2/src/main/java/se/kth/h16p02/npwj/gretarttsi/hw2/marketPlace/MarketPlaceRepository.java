@@ -162,6 +162,17 @@ public class MarketPlaceRepository
         return true;
     }
 
+    public boolean removeTradersWishListItems(Trader trader)
+    {
+        ArrayList<WishListItem> wishListItems = getTradersWishes(trader);
+
+        for(WishListItem wishListItem: wishListItems)
+        {
+            removeWishListItem(wishListItem);
+        }
+        return true;
+    }
+
     public WishListItem findWishListItem(Trader trader, Item item) throws RemoteException
     {
         return findWishListItem(new WishListItem(trader, item));
@@ -212,10 +223,12 @@ public class MarketPlaceRepository
 
     public ArrayList<WishListItem> getTradersWishes(Trader trader)
     {
-        return wishListItems = this.wishListItems
+        ArrayList<WishListItem> wishListItems = this.wishListItems
                 .stream()
                 .filter(wi -> wi.getTrader().equals(trader))
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        return wishListItems;
     }
 
     //endregion
