@@ -514,6 +514,10 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 {
                     System.out.println(TRADER_NOT_FOUND);
                 }
+                catch (NumberFormatException ex)
+                {
+                    System.err.println(ex);
+                }
                 return true;
 
             default:
