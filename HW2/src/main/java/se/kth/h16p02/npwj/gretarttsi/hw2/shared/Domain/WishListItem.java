@@ -7,7 +7,7 @@ public class WishListItem {
     private final Item item;
     //private float specifiedPrice;
 
-    public WishListItem(Trader trader, Item item, float specifiedPrice) {
+    public WishListItem(Trader trader, Item item) {
         this.trader = trader;
         this.item = item;
         //this.specifiedPrice = specifiedPrice;
@@ -37,6 +37,17 @@ public class WishListItem {
         if (!trader.equals(that.trader)) return false;
         return item.equals(that.item);
 
+    }
+
+    public boolean equalsWithoutPrice(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WishListItem that = (WishListItem) o;
+
+        if (!trader.equals(that.trader)) return false;
+        return item.getName() == that.item.getName();
     }
 
     @Override

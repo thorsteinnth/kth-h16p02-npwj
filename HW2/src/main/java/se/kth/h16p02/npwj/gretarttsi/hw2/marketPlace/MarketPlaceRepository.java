@@ -136,8 +136,23 @@ public class MarketPlaceRepository
     //endregion
 
     //region WishListItem
-    public boolean addWishListItem(Trader trader, Item item) throws WishListItemAlreadyExistsException
+    public boolean addWishListItem(Trader trader, Item item)
     {
+        WishListItem newWishListItem = new WishListItem(trader, item);
+
+        WishListItem containedWishListItem = findWishListItem(newWishListItem);
+
+        if(containedWishListItem == null)
+        {
+            this.wishListItems.add(newWishListItem);
+        }
+        else
+        {
+            int index = this.wishListItems.indexOf(containedWishListItem);
+            this.wishListItems.set(index, newWishListItem);
+        }
+
+
         return true;
     }
 
@@ -147,17 +162,32 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public boolean wishListItemExists(Trader trader, Item item)
+    public boolean wishListItemExists(WishListItem wishListItem)
     {
-        for(WishListItem wishListItem : this.wishListItems)
+        for(WishListItem listItem : this.wishListItems)
         {
-            if(trader.equals(wishListItem.getTrader()) && item.equals(wishListItem.getItem()))
+            if(listItem.equalsWithoutPrice(wishListItem))
             {
-                return false:
+                return false;
             }
         }
         return true;
     }
+
+    private WishListItem findWishListItem(WishListItem wishListItem)
+    {
+        for(WishListItem listItem : this.wishListItems)
+        {
+            if(listItem.equalsWithoutPrice(wishListItem))
+            {
+                return listItem;
+            }
+        }
+
+        return null;
+    }
+
+
 
     //endregion
 }

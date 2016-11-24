@@ -55,9 +55,11 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     public void addItemToWishlist(Trader trader, Item item, BigDecimal maxPrice) throws RemoteException
     {
         System.out.println("Trader " + trader
-                + " adding item to wishlist with max price " + maxPrice
-                + ": "+ item
+                + " adding item to wishlist with max price " + item.getPrice()
+                + ": "+ item.getName()
         );
+        
+        this.repository.addWishListItem(trader,item);
     }
 
     @Override
