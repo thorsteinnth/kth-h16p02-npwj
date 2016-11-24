@@ -41,9 +41,9 @@ public class MarketPlaceTest
             MarketPlace marketPlace = (MarketPlace)Naming.lookup("MarketPlace");
 
             // Register traders
-            Trader trader1 = new TraderImpl("trader1");
-            Trader trader2 = new TraderImpl("trader2");
-            Trader trader3 = new TraderImpl("trader3");
+            Trader trader1 = new TraderImpl("trader1","localhost",1099);
+            Trader trader2 = new TraderImpl("trader2","localhost",1099);
+            Trader trader3 = new TraderImpl("trader3","localhost",1099);
 
             try
             {

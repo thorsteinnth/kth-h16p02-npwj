@@ -45,6 +45,9 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String SELLING_FAILURE = "Unable to sell item";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
     private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
+    private static final int DEFAULT_PORT = 1099;
+    private static final String DEFAULT_HOST = "localhost";
+
 
     private BufferedReader consoleIn;
     private Account account;
@@ -114,7 +117,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return result;
     }
 
-    public TraderImpl(String username) throws RemoteException
+    public TraderImpl(String username, String host, int port) throws RemoteException
     {
         super();
 
@@ -125,11 +128,21 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         {
             try
             {
-                LocateRegistry.getRegistry(1099).list();
+                LocateRegistry.getRegistry(host,port).list();
+                System.out.println("Found registry at: " + host + " at port " + port);
             }
             catch (RemoteException e)
             {
-                LocateRegistry.createRegistry(1099);
+                if(host.equals(DEFAULT_HOST))
+                {
+                    LocateRegistry.createRegistry(DEFAULT_PORT);
+                    System.out.println("Created registry at: " + DEFAULT_HOST + " at port " + DEFAULT_PORT);
+                }
+                else
+                {
+                    System.out.println(e);
+                    System.exit(1);
+                }
             }
 
             bankobj = (Bank) Naming.lookup(bankname);
