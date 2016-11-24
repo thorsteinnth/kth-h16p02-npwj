@@ -136,6 +136,7 @@ public class MarketPlaceRepository
     //endregion
 
     //region WishListItem
+
     public boolean addWishListItem(Trader trader, Item item)
     {
         WishListItem newWishListItem = new WishListItem(trader, item);
@@ -152,7 +153,6 @@ public class MarketPlaceRepository
             this.wishListItems.set(index, newWishListItem);
         }
 
-
         return true;
     }
 
@@ -162,16 +162,9 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public boolean wishListItemExists(WishListItem wishListItem)
+    public WishListItem findWishListItem(Trader trader, Item item)
     {
-        for(WishListItem listItem : this.wishListItems)
-        {
-            if(listItem.equalsWithoutPrice(wishListItem))
-            {
-                return false;
-            }
-        }
-        return true;
+        return findWishListItem(new WishListItem(trader, item));
     }
 
     private WishListItem findWishListItem(WishListItem wishListItem)
@@ -186,8 +179,6 @@ public class MarketPlaceRepository
 
         return null;
     }
-
-
 
     //endregion
 }

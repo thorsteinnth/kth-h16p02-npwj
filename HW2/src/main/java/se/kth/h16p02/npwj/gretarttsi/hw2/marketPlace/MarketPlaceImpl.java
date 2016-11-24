@@ -2,6 +2,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
@@ -102,6 +103,11 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         seller.itemSoldNotification(saleItem.getItem().getName());
 
         this.repository.removeSaleItem(saleItem);
+
+        // Remove the item from the buyer's wish list if it is there
+        WishListItem foundWishListItem = this.repository.findWishListItem(trader, item);
+        if (foundWishListItem != null)
+            this.repository.removeWishListItem(foundWishListItem);
 
         return true;
     }
