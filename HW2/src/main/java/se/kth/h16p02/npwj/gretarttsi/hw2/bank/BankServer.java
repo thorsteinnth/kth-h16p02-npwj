@@ -7,10 +7,11 @@ import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
 
 public class BankServer
 {
-    private static final String USAGE = "java bankrmi.BankServer <bank_rmi_url>";
     private static final String BANK = "Nordea";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 1099;
 
-    public BankServer(String bankName)
+    public BankServer(String bankName, String host, int port)
     {
         try
         {
@@ -19,12 +20,23 @@ public class BankServer
             // Register the newly created object at rmiregistry.
             try
             {
-                LocateRegistry.getRegistry(1099).list();
+                LocateRegistry.getRegistry(host, port).list();
+                System.out.println("Found registry at: " + host + " " + port);
             }
             catch (RemoteException e)
             {
-                LocateRegistry.createRegistry(1099);
+                if (host.equals(DEFAULT_HOST))
+                {
+                    LocateRegistry.createRegistry(DEFAULT_PORT);
+                    System.out.println("Created registry at: " + DEFAULT_HOST + " " + DEFAULT_PORT);
+                }
+                else
+                {
+                    System.err.println(e);
+                    System.exit(1);
+                }
             }
+
             Naming.rebind(bankName, bankobj);
             System.out.println(bankobj + " is ready.");
         }
@@ -36,10 +48,21 @@ public class BankServer
 
     public static void main(String[] args)
     {
-        if (args.length > 1 || (args.length > 0 && args[0].equalsIgnoreCase("-h")))
+        String host = DEFAULT_HOST;
+        int port = DEFAULT_PORT;
+
+        if (args.length == 2)
         {
-            System.out.println(USAGE);
-            System.exit(1);
+            try
+            {
+                host = args[0];
+                port = Integer.parseInt(args[1]);
+            }
+            catch (NumberFormatException ex)
+            {
+                System.err.println(ex);
+                System.exit(1);
+            }
         }
 
         String bankName;
@@ -52,6 +75,6 @@ public class BankServer
             bankName = BANK;
         }
 
-        new BankServer(bankName);
+        new BankServer(bankName, host, port);
     }
 }

@@ -9,7 +9,10 @@ import java.rmi.registry.LocateRegistry;
 
 public class MarketPlaceServer
 {
-    public MarketPlaceServer()
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 1099;
+
+    public MarketPlaceServer(String host, int port)
     {
         try
         {
@@ -17,12 +20,21 @@ public class MarketPlaceServer
 
             try
             {
-                LocateRegistry.getRegistry(1099).list();
+                LocateRegistry.getRegistry(host, port).list();
+                System.out.println("Found registry at: " + host + " " + port);
             }
             catch (RemoteException e)
             {
-                // Assuming that the registry doesn't exist
-                LocateRegistry.createRegistry(1099);
+                if (host.equals(DEFAULT_HOST))
+                {
+                    LocateRegistry.createRegistry(DEFAULT_PORT);
+                    System.out.println("Created registry at: " + DEFAULT_HOST + " " + DEFAULT_PORT);
+                }
+                else
+                {
+                    System.err.println(e);
+                    System.exit(1);
+                }
             }
 
             Naming.rebind("MarketPlace", marketPlace);
@@ -36,6 +48,23 @@ public class MarketPlaceServer
 
     public static void main(String[] args)
     {
-        new MarketPlaceServer();
+        String host = DEFAULT_HOST;
+        int port = DEFAULT_PORT;
+
+        if (args.length == 2)
+        {
+            try
+            {
+                host = args[0];
+                port = Integer.parseInt(args[1]);
+            }
+            catch (NumberFormatException ex)
+            {
+                System.err.println(ex);
+                System.exit(1);
+            }
+        }
+
+        new MarketPlaceServer(host, port);
     }
 }
