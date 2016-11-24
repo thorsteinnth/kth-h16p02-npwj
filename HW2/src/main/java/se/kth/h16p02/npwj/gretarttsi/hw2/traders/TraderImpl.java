@@ -107,8 +107,8 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             System.exit(0);
         }
 
-        System.out.println("Connected to bank: " + bankname);
-        System.out.println("Connection to marketplace");
+        System.out.println(this.username + " - Connected to bank: " + bankname);
+        System.out.println(this.username + " - Connected to marketplace");
     }
 
     @Override
