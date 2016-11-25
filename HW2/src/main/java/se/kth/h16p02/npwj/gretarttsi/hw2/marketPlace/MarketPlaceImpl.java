@@ -21,11 +21,13 @@ import java.util.ArrayList;
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
     private static final String DEFAULT_BANK_NAME = "Nordea";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_PORT = 1099;
 
     private MarketPlaceRepository repository;
     private Bank bank;
 
-    public MarketPlaceImpl() throws RemoteException
+    public MarketPlaceImpl(String host, int port) throws RemoteException
     {
         super();
         this.repository = new MarketPlaceRepository();
@@ -34,11 +36,21 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         {
             try
             {
-                LocateRegistry.getRegistry(1099).list();
+                LocateRegistry.getRegistry(host, port).list();
+                System.out.println("Found registry at: " + host + " " + port);
             }
             catch (RemoteException e)
             {
-                LocateRegistry.createRegistry(1099);
+                if (host.equals(DEFAULT_HOST))
+                {
+                    LocateRegistry.createRegistry(DEFAULT_PORT);
+                    System.out.println("Created registry at: " + DEFAULT_HOST + " " + DEFAULT_PORT);
+                }
+                else
+                {
+                    System.err.println(e);
+                    System.exit(1);
+                }
             }
 
             this.bank = (Bank) Naming.lookup(DEFAULT_BANK_NAME);
@@ -195,8 +207,6 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         return this.repository.isTraderRegistered(trader);
     }
-
-
 
     //endregion
 }

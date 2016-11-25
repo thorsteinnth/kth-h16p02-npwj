@@ -16,7 +16,7 @@ public class MarketPlaceServer
     {
         try
         {
-            MarketPlace marketPlace = new MarketPlaceImpl();
+            MarketPlace marketPlace = new MarketPlaceImpl(host, port);
 
             try
             {

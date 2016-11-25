@@ -1,6 +1,5 @@
 package se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces;
 
-import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
