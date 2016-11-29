@@ -13,7 +13,7 @@ public class Server {
             + "[database] [dbms: derby, mysql]";
     private String bankName = "Nordea";
     private String datasource = "Banks";
-    private String dbms = "derby";
+    private String dbms = "sqlite"; // Changed to sqlite from derby by Thorsteinn
 
     public static void main(String[] args) {
         Server server = new Server();

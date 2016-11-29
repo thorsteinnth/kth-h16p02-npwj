@@ -34,6 +34,7 @@ public class BankDAO {
         try {
             Connection connection = createDatasource(dbms, datasource);
             prepareStatements(connection);
+            System.out.println("BankDAO - connection ready");
         } catch (ClassNotFoundException | SQLException exception) {
             throw new BankDBException("Could not connect to datasource.", exception);
         }
@@ -147,15 +148,25 @@ public class BankDAO {
 
     private Connection getConnection(String dbms, String datasource)
             throws ClassNotFoundException, SQLException, BankDBException {
-        if (dbms.equalsIgnoreCase("derby")) {
+        if (dbms.equalsIgnoreCase("derby"))
+        {
             Class.forName("org.apache.derby.jdbc.ClientXADataSource");
             return DriverManager.getConnection(
                     "jdbc:derby://localhost:1527/" + datasource + ";create=true");
-        } else if (dbms.equalsIgnoreCase("mysql")) {
+        }
+        else if (dbms.equalsIgnoreCase("mysql"))
+        {
             Class.forName("com.mysql.jdbc.Driver");
             return DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + datasource, "root", "javajava");
-        } else {
+        }
+        else if (dbms.equalsIgnoreCase("sqlite"))   // Added by Thorsteinn
+        {
+            Class.forName("org.sqlite.JDBC");
+            return DriverManager.getConnection("jdbc:sqlite:bankjdbc.sqlite");
+        }
+        else
+        {
             throw new BankDBException("Unable to create datasource, unknown dbms.");
         }
     }
