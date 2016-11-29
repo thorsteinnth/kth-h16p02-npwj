@@ -77,13 +77,13 @@ public class TestJDBC
             {
                 Class.forName("org.sqlite.JDBC");
                 conn = DriverManager.getConnection("jdbc:sqlite:testjdbc.sqlite");
+                System.out.println("Opened database successfully");
             }
             catch ( Exception e )
             {
                 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
                 System.exit(0);
             }
-            System.out.println("Opened database successfully");
         }
         else
         {
@@ -106,9 +106,10 @@ public class TestJDBC
 
     private void createTable() throws Exception
     {
-        ResultSet result = conn.getMetaData().
-                getTables(null, null, "ACCOUNT", null);
-        if (result.next()) {
+        ResultSet result = conn.getMetaData().getTables(null, null, "ACCOUNT", null);
+
+        if (result.next())
+        {
             dropTable();
         }
 
