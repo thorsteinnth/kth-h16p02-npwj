@@ -110,6 +110,7 @@ public class TestJDBC
 
         if (result.next())
         {
+            result.close();
             dropTable();
         }
 
