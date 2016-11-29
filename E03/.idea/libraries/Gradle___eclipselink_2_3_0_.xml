@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="sqlite-jdbc-3.15.1">
+  <library name="Gradle: :eclipselink-2.3.0:">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/sqlite-jdbc-3.15.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/eclipselink-2.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
