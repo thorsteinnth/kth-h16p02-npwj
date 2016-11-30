@@ -49,7 +49,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String DEFAULT_HOST = "localhost";
 
     private BufferedReader consoleIn;
-    private Account account;
     private Bank bankobj;
     private MarketPlace marketplaceobj;
     private String bankname;
@@ -663,6 +662,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         switch (command.getCommandName())
         {
+            /*
             case list:
                 try
                 {
@@ -679,7 +679,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                     return true;
                 }
                 return true;
-
+             */
             case exit:
                 runHome();
                 return false;
@@ -716,27 +716,23 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             System.out.println("No account for " + username);
             return true;
         }
-        else
-        {
-            account = acc;
-        }
 
         switch (command.getCommandName())
         {
             case getaccount:
-                System.out.println(account);
+                System.out.println(acc);
                 break;
 
             case deposit:
-                account.deposit(command.getAmount());
+                acc.deposit(command.getAmount());
                 break;
 
             case withdraw:
-                account.withdraw(command.getAmount());
+                acc.withdraw(command.getAmount());
                 break;
 
             case balance:
-                System.out.println("balance: $" + account.getBalance());
+                System.out.println("balance: $" + acc.getBalance());
                 break;
 
             default:

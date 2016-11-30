@@ -11,7 +11,6 @@ public class Client
 {
     private static final String USAGE = "java bankrmi.Client <bank_url>";
     private static final String DEFAULT_BANK_NAME = "Nordea";
-    Account account;
     Bank bankobj;
     private String bankname;
     String clientName;
