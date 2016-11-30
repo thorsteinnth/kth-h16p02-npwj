@@ -4,6 +4,8 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
@@ -15,22 +17,15 @@ public class BankController extends Controller
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
 
-    private String host;
-    private int port;
-    private String bankname;
-
-    public BankController(Trader user, String host, int port)
+    public BankController(Trader user, Bank bank, MarketPlace marketPlace)
     {
-        super(user, host, port);
-        this.host = host;
-        this.port = port;
-        this.bankname = DEFAULT_BANK_NAME;
+        super(user, bank, marketPlace);
     }
 
     @Override
     protected void printConsolePrompt()
     {
-        System.out.print(username + "@" + bankname + ">");
+        System.out.print(username + "@" + DEFAULT_BANK_NAME + ">");
     }
 
     @Override
@@ -148,7 +143,7 @@ public class BankController extends Controller
                 return true;
 
             case exit:
-                new HomeController(user, host, port).run();
+                new HomeController(user, bank, marketPlace).run();
                 return false;
 
             case ls:

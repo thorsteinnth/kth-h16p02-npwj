@@ -1,18 +1,21 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.traders;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.LoginController;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 
 public class TraderClient
 {
     private static final int DEFAULT_PORT = 1099;
     private static final String DEFAULT_HOST = "localhost";
+    private static final String DEFAULT_BANK_NAME = "Nordea";
 
-    public TraderClient() {
-    }
+    public TraderClient()
+    {}
 
     public static void main (String[] args)
     {
@@ -33,32 +36,48 @@ public class TraderClient
             }
         }
 
-        new LoginController(host, port).run();
+        // Get bank and marketplace remote objects
 
-        /*
-        BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
-        String clientName = "";
+        System.out.println("TraderClient: Starting up ...");
 
-        while (clientName == "")
+        Bank bank;
+        MarketPlace marketPlace;
+
+        try
         {
-
-            System.out.print("Please insert a username: ");
-            try {
-                String userInput = consoleIn.readLine();
-
-                if(userInput != null && userInput != "")
+            try
+            {
+                LocateRegistry.getRegistry(host, port).list();
+                System.out.println("TraderClient: Found registry at: " + host + " at port " + port);
+            }
+            catch (RemoteException e)
+            {
+                if (host.equals(DEFAULT_HOST))
                 {
-                    clientName = userInput;
-                    new TraderImpl(clientName, host, port).run();
-                    break;
+                    LocateRegistry.createRegistry(DEFAULT_PORT);
+                    System.out.println("TraderClient: Created registry at: " + DEFAULT_HOST + " at port " + DEFAULT_PORT);
+                }
+                else
+                {
+                    System.out.println(e);
+                    System.exit(1);
                 }
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }*/
+
+            //Properties props = System.getProperties();
+            //props.setProperty("java.rmi.server.hostname", host);
+            bank = (Bank) Naming.lookup(DEFAULT_BANK_NAME);
+            marketPlace = (MarketPlace)Naming.lookup("MarketPlace");
+
+            System.out.println("TraderClient - Connected to bank: " + DEFAULT_BANK_NAME);
+            System.out.println("TraderClient - Connected to marketplace");
+
+            new LoginController(bank, marketPlace).run();
+        }
+        catch (Exception e)
+        {
+            System.out.println("TraderClient: The runtime failed: " + e.getMessage());
+            System.exit(0);
+        }
     }
-
-
 }

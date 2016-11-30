@@ -1,12 +1,13 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
-
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
@@ -35,9 +36,9 @@ public class MarketPlaceController extends Controller
     private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
 
-    public MarketPlaceController(Trader user, String host, int port)
+    public MarketPlaceController(Trader user, Bank bank, MarketPlace marketPlace)
     {
-        super(user, host, port);
+        super(user, bank, marketPlace);
     }
 
     @Override
