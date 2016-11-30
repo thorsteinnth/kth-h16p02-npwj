@@ -1,12 +1,12 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.Account;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
@@ -137,7 +137,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         // Get the relevant bank accounts
-        Account sellerAccount = bank.findAccount(saleItem.getTrader().getUsername());
+        AccountDTO sellerAccount = bank.findAccount(saleItem.getTrader().getUsername());
         Account buyerAccount = bank.findAccount(trader.getUsername());
         if (sellerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for seller");
