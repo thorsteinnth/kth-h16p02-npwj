@@ -19,7 +19,10 @@ public abstract class Controller
 
         try
         {
-            this.username = user.getUsername();
+            if (this.user != null)
+                this.username = this.user.getUsername();
+            else
+                this.username = "UnknownUser";
         }
         catch (RemoteException ex)
         {

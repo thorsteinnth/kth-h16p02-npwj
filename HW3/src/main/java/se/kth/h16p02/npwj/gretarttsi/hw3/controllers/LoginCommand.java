@@ -1,30 +1,25 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
-public class BankCommand extends Command
+public class LoginCommand extends Command
 {
     private CommandType commandType;
     private String username;
-    private float amount;
+    private String password;
 
     public enum CommandType
     {
-        newaccount,
-        getaccount,
-        deleteaccount,
-        deposit,
-        withdraw,
-        balance,
-        exit,
-        help,
-        list,
-        ls
+        login,
+        register,
+        quit,
+        ls,
+        help
     }
 
-    public BankCommand(CommandType commandType, String username, float amount)
+    public LoginCommand(CommandType commandType, String username, String password)
     {
         this.commandType = commandType;
         this.username = username;
-        this.amount = amount;
+        this.password = password;
     }
 
     public CommandType getCommandType()
@@ -37,18 +32,18 @@ public class BankCommand extends Command
         return username;
     }
 
-    public float getAmount()
+    public String getPassword()
     {
-        return amount;
+        return password;
     }
 
     @Override
     public String toString()
     {
-        return "BankCommand{" +
+        return "LoginCommand{" +
                 "commandType=" + commandType +
                 ", username='" + username + '\'' +
-                ", amount=" + amount +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

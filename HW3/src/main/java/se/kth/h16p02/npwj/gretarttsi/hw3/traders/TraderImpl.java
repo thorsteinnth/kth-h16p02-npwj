@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.HomeController;
+import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.LoginController;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
@@ -118,6 +119,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
     public void run()
     {
-        new HomeController(this).run();
+        //new HomeController(this).run();
+        new LoginController(null).run();
     }
 }
