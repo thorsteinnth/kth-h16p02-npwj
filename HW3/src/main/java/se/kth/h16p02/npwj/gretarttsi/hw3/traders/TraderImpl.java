@@ -5,8 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.HomeController;
-import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.LoginController;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
@@ -115,11 +113,5 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     public void itemSoldNotification(String itemName) throws RemoteException {
         System.out.println("\n" + String.format(ITEM_SOLD,itemName));
         // TODO Print the correct console output depending on what controller he is in
-    }
-
-    public void run()
-    {
-        //new HomeController(this).run();
-        new LoginController(null).run();
     }
 }

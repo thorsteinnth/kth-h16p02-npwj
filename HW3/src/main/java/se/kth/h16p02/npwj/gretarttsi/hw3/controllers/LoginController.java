@@ -1,15 +1,22 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderImpl;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
 public class LoginController extends Controller
 {
-    public LoginController(Trader user)
+    private String host;
+    private int port;
+
+    public LoginController(String host, int port)
     {
-        super(user);
+        super(null);
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -36,6 +43,38 @@ public class LoginController extends Controller
             {
                 System.err.println(ex);
             }
+        }
+    }
+
+    private void register(String username, String password)
+    {
+        // TODO Save to DB and stuff
+        System.out.println("Registering user with username and password: " + username + " " + password);
+
+        try
+        {
+            Trader newTrader = new TraderImpl(username, host, port);
+            new HomeController(newTrader).run();
+        }
+        catch (RemoteException ex)
+        {
+            System.err.println(ex);
+        }
+    }
+
+    private void login(String username, String password)
+    {
+        // TODO Save to DB and stuff
+        System.out.println("Logging in user with username and password: " + username + " " + password);
+
+        try
+        {
+            Trader newTrader = new TraderImpl(username, host, port);
+            new HomeController(newTrader).run();
+        }
+        catch (RemoteException ex)
+        {
+            System.err.println(ex);
         }
     }
 
@@ -138,10 +177,10 @@ public class LoginController extends Controller
         switch (loginCommand.getCommandType())
         {
             case login:
-                System.out.println("Should login with username and password: " + loginCommand.getUsername() + " " + loginCommand.getPassword());
+                login(loginCommand.getUsername(), loginCommand.getPassword());
                 return true;
             case register:
-                System.out.println("Should register with username and password: " + loginCommand.getUsername() + " " + loginCommand.getPassword());
+                register(loginCommand.getUsername(), loginCommand.getPassword());
                 return true;
         }
 
