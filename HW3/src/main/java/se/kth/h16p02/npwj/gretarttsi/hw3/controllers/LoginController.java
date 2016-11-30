@@ -1,5 +1,8 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderImpl;
 
@@ -51,10 +54,40 @@ public class LoginController extends Controller
     {
         // TODO Save to DB and stuff
         System.out.println("Registering user with username and password: " + username + " " + password);
-
         try
         {
-            Trader newTrader = new TraderImpl(username);
+            Trader newTrader = new TraderImpl(username,password);
+
+            //CheckIfRegister function onlu checks if there is a trader already registered with this username
+            boolean userNameTaken = this.marketPlace.checkIfRegistered(newTrader);
+
+            if(userNameTaken == true)
+            {
+                System.out.println("This username is taken. Please choose another name");
+                return;
+            }
+
+            // The user need to have a bank account.
+            try
+            {
+                this.bank.newAccount(username);
+            }
+            catch (RejectedException e)
+            {
+                //If an account under this name already exist then we return;
+                System.out.println(e.getMessage());
+                return;
+            }
+
+            try
+            {
+                this.marketPlace.register(newTrader);
+            }
+            catch (TraderAlreadyExistsException|BankAccountNotFoundException e)
+            {
+                System.out.println(e.getMessage());
+            }
+
             new HomeController(newTrader, this.host, this.port).run();
         }
         catch (RemoteException ex)

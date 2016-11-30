@@ -11,6 +11,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String ITEM_SOLD = "Your item %s has been sold on the marketplace. Deposit has been made to your account";
 
     private String username;
+    private String password;
 
     @Override
     public boolean equals(Object o)
@@ -32,10 +33,11 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         return result;
     }
 
-    public TraderImpl(String username) throws RemoteException
+    public TraderImpl(String username, String password) throws RemoteException
     {
         super();
         this.username = username;
+        this.password = password;
     }
 
     @Override
@@ -43,6 +45,14 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     {
         return this.username;
     }
+
+    @Override
+    public String getPassword()
+    {
+        return this.password;
+    }
+
+
 
     @Override
     public void wishListAvailableNotification(String itemName) throws RemoteException {

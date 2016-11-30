@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 public interface Trader extends Remote
 {
     String getUsername() throws RemoteException;
+    String getPassword() throws RemoteException;
     void wishListAvailableNotification (String notification) throws RemoteException;
     void itemSoldNotification(String notification) throws RemoteException;
 }
