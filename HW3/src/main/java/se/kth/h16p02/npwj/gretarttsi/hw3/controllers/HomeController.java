@@ -1,5 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
@@ -7,22 +9,15 @@ import java.util.StringTokenizer;
 
 public class HomeController extends Controller
 {
-    private static final String HOME = "Home";
-
-    private String host;
-    private int port;
-
-    public HomeController(Trader user, String host, int port)
+    public HomeController(Trader user, Bank bank, MarketPlace marketPlace)
     {
-        super(user, host, port);
-        this.host = host;
-        this.port = port;
+        super(user, bank, marketPlace);
     }
 
     @Override
     public void printConsolePrompt()
     {
-        System.out.print(this.username + "@" + HOME + ">");
+        System.out.print(this.username + "@Home" + ">");
     }
 
     @Override
@@ -63,11 +58,11 @@ public class HomeController extends Controller
                 return;
 
             case marketplace:
-                new MarketPlaceController(user, host, port).run();
+                new MarketPlaceController(user, bank, marketPlace).run();
                 return;
 
             case bank:
-                new BankController(user, host, port).run();
+                new BankController(user, bank, marketPlace).run();
                 return;
 
         }
