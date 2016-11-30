@@ -20,3 +20,5 @@ build/
 # Intellij IDEA stuff
 **/.idea/workspace.xml 
 **/.idea/tasks.xml
+
+*.sqlite
