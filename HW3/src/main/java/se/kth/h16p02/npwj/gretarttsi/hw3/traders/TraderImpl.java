@@ -662,7 +662,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
         switch (command.getCommandName())
         {
-            /*
+
             case list:
                 try
                 {
@@ -679,7 +679,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                     return true;
                 }
                 return true;
-             */
+
             case exit:
                 runHome();
                 return false;
