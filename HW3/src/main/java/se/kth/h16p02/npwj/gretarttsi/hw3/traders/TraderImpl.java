@@ -724,11 +724,11 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 break;
 
             case deposit:
-                acc.deposit(command.getAmount());
+                bankobj.deposit(username,command.getAmount());
                 break;
 
             case withdraw:
-                acc.withdraw(command.getAmount());
+                bankobj.withdraw(username,command.getAmount());
                 break;
 
             case balance:
