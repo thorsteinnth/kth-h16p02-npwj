@@ -25,8 +25,6 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 public class TraderImpl extends UnicastRemoteObject implements Trader
 {
-    private static final String DEFAULT_BANK_NAME = "Nordea";
-
     private static final String MARKETPLACE = "Marketplace";
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
@@ -52,22 +50,9 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private BufferedReader consoleIn;
     private Bank bankobj;
     private MarketPlace marketplaceobj;
-    private String bankname;
+    private String bankname = "Nordea";
     private String username;
     private State state;
-
-    enum BankCommandName {
-        newaccount,
-        getaccount,
-        deleteaccount,
-        deposit,
-        withdraw,
-        balance,
-        exit,
-        help,
-        list,
-        ls
-    };
 
     enum MarketplaceCommandName {
         register,
@@ -84,7 +69,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
     enum State
     {
-        bank,
         marketplace
     }
 
@@ -112,7 +96,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         super();
 
         this.username = username;
-        this.bankname = DEFAULT_BANK_NAME;
+
 
         try
         {
@@ -137,7 +121,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
 
             //Properties props = System.getProperties();
             //props.setProperty("java.rmi.server.hostname", host);
-            bankobj = (Bank) Naming.lookup(bankname);
+            bankobj = (Bank) Naming.lookup(this.bankname);
             marketplaceobj = (MarketPlace)Naming.lookup("MarketPlace");
 
         }
@@ -173,9 +157,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     {
         switch(state)
         {
-            case bank:
-                System.out.print(username + "@" + bankname + ">");
-                break;
             case marketplace:
                 System.out.print(username + "@" + MARKETPLACE + ">");
                 break;
@@ -216,33 +197,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
     }
 
-    private void runBank()
-    {
-        boolean run = true;
-
-        while (run)
-        {
-            state = State.bank;
-            runConsolOutput(state);
-            try
-            {
-                String userInput = consoleIn.readLine();
-                run = bankExecute(bankParse(userInput));
-            }
-            catch (RejectedException re)
-            {
-                System.out.println(re);
-            }
-            catch (InsufficientFundsException ex)
-            {
-                System.out.println(INSUFFICIENT_FUNDS);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
     //endregion functions
 
     //region Marketplace command line function
@@ -489,186 +443,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     }
     //endregion
 
-    //region Bank Command line function
-    private BankCommand bankParse(String userInput)
-    {
-        if (userInput == null)
-        {
-            return null;
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(userInput);
-        if (tokenizer.countTokens() == 0)
-        {
-            return null;
-        }
-
-        BankCommandName commandName = null;
-        String userName = null;
-        float amount = 0;
-        int userInputTokenNo = 1;
-
-        while (tokenizer.hasMoreTokens())
-        {
-            switch (userInputTokenNo)
-            {
-                case 1:
-                    try
-                    {
-                        String commandNameString = tokenizer.nextToken();
-                        commandName = BankCommandName.valueOf(BankCommandName.class, commandNameString);
-                    }
-                    catch (IllegalArgumentException commandDoesNotExist)
-                    {
-                        System.out.println("Illegal command");
-                        return null;
-                    }
-                    break;
-
-                case 2:
-                    try
-                    {
-                        amount = Float.parseFloat(tokenizer.nextToken());
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println("Illegal amount");
-                        return null;
-                    }
-                    break;
-
-                default:
-                    System.out.println("Illegal command");
-                    return null;
-            }
-            userInputTokenNo++;
-        }
-        return new BankCommand(commandName, this.username, amount);
-    }
-
-    boolean bankExecute(BankCommand command) throws RemoteException, RejectedException, InsufficientFundsException
-    {
-        if (command == null)
-        {
-            return true;
-        }
-
-        switch (command.getCommandName())
-        {
-
-            case list:
-                try
-                {
-                    /*
-                    for (String accountHolder : bankobj.listAccounts())
-                    {
-                        System.out.println(accountHolder);
-                    }*/
-                    System.out.println("List accounts currently not supported");
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    return true;
-                }
-                return true;
-
-            case exit:
-                new HomeController(this).run();
-                return false;
-
-            case ls:
-            case help:
-                for (BankCommandName commandName : BankCommandName.values()) {
-                    System.out.println(commandName);
-                }
-                return true;
-
-        }
-
-        if (username == null || username == "")
-        {
-            System.out.println("username is not specified");
-            return true;
-        }
-
-        switch (command.getCommandName())
-        {
-            case newaccount:
-                bankobj.newAccount(username);
-                return true;
-            case deleteaccount:
-                bankobj.deleteAccount(username);
-                return true;
-        }
-
-        // All further commands require a Account reference
-        Account acc = bankobj.findAccount(username);
-        if (acc == null)
-        {
-            System.out.println("No account for " + username);
-            return true;
-        }
-
-        switch (command.getCommandName())
-        {
-            case getaccount:
-                System.out.println(acc);
-                break;
-
-            case deposit:
-                bankobj.deposit(username,command.getAmount());
-                break;
-
-            case withdraw:
-                bankobj.withdraw(username,command.getAmount());
-                break;
-
-            case balance:
-                System.out.println("balance: $" + acc.getBalance());
-                break;
-
-            default:
-                System.out.println("Illegal command");
-        }
-
-        return true;
-    }
-
-    private class BankCommand
-    {
-        private String userName;
-        private float amount;
-        private BankCommandName commandName;
-
-        private String getUserName() {
-            return userName;
-        }
-
-        private float getAmount() {
-            return amount;
-        }
-
-        private BankCommandName getCommandName() {
-            return commandName;
-        }
-
-        private BankCommand(BankCommandName commandName, String userName, float amount)
-        {
-            this.commandName = commandName;
-            this.userName = userName;
-            this.amount = amount;
-        }
-
-        @Override
-        public String toString() {
-            return "BankCommand{" +
-                    "userName='" + userName + '\'' +
-                    ", amount=" + amount +
-                    ", commandName=" + commandName +
-                    '}';
-        }
-    }
     //endregion
 
     //region Display functions

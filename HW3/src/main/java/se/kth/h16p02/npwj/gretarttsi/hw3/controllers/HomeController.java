@@ -3,43 +3,21 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
 public class HomeController extends Controller
 {
     private static final String HOME = "Home";
 
-    private String userName;
-
-    enum Command
-    {
-        bank,
-        marketplace,
-        home,
-        help,
-        ls
-    }
-
     public HomeController(Trader user)
     {
         super(user);
-
-        try
-        {
-            this.userName = user.getUsername();
-        }
-        catch (RemoteException ex)
-        {
-            System.err.println(ex);
-            this.userName = "UnknownUser";
-        }
     }
 
     @Override
     public void printConsolePrompt()
     {
-        System.out.print(this.userName + "@" + HOME + ">");
+        System.out.print(this.username + "@" + HOME + ">");
     }
 
     @Override
@@ -60,18 +38,21 @@ public class HomeController extends Controller
         }
     }
 
-    private void execute(Command command)
+    protected void execute(Command command)
     {
+        HomeCommand homeCommand = (HomeCommand)command;
+
         if (command == null)
         {
             return;
         }
 
-        switch (command)
+        switch (homeCommand.getCommandType())
         {
             case ls:
             case help:
-                for (Command availableCommand : Command.values()) {
+                for (HomeCommand.CommandType availableCommand : HomeCommand.CommandType.values())
+                {
                     System.out.println(availableCommand);
                 }
                 return;
@@ -81,13 +62,13 @@ public class HomeController extends Controller
                 return;
 
             case bank:
-                System.out.println("Should run bank");
+                new BankController(user).run();
                 return;
 
         }
     }
 
-    private Command parse(String userInput)
+    protected Command parse(String userInput)
     {
         if (userInput == null)
         {
@@ -100,7 +81,7 @@ public class HomeController extends Controller
             return null;
         }
 
-        Command command = null;
+        HomeCommand command = null;
         int userInputTokenNo = 1;
 
         while (tokenizer.hasMoreTokens())
@@ -111,7 +92,11 @@ public class HomeController extends Controller
                     try
                     {
                         String commandString = tokenizer.nextToken();
-                        command = Command.valueOf(Command.class, commandString);
+                        command = new HomeCommand(
+                                HomeCommand.CommandType.valueOf(
+                                        HomeCommand.CommandType.class,
+                                        commandString)
+                        );
                     }
                     catch (IllegalArgumentException ex)
                     {
