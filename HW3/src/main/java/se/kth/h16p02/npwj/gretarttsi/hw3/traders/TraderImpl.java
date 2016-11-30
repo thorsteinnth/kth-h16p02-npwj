@@ -48,7 +48,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private static final String DEFAULT_HOST = "localhost";
 
     private BufferedReader consoleIn;
-    private Account account;
     private Bank bankobj;
     private MarketPlace marketplaceobj;
     private String bankname;
