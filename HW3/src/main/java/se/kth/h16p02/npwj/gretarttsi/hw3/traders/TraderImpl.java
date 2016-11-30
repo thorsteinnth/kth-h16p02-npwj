@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.traders;
+package se.kth.h16p02.npwj.gretarttsi.hw3.traders;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,19 +9,17 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.bank.InsufficientFundsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.marketplace.*;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 public class TraderImpl extends UnicastRemoteObject implements Trader
 {
