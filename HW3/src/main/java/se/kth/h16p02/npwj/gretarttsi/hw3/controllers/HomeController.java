@@ -9,9 +9,14 @@ public class HomeController extends Controller
 {
     private static final String HOME = "Home";
 
-    public HomeController(Trader user)
+    private String host;
+    private int port;
+
+    public HomeController(Trader user, String host, int port)
     {
-        super(user);
+        super(user, host, port);
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -58,11 +63,11 @@ public class HomeController extends Controller
                 return;
 
             case marketplace:
-                new MarketPlaceController(user).run();
+                new MarketPlaceController(user, host, port).run();
                 return;
 
             case bank:
-                new BankController(user).run();
+                new BankController(user, host, port).run();
                 return;
 
         }

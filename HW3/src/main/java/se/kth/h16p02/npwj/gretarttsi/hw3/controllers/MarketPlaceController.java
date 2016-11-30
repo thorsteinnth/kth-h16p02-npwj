@@ -35,9 +35,9 @@ public class MarketPlaceController extends Controller
     private static final String AMOUNT_ERROR = "Illegal amount specified";
     private static final String NO_WISHES_REGISTERED = "You have no wishes registered";
 
-    public MarketPlaceController(Trader user)
+    public MarketPlaceController(Trader user, String host, int port)
     {
-        super(user);
+        super(user, host, port);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class MarketPlaceController extends Controller
         switch (marketPlaceCommand.getCommandType())
         {
             case unregister:
-                if (user.getMarketPlace().deregister(user))
+                if (marketPlace.deregister(user))
                 {
                     System.out.println(DEREGISTRATION_SUCCESS);
                     return true;
@@ -92,7 +92,7 @@ public class MarketPlaceController extends Controller
             case register:
                 try
                 {
-                    this.user.getMarketPlace().register(user);
+                    marketPlace.register(user);
                     System.out.println(REGISTRATION_SUCCESS);
                     return true;
                 }
@@ -108,12 +108,12 @@ public class MarketPlaceController extends Controller
                 }
 
             case inspect:
-                ArrayList<SaleItem> saleItems = this.user.getMarketPlace().inspectAvailableItems();
+                ArrayList<SaleItem> saleItems = marketPlace.inspectAvailableItems();
                 System.out.println(getAvailbleItemsDisplayString(saleItems));
                 return true;
 
             case getwishes:
-                ArrayList<WishListItem> wishListItems = this.user.getMarketPlace().getTradersWishes(user);
+                ArrayList<WishListItem> wishListItems = marketPlace.getTradersWishes(user);
                 System.out.println(getTradersWishesDisplayString(wishListItems));
                 return true;
 
@@ -140,7 +140,7 @@ public class MarketPlaceController extends Controller
         {
             try
             {
-                if (user.getMarketPlace().sell(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount()))))
+                if (marketPlace.sell(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount()))))
                     System.out.println(String.format(SELLING_SUCCESSFUL, marketPlaceCommand.getProductName(), String.valueOf(marketPlaceCommand.getAmount())));
                 else
                     System.out.println(SELLING_FAILURE);
@@ -169,7 +169,7 @@ public class MarketPlaceController extends Controller
             case buy:
                 try
                 {
-                    this.user.getMarketPlace().buy(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount())));
+                    marketPlace.buy(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount())));
                     System.out.println(String.format(BUY_SUCCESSFUL, marketPlaceCommand.getProductName(), String.valueOf(marketPlaceCommand.getAmount())));
                 }
                 catch (TraderNotFoundException e)
@@ -201,7 +201,7 @@ public class MarketPlaceController extends Controller
             case wish:
                 try
                 {
-                    this.user.getMarketPlace().addItemToWishlist(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount())));
+                    marketPlace.addItemToWishlist(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount())));
                     System.out.println(ADD_TO_WISHLIST_SUCCESSFUL);
                 }
                 catch (TraderNotFoundException ex)

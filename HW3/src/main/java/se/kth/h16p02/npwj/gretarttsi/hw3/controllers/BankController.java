@@ -15,11 +15,15 @@ public class BankController extends Controller
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
 
+    private String host;
+    private int port;
     private String bankname;
 
-    public BankController(Trader user)
+    public BankController(Trader user, String host, int port)
     {
-        super(user);
+        super(user, host, port);
+        this.host = host;
+        this.port = port;
         this.bankname = DEFAULT_BANK_NAME;
     }
 
@@ -144,7 +148,7 @@ public class BankController extends Controller
                 return true;
 
             case exit:
-                new HomeController(user).run();
+                new HomeController(user, host, port).run();
                 return false;
 
             case ls:
@@ -166,7 +170,7 @@ public class BankController extends Controller
         switch (bankCommand.getCommandType())
         {
             case newaccount:
-                user.getBank().newAccount(username);
+                bank.newAccount(username);
                 return true;
         }
 
@@ -176,7 +180,7 @@ public class BankController extends Controller
 
         try
         {
-            acc = user.getBank().getAccount(username);
+            acc = bank.getAccount(username);
 
             switch (bankCommand.getCommandType())
             {
@@ -185,15 +189,15 @@ public class BankController extends Controller
                     break;
 
                 case deleteaccount:
-                    user.getBank().deleteAccount(acc);
+                    bank.deleteAccount(acc);
                     return true;
 
                 case deposit:
-                    user.getBank().deposit(acc, bankCommand.getAmount());
+                    bank.deposit(acc, bankCommand.getAmount());
                     break;
 
                 case withdraw:
-                    user.getBank().withdraw(acc, bankCommand.getAmount());
+                    bank.withdraw(acc, bankCommand.getAmount());
                     break;
 
                 case balance:

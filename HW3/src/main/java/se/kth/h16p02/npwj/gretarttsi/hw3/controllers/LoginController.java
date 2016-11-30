@@ -14,7 +14,7 @@ public class LoginController extends Controller
 
     public LoginController(String host, int port)
     {
-        super(null);
+        super(null, host, port);
         this.host = host;
         this.port = port;
     }
@@ -53,8 +53,8 @@ public class LoginController extends Controller
 
         try
         {
-            Trader newTrader = new TraderImpl(username, host, port);
-            new HomeController(newTrader).run();
+            Trader newTrader = new TraderImpl(username);
+            new HomeController(newTrader, this.host, this.port).run();
         }
         catch (RemoteException ex)
         {
@@ -69,8 +69,8 @@ public class LoginController extends Controller
 
         try
         {
-            Trader newTrader = new TraderImpl(username, host, port);
-            new HomeController(newTrader).run();
+            Trader newTrader = new TraderImpl(username);
+            new HomeController(newTrader, this.host, this.port).run();
         }
         catch (RemoteException ex)
         {
