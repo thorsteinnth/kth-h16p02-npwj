@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 public class LoginController extends Controller
 {
+    private final int passwordLength = 8;
     private String host;
     private int port;
 
@@ -171,6 +172,12 @@ public class LoginController extends Controller
         if (loginCommand.getPassword() == null || loginCommand.getPassword() == "")
         {
             System.out.println("Password is not specified");
+            return true;
+        }
+
+        if (loginCommand.getPassword().length() <= this.passwordLength)
+        {
+            System.out.println("Password is not legal. It has to be longer than 8 characters");
             return true;
         }
 
