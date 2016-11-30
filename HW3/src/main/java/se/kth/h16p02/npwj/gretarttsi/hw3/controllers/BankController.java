@@ -3,7 +3,6 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
@@ -144,8 +143,7 @@ public class BankController extends Controller
                 return true;
 
             case exit:
-                //new HomeController(this).run();
-                System.out.println("Should go home");
+                new HomeController(user).run();
                 return false;
 
             case ls:
@@ -167,46 +165,38 @@ public class BankController extends Controller
         switch (bankCommand.getCommandType())
         {
             case newaccount:
-                //bankobj.newAccount(username);
-                System.out.println("Should create new account");
+                user.getBank().newAccount(username);
                 return true;
             case deleteaccount:
-                //bankobj.deleteAccount(username);
-                System.out.println("Should delete account");
+                user.getBank().deleteAccount(username);
                 return true;
         }
 
         // All further commands require an account reference
 
-        // TODO Get account
-        /*
-        Account acc = bankobj.findAccount(username);
+        Account acc = user.getBank().findAccount(username);
         if (acc == null)
         {
             System.out.println("No account for " + username);
             return true;
-        }*/
+        }
 
         switch (bankCommand.getCommandType())
         {
             case getaccount:
-                //System.out.println(acc);
-                System.out.println("Should print account");
+                System.out.println(acc);
                 break;
 
             case deposit:
-                //bankobj.deposit(username,command.getAmount());
-                System.out.println("Should deposit");
+                user.getBank().deposit(username, bankCommand.getAmount());
                 break;
 
             case withdraw:
-                //bankobj.withdraw(username,command.getAmount());
-                System.out.println("Should withdraw");
+                user.getBank().withdraw(username, bankCommand.getAmount());
                 break;
 
             case balance:
-                //System.out.println("balance: $" + acc.getBalance());
-                System.out.println("Should print balance");
+                System.out.println("balance: $" + acc.getBalance());
                 break;
 
             default:
