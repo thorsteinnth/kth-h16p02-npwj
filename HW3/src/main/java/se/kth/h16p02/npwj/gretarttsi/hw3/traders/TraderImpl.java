@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.controllers.HomeController;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
@@ -25,7 +26,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 public class TraderImpl extends UnicastRemoteObject implements Trader
 {
     private static final String DEFAULT_BANK_NAME = "Nordea";
-    private static final String HOME = "Home";
+
     private static final String MARKETPLACE = "Marketplace";
     private static final String PRODUCT_ERROR = "Product name is not specified";
     private static final String AMOUNT_ERROR = "Illegal amount specified";
@@ -54,14 +55,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     private String bankname;
     private String username;
     private State state;
-
-    enum HomeCommandName{
-        bank,
-        marketplace,
-        home,
-        help,
-        ls
-    }
 
     enum BankCommandName {
         newaccount,
@@ -92,8 +85,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     enum State
     {
         bank,
-        marketplace,
-        home
+        marketplace
     }
 
     @Override
@@ -181,9 +173,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     {
         switch(state)
         {
-            case home:
-                System.out.print(username + "@" + HOME + ">");
-                break;
             case bank:
                 System.out.print(username + "@" + bankname + ">");
                 break;
@@ -198,32 +187,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
     public void run()
     {
         this.consoleIn = new BufferedReader(new InputStreamReader(System.in));
-
-        runHome();
-    }
-
-    private void runHome()
-    {
-        while (true)
-        {
-            state = State.home;
-            runConsolOutput(state);
-            try
-            {
-                String userInput = consoleIn.readLine();
-                homeExecute(homeParse(userInput));
-            }
-            /*
-            catch (RejectedException re)
-            {
-                System.out.println(re);
-            }
-            */
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        new HomeController(this).run();
     }
 
     private void runMarketplace()
@@ -280,77 +244,6 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
     }
     //endregion functions
-
-    //region Home command line function
-    private HomeCommandName homeParse(String userInput)
-    {
-        if (userInput == null)
-        {
-            return null;
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(userInput);
-        if (tokenizer.countTokens() == 0)
-        {
-            return null;
-        }
-
-        HomeCommandName commandName = null;
-        int userInputTokenNo = 1;
-
-        while (tokenizer.hasMoreTokens())
-        {
-            switch (userInputTokenNo)
-            {
-                case 1:
-                    try
-                    {
-                        String commandNameString = tokenizer.nextToken();
-                        commandName = BankCommandName.valueOf(HomeCommandName.class, commandNameString);
-                    }
-                    catch (IllegalArgumentException commandDoesNotExist)
-                    {
-                        System.out.println("Illegal command");
-                        return null;
-                    }
-                    break;
-
-                default:
-                    System.out.println("Illegal command");
-                    return null;
-            }
-            userInputTokenNo++;
-        }
-        return commandName;
-    }
-
-    private void homeExecute ( HomeCommandName commandName)
-    {
-        if (commandName == null)
-        {
-            return;
-        }
-
-        switch (commandName)
-        {
-            case ls:
-            case help:
-                for (HomeCommandName homeCommandName : HomeCommandName.values()) {
-                    System.out.println(homeCommandName);
-                }
-                return;
-
-            case marketplace:
-                runMarketplace();
-                return;
-
-            case bank:
-                runBank();
-                return;
-
-        }
-    }
-    //endregion
 
     //region Marketplace command line function
     private MarketPlaceCommand marketplaceParse(String userInput)
@@ -681,7 +574,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
                 return true;
 
             case exit:
-                runHome();
+                new HomeController(this).run();
                 return false;
 
             case ls:

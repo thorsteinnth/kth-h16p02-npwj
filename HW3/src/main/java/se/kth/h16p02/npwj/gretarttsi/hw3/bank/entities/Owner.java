@@ -22,7 +22,7 @@ public class Owner implements Serializable
 
     public Owner()
     {
-        this(null);
+        this("");
     }
 
     public Owner(String name)
