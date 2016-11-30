@@ -38,7 +38,7 @@ public class HomeController extends Controller
         }
     }
 
-    protected void execute(Command command)
+    private void execute(Command command)
     {
         HomeCommand homeCommand = (HomeCommand)command;
 
@@ -58,7 +58,7 @@ public class HomeController extends Controller
                 return;
 
             case marketplace:
-                System.out.println("Should run marketplace");
+                new MarketPlaceController(user).run();
                 return;
 
             case bank:

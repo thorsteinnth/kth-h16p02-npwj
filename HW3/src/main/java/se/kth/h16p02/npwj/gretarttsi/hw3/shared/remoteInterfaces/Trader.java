@@ -8,4 +8,6 @@ public interface Trader extends Remote
     String getUsername() throws RemoteException;
     void wishListAvailableNotification (String notification) throws RemoteException;
     void itemSoldNotification(String notification) throws RemoteException;
+    MarketPlace getMarketPlace() throws RemoteException;
+    Bank getBank() throws RemoteException;
 }

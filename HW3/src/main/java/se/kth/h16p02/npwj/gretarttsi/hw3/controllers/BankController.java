@@ -115,7 +115,7 @@ public class BankController extends Controller
         return new BankCommand(commandType, this.username, amount);
     }
 
-    protected boolean execute(Command command) throws RemoteException, RejectedException, InsufficientFundsException
+    private boolean execute(Command command) throws RemoteException, RejectedException, InsufficientFundsException
     {
         if (command == null)
         {
