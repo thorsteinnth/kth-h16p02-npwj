@@ -1,14 +1,15 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
+package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.bank.InsufficientFundsException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Exceptions.RejectedException;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Account;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Bank;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -136,8 +137,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         // Get the relevant bank accounts
-        Account sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
-        Account buyerAccount = bank.getAccount(trader.getUsername());
+        Account sellerAccount = bank.findAccount(saleItem.getTrader().getUsername());
+        Account buyerAccount = bank.findAccount(trader.getUsername());
         if (sellerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for seller");
         if (buyerAccount == null)
@@ -189,7 +190,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException
     {
-        if (this.bank.getAccount(trader.getUsername()) == null)
+        if (this.bank.findAccount(trader.getUsername()) == null)
             throw new BankAccountNotFoundException("Could not find bank account for user: " + trader.getUsername());
 
         return this.repository.registerTrader(trader);

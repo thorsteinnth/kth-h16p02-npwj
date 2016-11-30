@@ -11,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
@@ -665,10 +666,12 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
             case list:
                 try
                 {
+                    /*
                     for (String accountHolder : bankobj.listAccounts())
                     {
                         System.out.println(accountHolder);
-                    }
+                    }*/
+                    System.out.println("List accounts currently not supported");
                 }
                 catch (Exception e)
                 {
@@ -707,7 +710,7 @@ public class TraderImpl extends UnicastRemoteObject implements Trader
         }
 
         // All further commands require a Account reference
-        Account acc = bankobj.getAccount(username);
+        Account acc = bankobj.findAccount(username);
         if (acc == null)
         {
             System.out.println("No account for " + username);

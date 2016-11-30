@@ -1,9 +1,12 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
+package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.Item;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.SaleItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.Domain.WishListItem;
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;

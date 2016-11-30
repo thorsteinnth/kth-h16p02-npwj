@@ -1,6 +1,6 @@
-package se.kth.h16p02.npwj.gretarttsi.hw2.marketplace;
+package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw2.shared.RemoteInterfaces.MarketPlace;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
