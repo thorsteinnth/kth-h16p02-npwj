@@ -2,7 +2,8 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
@@ -137,8 +138,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         // Get the relevant bank accounts
-        AccountDTO sellerAccount = bank.findAccount(saleItem.getTrader().getUsername());
-        Account buyerAccount = bank.findAccount(trader.getUsername());
+        AccountDTO sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
+        AccountDTO buyerAccount = bank.getAccount(trader.getUsername());
         if (sellerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for seller");
         if (buyerAccount == null)
@@ -147,21 +148,21 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         // "Transaction" for moving money around
         boolean depositDone = false;
         boolean withdrawDone = false;
-        float itemPrice = saleItem.getItem().getPrice().floatValue();
+        int itemPrice = saleItem.getItem().getPrice().intValue();
         try
         {
-            sellerAccount.deposit(itemPrice);
+            bank.deposit(sellerAccount,itemPrice);
             depositDone = true;
-            buyerAccount.withdraw(itemPrice);
+            bank.withdraw(buyerAccount, itemPrice);
             withdrawDone = true;
         }
         catch (Exception ex)
         {
             // Rollback changes
             if (depositDone)
-                sellerAccount.withdraw(itemPrice);
+                bank.withdraw(sellerAccount, itemPrice);
             if (withdrawDone)
-                buyerAccount.deposit(itemPrice);
+                bank.deposit(buyerAccount,itemPrice);
 
             throw ex;
         }
@@ -190,8 +191,14 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException
     {
-        if (this.bank.findAccount(trader.getUsername()) == null)
-            throw new BankAccountNotFoundException("Could not find bank account for user: " + trader.getUsername());
+        try
+        {
+            this.bank.getAccount(trader.getUsername());
+        }
+        catch (RemoteException | BankAccountNotFoundException e)
+        {
+            throw e;
+        }
 
         return this.repository.registerTrader(trader);
     }

@@ -1,8 +1,9 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.entities.Account;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.io.IOException;
@@ -46,13 +47,13 @@ public class BankController extends Controller
             {
                 System.out.println(re);
             }
-            catch (InsufficientFundsException ex)
-            {
-                System.out.println(INSUFFICIENT_FUNDS);
-            }
             catch (IOException e)
             {
                 e.printStackTrace();
+            }
+            catch (InsufficientFundsException ex)
+            {
+                System.out.println(INSUFFICIENT_FUNDS);
             }
         }
     }
@@ -71,7 +72,7 @@ public class BankController extends Controller
         }
 
         BankCommand.CommandType commandType = null;
-        float amount = 0;
+        int amount = 0;
         int userInputTokenNo = 1;
 
         while (tokenizer.hasMoreTokens())
@@ -95,7 +96,7 @@ public class BankController extends Controller
                 case 2:
                     try
                     {
-                        amount = Float.parseFloat(tokenizer.nextToken());
+                        amount = Integer.parseInt(tokenizer.nextToken());
                     }
                     catch (NumberFormatException e)
                     {
@@ -167,40 +168,46 @@ public class BankController extends Controller
             case newaccount:
                 user.getBank().newAccount(username);
                 return true;
-            case deleteaccount:
-                user.getBank().deleteAccount(username);
-                return true;
         }
 
         // All further commands require an account reference
 
-        Account acc = user.getBank().findAccount(username);
-        if (acc == null)
+        AccountDTO acc;
+
+        try
+        {
+            acc = user.getBank().getAccount(username);
+
+            switch (bankCommand.getCommandType())
+            {
+                case getaccount:
+                    System.out.println(acc);
+                    break;
+
+                case deleteaccount:
+                    user.getBank().deleteAccount(acc);
+                    return true;
+
+                case deposit:
+                    user.getBank().deposit(acc, bankCommand.getAmount());
+                    break;
+
+                case withdraw:
+                    user.getBank().withdraw(acc, bankCommand.getAmount());
+                    break;
+
+                case balance:
+                    System.out.println("balance: $" + acc.getBalance());
+                    break;
+
+                default:
+                    System.out.println("Illegal command");
+            }
+        }
+        catch (BankAccountNotFoundException e)
         {
             System.out.println("No account for " + username);
             return true;
-        }
-
-        switch (bankCommand.getCommandType())
-        {
-            case getaccount:
-                System.out.println(acc);
-                break;
-
-            case deposit:
-                user.getBank().deposit(username, bankCommand.getAmount());
-                break;
-
-            case withdraw:
-                user.getBank().withdraw(username, bankCommand.getAmount());
-                break;
-
-            case balance:
-                System.out.println("balance: $" + acc.getBalance());
-                break;
-
-            default:
-                System.out.println("Illegal command");
         }
 
         return true;

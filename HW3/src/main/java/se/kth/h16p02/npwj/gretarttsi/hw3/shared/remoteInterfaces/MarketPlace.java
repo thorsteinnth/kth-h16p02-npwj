@@ -1,11 +1,11 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.InsufficientFundsException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

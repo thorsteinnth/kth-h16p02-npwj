@@ -6,6 +6,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDAO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 
 /**
  * Implementations of the bank's remote methods.
@@ -45,7 +49,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
     }
 
     @Override
-    public synchronized AccountDTO getAccount(String holderName) throws RejectedException {
+    public synchronized AccountDTO getAccount(String holderName) throws BankAccountNotFoundException {
         if (holderName == null) {
             return null;
         }
@@ -55,7 +59,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
             try {
                 acct = (Account) bankDb.findAccountByName(holderName);
             } catch (BankDBException exception) {
-                throw new RejectedException("Could not search for account.");
+                throw new BankAccountNotFoundException("Could not find bank account for user: " + holderName);
             }
         }
 
@@ -80,13 +84,13 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
     }
 
     @Override
-    public void deposit(AccountDTO acctDTO, int amt) throws RejectedException {
+    public void deposit(AccountDTO acctDTO, int amt) throws RejectedException, BankAccountNotFoundException {
         Account acct = (Account) getAccount(acctDTO.getHolderName());
         acct.deposit(amt);
     }
 
     @Override
-    public void withdraw(AccountDTO acctDTO, int amt) throws RejectedException {
+    public void withdraw(AccountDTO acctDTO, int amt) throws RejectedException, BankAccountNotFoundException, InsufficientFundsException {
         Account acct = (Account) getAccount(acctDTO.getHolderName());
         acct.withdraw(amt);
     }

@@ -4,7 +4,7 @@ public class BankCommand extends Command
 {
     private CommandType commandType;
     private String username;
-    private float amount;
+    private int amount;
 
     public enum CommandType
     {
@@ -20,7 +20,7 @@ public class BankCommand extends Command
         ls
     }
 
-    public BankCommand(CommandType commandType, String username, float amount)
+    public BankCommand(CommandType commandType, String username, int amount)
     {
         this.commandType = commandType;
         this.username = username;
@@ -37,7 +37,7 @@ public class BankCommand extends Command
         return username;
     }
 
-    public float getAmount()
+    public int getAmount()
     {
         return amount;
     }

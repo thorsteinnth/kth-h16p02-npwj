@@ -1,11 +1,12 @@
-package bankjdbc.server.startup;
+package se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.startup;
+
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDBException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.BankImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.sql.SQLException;
-import bankjdbc.server.integration.BankDBException;
-import bankjdbc.server.model.BankImpl;
 
 public class Server {
     private static final int REGISTRY_PORT_NUMBER = 1099;

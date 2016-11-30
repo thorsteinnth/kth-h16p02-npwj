@@ -2,6 +2,8 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDAO;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDBException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 
 /**
  * An account in the bank.
@@ -60,13 +62,13 @@ public class Account implements AccountDTO {
      * @throws RejectedException If the specified amount is negative, if the amount is larger than
      *                           the balance, or if unable to perform the update.
      */
-    public void withdraw(int amount) throws RejectedException {
+    public void withdraw(int amount) throws RejectedException, InsufficientFundsException {
         if (amount < 0) {
             throw new RejectedException("Tried to withdraw negative value, account: " + this
                     + ", illegal value: " + amount);
         }
         if (balance - amount < 0) {
-            throw new RejectedException("Tried to overdraft, account: " + this
+            throw new InsufficientFundsException("Tried to overdraft, account: " + this
                     + ", illegal value: " + amount);
         }
         changeBalance(balance - amount, "Could not withdraw from account " + this);
