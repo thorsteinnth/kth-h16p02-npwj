@@ -1,7 +1,10 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.PasswordNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
@@ -110,6 +113,22 @@ public class LoginController extends Controller
         try
         {
             Trader newTrader = new TraderImpl(username,password);
+
+            try
+            {
+                 marketPlace.login(newTrader);
+            }
+            catch (TraderNotFoundException tnfe)
+            {
+                System.out.println(tnfe.getMessage());
+                return;
+            }
+            catch (PasswordNotFoundException pe)
+            {
+                System.out.println(pe.getMessage());
+                return;
+            }
+
             new HomeController(newTrader, bank, marketPlace).run();
         }
         catch (RemoteException ex)

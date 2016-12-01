@@ -19,6 +19,11 @@ public interface MarketPlace extends Remote
     boolean addItemToWishlist(Trader trader, Item item) throws RemoteException, TraderNotFoundException;
 
     /**
+     * Login to marketplace
+     * */
+    boolean login(Trader trader) throws RemoteException,TraderNotFoundException, PasswordNotFoundException;
+
+    /**
      * Find all trader´s wishes
      * */
     ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException;

@@ -194,16 +194,27 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         try
         {
-            System.out.println("inside marketplace registration");
             this.bank.getAccount(trader.getUsername());
         }
         catch (RemoteException | BankAccountNotFoundException e)
         {
-            System.out.println("this is failing");
             throw e;
         }
 
         return this.repository.registerTrader(trader);
+    }
+
+    @Override
+    public boolean login(Trader trader) throws RemoteException,TraderNotFoundException, PasswordNotFoundException
+    {
+        try
+        {
+            return this.repository.loginTrader(trader);
+        }
+        catch (RemoteException | TraderNotFoundException | PasswordNotFoundException e)
+        {
+            throw e;
+        }
     }
 
     @Override

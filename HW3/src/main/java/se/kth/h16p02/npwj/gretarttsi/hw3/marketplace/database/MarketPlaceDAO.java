@@ -128,4 +128,41 @@ public class MarketPlaceDAO {
             }
         }
     }
+
+
+    public String GetTradersPassword(String username) throws MarketplaceDBException, TraderNotFoundException
+    {
+        String failureMsg = "Database Error: something went wrong, could not search for specified trader: " + username;
+        ResultSet result = null;
+
+        try
+        {
+            findTraderStmt.setString(1, username);
+            result = findTraderStmt.executeQuery();
+            if(result.next())
+            {
+                return result.getString(PASSWORD_COLUMN_NAME);
+            }
+            else
+            {
+                throw new TraderNotFoundException("No trader with the username: " + username);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try {
+                result.close();
+            } catch (Exception e) {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+    }
+
 }
