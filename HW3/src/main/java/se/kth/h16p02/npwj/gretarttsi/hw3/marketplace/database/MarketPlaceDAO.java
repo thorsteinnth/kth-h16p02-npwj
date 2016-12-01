@@ -21,12 +21,15 @@ public class MarketPlaceDAO
     private static final String PRICE_COLUMN_NAME = "PRICE";
     private static final String SOLD_COLUMN_NAME = "SOLD";
     private static final String BOUGHT_COLUMN_NAME = "BOUGHT";
+    private static final String SELLER_COLUMN_NAME = "SELLER";
+    private static final String BUYER_COLUMN_NAME = "BUYER";
 
     private PreparedStatement createTraderStmt;
     private PreparedStatement findTraderStmt;
-    private PreparedStatement getAllTradersStmt;
+    private PreparedStatement getAllTraderUsernamesStmt;
     private PreparedStatement insertSaleItem;
-    private PreparedStatement getSaleItemsForTrader;
+    private PreparedStatement getSaleItemsBySeller;
+    private PreparedStatement getSaleItemsByBuyer;
     private PreparedStatement insertWishListItem;
     private PreparedStatement getWishListItemsForTrader;
     private PreparedStatement setSaleItemSold;
@@ -89,10 +92,12 @@ public class MarketPlaceDAO
                     + " ("
                     + ITEMNAME_COLUMN_NAME + " VARCHAR(32), "
                     + PRICE_COLUMN_NAME + " INT, "
-                    + USERNAME_COLUMN_NAME + " VARCHAR(32), "
+                    + SELLER_COLUMN_NAME + " VARCHAR(32), "
+                    + BUYER_COLUMN_NAME + " VARCHAR(32), "
                     + SOLD_COLUMN_NAME + " BOOLEAN, "
                     + "PRIMARY KEY (" + ITEMNAME_COLUMN_NAME + "," + PRICE_COLUMN_NAME + "), "
-                    + "FOREIGN KEY(" + USERNAME_COLUMN_NAME + ") REFERENCES " + TRADER_TABLE_NAME + "(" + USERNAME_COLUMN_NAME + ")"
+                    + "FOREIGN KEY(" + SELLER_COLUMN_NAME + ") REFERENCES " + TRADER_TABLE_NAME + "(" + USERNAME_COLUMN_NAME + ") "
+                    + "FOREIGN KEY(" + BUYER_COLUMN_NAME + ") REFERENCES " + TRADER_TABLE_NAME + "(" + USERNAME_COLUMN_NAME + ")"
                     + ")"
             );
         }
@@ -125,15 +130,18 @@ public class MarketPlaceDAO
         createTraderStmt = connection.prepareStatement("INSERT INTO " + TRADER_TABLE_NAME + " VALUES (?, ?)");
         findTraderStmt = connection.prepareStatement("SELECT * from " + TRADER_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
 
-        insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
+        getAllTraderUsernamesStmt = connection.prepareStatement("SELECT " + USERNAME_COLUMN_NAME + " FROM " + TRADER_TABLE_NAME);
+
+        insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?, ?)");
         insertWishListItem = connection.prepareStatement("INSERT INTO " + WISHLISTITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
 
-        getSaleItemsForTrader = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
+        getSaleItemsBySeller = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + SELLER_COLUMN_NAME + " = ?");
+        getSaleItemsByBuyer = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + BUYER_COLUMN_NAME + " = ?");
         getWishListItemsForTrader = connection.prepareStatement("SELECT * from " + WISHLISTITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
 
         setSaleItemSold = connection.prepareStatement(
                 "UPDATE " + SALEITEM_TABLE_NAME
-                + " SET " + SOLD_COLUMN_NAME + "=?"
+                + " SET " + SOLD_COLUMN_NAME + "=?, " + BUYER_COLUMN_NAME + "=?"
                 + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?"
         );
 
@@ -202,6 +210,41 @@ public class MarketPlaceDAO
         }
     }
 
+    public ArrayList<String> getAllTraderUsernames() throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get all trader usernames";
+        ResultSet result = null;
+        ArrayList<String> traderUsernames = new ArrayList<>();
+
+        try
+        {
+            result = getAllTraderUsernamesStmt.executeQuery();
+            while (result.next())
+            {
+                traderUsernames.add(result.getString(USERNAME_COLUMN_NAME));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return traderUsernames;
+    }
+
     public String GetTradersPassword(String username) throws MarketplaceDBException, TraderNotFoundException
     {
         String failureMsg = "Database Error: something went wrong, could not search for specified trader: " + username;
@@ -235,17 +278,18 @@ public class MarketPlaceDAO
         }
     }
 
-    public void createSaleItem (String itemname, int price, String username, boolean sold) throws MarketplaceDBException
+    public void createSaleItem (String itemname, int price, String seller, String buyer, boolean sold) throws MarketplaceDBException
     {
-        System.out.println("Adding sale item [" + itemname + "," + price + "," + username + "] to database");
+        System.out.println("Adding sale item [" + itemname + "," + price + "," + seller + "," + buyer + "," + sold + "] to database");
 
         String failureMsg = "DatabaseError: Could not add sale item";
         try
         {
             insertSaleItem.setString(1, itemname);
             insertSaleItem.setInt(2, price);
-            insertSaleItem.setString(3, username);
-            insertSaleItem.setBoolean(4, sold);
+            insertSaleItem.setString(3, seller);
+            insertSaleItem.setString(4, buyer);
+            insertSaleItem.setBoolean(5, sold);
             int rowsCreated = insertSaleItem.executeUpdate();
             if (rowsCreated != 1)
             {
@@ -283,22 +327,64 @@ public class MarketPlaceDAO
         }
     }
 
-    public ArrayList<SaleItem> getSaleItemsByUsername(String username) throws MarketplaceDBException
+    public ArrayList<SaleItem> getSaleItemsBySeller(String sellerName) throws MarketplaceDBException
     {
-        String failureMsg = "Database Error: Could not get sale items for user: " + username;
+        String failureMsg = "Database Error: Could not get sale items for seller: " + sellerName;
         ResultSet result = null;
 
         ArrayList<SaleItem> saleItems = new ArrayList<>();
 
         try
         {
-            getSaleItemsForTrader.setString(1, username);
-            result = getSaleItemsForTrader.executeQuery();
+            getSaleItemsBySeller.setString(1, sellerName);
+            result = getSaleItemsBySeller.executeQuery();
             while (result.next())
             {
                 SaleItem foundSaleItem = new SaleItem(
                         new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
-                        result.getString(USERNAME_COLUMN_NAME)
+                        result.getString(SELLER_COLUMN_NAME)
+                );
+
+                saleItems.add(foundSaleItem);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return saleItems;
+    }
+
+    public ArrayList<SaleItem> getSaleItemsByBuyer(String buyerName) throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get sale items for buyer: " + buyerName;
+        ResultSet result = null;
+
+        ArrayList<SaleItem> saleItems = new ArrayList<>();
+
+        try
+        {
+            getSaleItemsByBuyer.setString(1, buyerName);
+            result = getSaleItemsByBuyer.executeQuery();
+            while (result.next())
+            {
+                SaleItem foundSaleItem = new SaleItem(
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getString(SELLER_COLUMN_NAME)
                 );
 
                 saleItems.add(foundSaleItem);
@@ -367,17 +453,18 @@ public class MarketPlaceDAO
         return wishListItems;
     }
 
-    public void setSaleItemSold(String itemname, int price, boolean isSold) throws MarketplaceDBException
+    public void setSaleItemSold(String itemname, int price, boolean isSold, String buyer) throws MarketplaceDBException
     {
         System.out.println(
-                "Setting sale item [" + itemname + "," + price + "] to sold: " + isSold + " in database");
+                "Setting sale item [" + itemname + "," + price + "] to sold: " + isSold + " by buyer: " + buyer + " in database");
 
         String failureMsg = "DatabaseError: Could not set item sold";
         try
         {
             setSaleItemSold.setBoolean(1, isSold);
-            setSaleItemSold.setString(2, itemname);
-            setSaleItemSold.setInt(3, price);
+            setSaleItemSold.setString(2, buyer);
+            setSaleItemSold.setString(3, itemname);
+            setSaleItemSold.setInt(4, price);
             int rowsAffected = setSaleItemSold.executeUpdate();
             if (rowsAffected == 0)
             {
