@@ -1,8 +1,12 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class MarketPlaceDAO
 {
@@ -21,7 +25,9 @@ public class MarketPlaceDAO
     private PreparedStatement findTraderStmt;
     private PreparedStatement getAllTradersStmt;
     private PreparedStatement insertSaleItem;
+    private PreparedStatement getSaleItemsForTrader;
     private PreparedStatement insertWishListItem;
+    private PreparedStatement getWishListItemsForTrader;
 
     public MarketPlaceDAO() throws MarketplaceDBException
     {
@@ -118,6 +124,9 @@ public class MarketPlaceDAO
 
         insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
         insertWishListItem = connection.prepareStatement("INSERT INTO " + WISHLISTITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
+
+        getSaleItemsForTrader = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
+        getWishListItemsForTrader = connection.prepareStatement("SELECT * from " + WISHLISTITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
     }
 
     public void createTrader (String username, String password) throws MarketplaceDBException
@@ -213,7 +222,7 @@ public class MarketPlaceDAO
 
     public void createSaleItem (String itemname, int price, String username, boolean sold) throws MarketplaceDBException
     {
-        System.out.println("Trying to add sale item to database");
+        System.out.println("Adding sale item [" + itemname + "," + price + "," + username + "] to database");
 
         String failureMsg = "DatabaseError: Could not add sale item";
         try
@@ -257,5 +266,47 @@ public class MarketPlaceDAO
             System.err.println(e);
             throw new MarketplaceDBException(failureMsg);
         }
+    }
+
+    public ArrayList<SaleItem> getSaleItemsByUsername(String username) throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get sale items for user: " + username;
+        ResultSet result = null;
+
+        ArrayList<SaleItem> saleItems = new ArrayList<>();
+
+        try
+        {
+            getSaleItemsForTrader.setString(1, username);
+            result = getSaleItemsForTrader.executeQuery();
+            while (result.next())
+            {
+                SaleItem foundSaleItem = new SaleItem(
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getString(USERNAME_COLUMN_NAME)
+                );
+
+                saleItems.add(foundSaleItem);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return saleItems;
     }
 }
