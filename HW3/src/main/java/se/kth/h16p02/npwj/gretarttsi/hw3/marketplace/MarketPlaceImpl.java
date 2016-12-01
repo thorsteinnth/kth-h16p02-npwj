@@ -2,6 +2,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
@@ -193,10 +194,12 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     {
         try
         {
+            System.out.println("inside marketplace registration");
             this.bank.getAccount(trader.getUsername());
         }
         catch (RemoteException | BankAccountNotFoundException e)
         {
+            System.out.println("this is failing");
             throw e;
         }
 

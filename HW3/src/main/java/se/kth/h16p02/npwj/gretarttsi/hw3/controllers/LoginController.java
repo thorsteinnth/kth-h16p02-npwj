@@ -74,19 +74,27 @@ public class LoginController extends Controller
             {
                 //If an account under this name already exist then we return;
                 System.out.println(e.getMessage());
-                return;
+                // TODO what happens if he is not able to register but has created a database
             }
 
+            // After creating the account for the user we register to the marketplace
             try
             {
-                this.marketPlace.register(newTrader);
+                if(this.marketPlace.register(newTrader))
+                {
+                    System.out.println("The user: "+ username + "is know registered to the marketplace and an account has been created in the bank");
+                    new HomeController(newTrader, bank, marketPlace).run();
+                }
+                else
+                {
+                    System.out.println("Could not register user");
+                }
             }
             catch (TraderAlreadyExistsException|BankAccountNotFoundException e)
             {
                 System.out.println(e.getMessage());
+                return;
             }
-
-            new HomeController(newTrader, bank, marketPlace).run();
         }
         catch (RemoteException ex)
         {

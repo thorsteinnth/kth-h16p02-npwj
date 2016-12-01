@@ -172,8 +172,7 @@ public class BankDAO {
     }
 
     private void prepareStatements(Connection connection) throws SQLException {
-        createAccountStmt = connection.prepareStatement("INSERT INTO "
-                + TABLE_NAME + " VALUES (?, ?)");
+        createAccountStmt = connection.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?)");
         findAccountStmt = connection.prepareStatement("SELECT * from "
                 + TABLE_NAME + " WHERE NAME = ?");
         deleteAccountStmt = connection.prepareStatement("DELETE FROM "

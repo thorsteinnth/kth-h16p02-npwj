@@ -1,5 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketPlaceDAO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemAlreadyExistsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
@@ -15,12 +17,23 @@ import java.util.stream.Collectors;
 
 public class MarketPlaceRepository
 {
+    private MarketPlaceDAO marketPlaceDAO;
+
     private ArrayList<Trader> traders;
     private ArrayList<SaleItem> saleItems;
     private ArrayList<WishListItem> wishListItems;
 
     public MarketPlaceRepository()
     {
+        try
+        {
+            marketPlaceDAO = new MarketPlaceDAO();
+        }
+        catch (MarketplaceDBException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
         this.traders = new ArrayList<>();
         this.saleItems = new ArrayList<>();
         this.wishListItems = new ArrayList<>();
@@ -28,7 +41,7 @@ public class MarketPlaceRepository
 
     //region Traders
 
-    public boolean registerTrader(Trader trader) throws TraderAlreadyExistsException
+    public synchronized boolean registerTrader(Trader trader) throws TraderAlreadyExistsException
     {
         try
         {
@@ -36,8 +49,17 @@ public class MarketPlaceRepository
                 throw new TraderAlreadyExistsException(
                         "Trader already exists with username: " + trader.getUsername()
                 );
+            try
+            {
+                marketPlaceDAO.createTrader(trader.getUsername(), trader.getPassword());
+                this.traders.add(trader);
+            }
+            catch (MarketplaceDBException e)
+            {
+                System.out.println(e.getMessage());
+                return false;
+            }
 
-            this.traders.add(trader);
             return true;
         }
         catch (RemoteException ex)
@@ -70,6 +92,8 @@ public class MarketPlaceRepository
             if (t.getUsername().equals(trader.getUsername()))
                 isUnique = false;
         }
+
+        // TODO fara í database og tékka á trader
 
         return isUnique;
     }
