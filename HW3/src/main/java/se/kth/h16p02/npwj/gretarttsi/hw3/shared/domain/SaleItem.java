@@ -45,6 +45,21 @@ public class SaleItem implements Serializable
         return sold;
     }
 
+    public String toDisplayString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(this.item.toDisplayString());
+        sb.append(" - ");
+        sb.append("Seller: ");
+        sb.append(this.sellerName);
+        sb.append(" - ");
+        sb.append("Buyer: ");
+        sb.append(this.buyerName);
+
+        return sb.toString();
+    }
+
     @Override
     public String toString()
     {

@@ -15,6 +15,7 @@ public class MarketPlaceCommand extends Command
         buy,
         wish,
         getwishes,
+        history,
         help,
         exit,
         ls

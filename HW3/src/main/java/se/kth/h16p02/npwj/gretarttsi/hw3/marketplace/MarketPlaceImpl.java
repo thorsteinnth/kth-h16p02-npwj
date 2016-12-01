@@ -1,6 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.History;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
@@ -210,6 +211,22 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
                 .collect(Collectors.toCollection(ArrayList::new));
 
         return unsoldSaleItems;
+    }
+
+    @Override
+    public History getTradersHistory(Trader trader) throws RemoteException
+    {
+        ArrayList<SaleItem> soldItems = this.repository.getSaleItemsBySeller(trader)
+                .stream()
+                .filter(si -> si.isSold())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        ArrayList<SaleItem> boughtItems = this.repository.getSaleItemsByBuyer(trader)
+                .stream()
+                .filter(si -> si.isSold())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return new History(soldItems, boughtItems);
     }
 
     @Override

@@ -193,6 +193,32 @@ public class MarketPlaceRepository
         }
     }
 
+    public synchronized ArrayList<SaleItem> getSaleItemsBySeller(Trader seller) throws RemoteException
+    {
+        try
+        {
+            return this.marketPlaceDAO.getSaleItemsBySeller(seller.getUsername());
+        }
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return new ArrayList<>();
+        }
+    }
+
+    public synchronized ArrayList<SaleItem> getSaleItemsByBuyer(Trader buyer) throws RemoteException
+    {
+        try
+        {
+            return this.marketPlaceDAO.getSaleItemsByBuyer(buyer.getUsername());
+        }
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return new ArrayList<>();
+        }
+    }
+
     public synchronized boolean itemExists(Item item)
     {
         return !isItemUnique(item);
