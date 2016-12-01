@@ -6,6 +6,7 @@ public class HomeCommand extends Command
 
     public enum CommandType
     {
+        logout,
         bank,
         marketplace,
         home,

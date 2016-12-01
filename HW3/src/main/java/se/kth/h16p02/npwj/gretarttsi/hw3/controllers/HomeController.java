@@ -6,10 +6,14 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
+import java.rmi.ConnectException;
+import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
 public class HomeController extends Controller
 {
+    private static final String LOGOUT_SUCCESS = "User successfully logout";
+
     public HomeController(Trader user, Bank bank, MarketPlace marketPlace)
     {
         super(user, bank, marketPlace);
@@ -32,6 +36,13 @@ public class HomeController extends Controller
                 String userInput = consoleIn.readLine();
                 execute(parse(userInput));
             }
+            catch(ConnectException ex)
+            {
+                System.err.println(ex);
+                System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
+                System.out.print(username + "@" + "login" + ">");
+                TraderClient.goToLogin = true;
+            }
             catch (IOException e)
             {
                 e.printStackTrace();
@@ -39,7 +50,7 @@ public class HomeController extends Controller
         }
     }
 
-    private void execute(Command command)
+    private void execute(Command command) throws RemoteException
     {
         HomeCommand homeCommand = (HomeCommand)command;
 
@@ -57,6 +68,18 @@ public class HomeController extends Controller
                     System.out.println(availableCommand);
                 }
                 return;
+
+            case logout:
+                if (marketPlace.logOut(user))
+                {
+                    System.out.println(LOGOUT_SUCCESS);
+                    TraderClient.goToLogin = true;
+                    return;
+                }
+                else
+                {
+                    return;
+                }
 
             case marketplace:
                 new MarketPlaceController(user, bank, marketPlace).run();

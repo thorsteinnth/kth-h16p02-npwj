@@ -37,7 +37,7 @@ public class LoginController extends Controller
     {
         boolean run = true;
 
-        while (run)
+        while (run )
         {
             printConsolePrompt();
 
@@ -55,8 +55,8 @@ public class LoginController extends Controller
 
     private void register(String username, String password)
     {
-        pingMarketPlace(true);
-        pingBank(true);
+        pingMarketPlace(false);
+        pingBank(false);
 
         System.out.println("Registering user with username and password: " + username + " " + password);
         try
@@ -112,8 +112,8 @@ public class LoginController extends Controller
 
     private void login(String username, String password)
     {
-        pingMarketPlace(true);
-        pingBank(true);
+        pingMarketPlace(false);
+        pingBank(false);
 
         // TODO Save to DB and stuff
         System.out.println("Logging in user with username and password: " + username + " " + password);

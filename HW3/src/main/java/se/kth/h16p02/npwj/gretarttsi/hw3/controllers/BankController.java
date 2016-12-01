@@ -10,6 +10,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
@@ -17,6 +18,7 @@ public class BankController extends Controller
 {
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
+    private static final String LOGOUT_SUCCESS = "User successfully logout";
 
     public BankController(Trader user, Bank bank, MarketPlace marketPlace)
     {
@@ -43,16 +45,20 @@ public class BankController extends Controller
                 String userInput = consoleIn.readLine();
                 run = execute(parse(userInput));
             }
+            catch(ConnectException ex)
+            {
+                System.err.println(ex);
+                System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
+                System.out.print(username + "@" + "login" + ">");
+                TraderClient.goToLogin = true;
+            }
             catch (RejectedException re)
             {
                 System.out.println(re);
             }
             catch (IOException e)
             {
-                // e.printStackTrace();
-                System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
-                System.out.print(username + "@" + "login" + ">");
-                TraderClient.goToLogin = true;
+                e.printStackTrace();
             }
             catch (InsufficientFundsException ex)
             {
@@ -146,6 +152,17 @@ public class BankController extends Controller
                 }
                 return true;
 
+            case logout:
+                if (marketPlace.logOut(user))
+                {
+                    System.out.println(LOGOUT_SUCCESS);
+                    TraderClient.goToLogin = true;
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
             case exit:
                 new HomeController(user, bank, marketPlace).run();
                 return false;
@@ -189,12 +206,11 @@ public class BankController extends Controller
                     System.out.println(acc);
                     break;
 
-                /*
+                    /*
                 case deleteaccount:
                     bank.deleteAccount(acc);
                     return true;
                 */
-
                 case deposit:
                     bank.deposit(acc, bankCommand.getAmount());
                     break;
