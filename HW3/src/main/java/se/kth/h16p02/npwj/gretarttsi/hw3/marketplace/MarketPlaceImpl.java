@@ -174,8 +174,9 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         if (seller != null)
             seller.itemSoldNotification(saleItem.getItem().getName());
 
-        // Remove sale item from the market repository
-        this.repository.removeSaleItem(saleItem);
+        // Mark sale item as sold
+        if (!this.repository.markSaleItemAsSold(saleItem, trader))
+            System.out.println("Could not mark item as sold in database, should rollback transaction"); // TODO
 
         // Remove the item from the buyer's wish list if it is there
         WishListItem foundWishListItem = this.repository.findWishListItem(trader, item);

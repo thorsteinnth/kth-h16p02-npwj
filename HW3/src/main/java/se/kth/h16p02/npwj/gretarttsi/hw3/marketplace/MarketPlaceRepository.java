@@ -10,7 +10,6 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class MarketPlaceRepository
@@ -19,7 +18,6 @@ public class MarketPlaceRepository
 
     // TODO Rename this to loggedInUsers
     private ArrayList<Trader> traders;
-    private ArrayList<SaleItem> saleItems;
     private ArrayList<WishListItem> wishListItems;
 
     public MarketPlaceRepository()
@@ -34,7 +32,6 @@ public class MarketPlaceRepository
         }
 
         this.traders = new ArrayList<>();
-        this.saleItems = new ArrayList<>();
         this.wishListItems = new ArrayList<>();
     }
 
@@ -148,26 +145,54 @@ public class MarketPlaceRepository
 
     public synchronized boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException, RemoteException
     {
-        if (!isItemUnique(item))
+        try
         {
-           throw new ItemAlreadyExistsException("Item already exists in marketplace " + item.toString());
+            if (!isItemUnique(item))
+            {
+                throw new ItemAlreadyExistsException("Item already exists in marketplace " + item.toString());
+            }
+
+            this.marketPlaceDAO.createSaleItem(item.getName(), item.getPrice().intValue(), trader.getUsername(), null, false);
+            return true;
         }
-
-        this.saleItems.add(new SaleItem(item, trader.getUsername()));
-
-        return true;
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return false;
+        }
     }
 
-    public synchronized boolean removeSaleItem(SaleItem saleItem)
+    public synchronized boolean markSaleItemAsSold(SaleItem saleItem, Trader buyer) throws RemoteException
     {
-        this.saleItems.remove(saleItem);
+        try
+        {
+            this.marketPlaceDAO.setSaleItemSold(
+                    saleItem.getItem().getName(),
+                    saleItem.getItem().getPrice().intValue(),
+                    true,
+                    buyer.getUsername()
+            );
 
-        return true;
+            return true;
+        }
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return false;
+        }
     }
 
     public synchronized ArrayList<SaleItem> getAllSaleItems()
     {
-        return this.saleItems;
+        try
+        {
+            return this.marketPlaceDAO.getAllSaleItems();
+        }
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return new ArrayList<>();
+        }
     }
 
     public synchronized boolean itemExists(Item item)
@@ -177,31 +202,36 @@ public class MarketPlaceRepository
 
     public synchronized SaleItem findSaleItem(Item item) throws ItemNotFoundException
     {
-        List<SaleItem> foundSaleItems =
-                this.saleItems
-                        .stream()
-                        .filter(si -> si.getItem().equals(item))
-                        .collect(Collectors.toList());
+        try
+        {
+            SaleItem foundItem = marketPlaceDAO.getSaleItem(item.getName(), item.getPrice().intValue());
+            if (foundItem == null)
+                throw new ItemNotFoundException("Could not find sale item for item: " + item.toDisplayString());
 
-        if (foundSaleItems.size() == 0)
-            throw new ItemNotFoundException(item.toString());
-        else if (foundSaleItems.size() > 1)
-            throw new IllegalStateException("More than one item found: " + item);
-        else
-            return foundSaleItems.get(0);
+            return foundItem;
+        }
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            throw new ItemNotFoundException("Could not find sale item for item: " + item.toDisplayString());
+        }
     }
 
     private synchronized boolean isItemUnique(Item item)
     {
-        for(SaleItem saleItem : this.saleItems)
+        try
         {
-            if(item.equals(saleItem.getItem()))
-            {
+            // Check if item already present in database
+            if (marketPlaceDAO.getSaleItem(item.getName(), item.getPrice().intValue()) == null)
+                return true;
+            else
                 return false;
-            }
         }
-
-        return true;
+        catch (MarketplaceDBException ex)
+        {
+            System.err.println(ex);
+            return false;
+        }
     }
 
     //endregion
