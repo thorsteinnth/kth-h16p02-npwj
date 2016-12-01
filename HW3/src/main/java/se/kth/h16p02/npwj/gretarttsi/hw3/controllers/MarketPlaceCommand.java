@@ -8,8 +8,8 @@ public class MarketPlaceCommand extends Command
 
     public enum CommandType
     {
-        register,
-        unregister,
+        //register,
+        logout,
         inspect,
         sell,
         buy,

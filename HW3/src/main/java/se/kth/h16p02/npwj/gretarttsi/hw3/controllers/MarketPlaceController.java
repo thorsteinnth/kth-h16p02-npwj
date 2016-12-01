@@ -21,7 +21,7 @@ public class MarketPlaceController extends Controller
 {
     private static final String MARKETPLACE = "Marketplace";
     private static final String REGISTRATION_SUCCESS = "User successfully registered";
-    private static final String DEREGISTRATION_SUCCESS = "User successfully deregistered";
+    private static final String LOGOUT_SUCCESS = "User successfully logout";
     private static final String TRADER_ALREADY_EXIST = "Trader with this username already exist";
     private static final String TRADER_NOT_FOUND = "User not registered";
     private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";
@@ -83,10 +83,11 @@ public class MarketPlaceController extends Controller
         // Commands using only one argument
         switch (marketPlaceCommand.getCommandType())
         {
-            case unregister:
-                if (marketPlace.deregister(user))
+            case logout:
+                if (marketPlace.logOut(user))
                 {
-                    System.out.println(DEREGISTRATION_SUCCESS);
+                    System.out.println(LOGOUT_SUCCESS);
+                    TraderClient.goToLogin = true;
                     return true;
                 }
                 else
@@ -94,6 +95,7 @@ public class MarketPlaceController extends Controller
                     return false;
                 }
 
+                /*
             case register:
                 try
                 {
@@ -111,6 +113,7 @@ public class MarketPlaceController extends Controller
                     System.out.println(BANKACCOUNT_NOT_FOUND);
                     return true;
                 }
+                */
 
             case inspect:
                 ArrayList<SaleItem> saleItems = marketPlace.inspectAvailableItems();

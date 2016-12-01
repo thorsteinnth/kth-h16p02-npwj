@@ -9,6 +9,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderImpl;
 
 import java.io.IOException;
@@ -87,6 +88,7 @@ public class LoginController extends Controller
             {
                 if(this.marketPlace.register(newTrader))
                 {
+                    TraderClient.goToLogin = false;
                     System.out.println("Marketplace registration and bank account creation was completed successfully for the user: "+ username);
                     new HomeController(newTrader, bank, marketPlace).run();
                 }
@@ -135,6 +137,7 @@ public class LoginController extends Controller
                 return;
             }
 
+            TraderClient.goToLogin = false;
             new HomeController(newTrader, bank, marketPlace).run();
         }
         catch (RemoteException ex)
