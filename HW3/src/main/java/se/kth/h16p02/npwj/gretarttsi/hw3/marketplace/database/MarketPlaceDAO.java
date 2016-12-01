@@ -3,6 +3,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -246,7 +247,7 @@ public class MarketPlaceDAO
 
     public void createWishlistItem (String itemname, int price, String username, boolean bought) throws MarketplaceDBException
     {
-        System.out.println("Trying to add wish list item to database");
+        System.out.println("Adding wish list item [" + itemname + "," + price + "," + username + "] to database");
 
         String failureMsg = "DatabaseError: Could not add wish list item";
         try
@@ -308,5 +309,47 @@ public class MarketPlaceDAO
         }
 
         return saleItems;
+    }
+
+    public ArrayList<WishListItem> getWishlistItemsByUsername(String username) throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get wish list items for user: " + username;
+        ResultSet result = null;
+
+        ArrayList<WishListItem> wishListItems = new ArrayList<>();
+
+        try
+        {
+            getWishListItemsForTrader.setString(1, username);
+            result = getWishListItemsForTrader.executeQuery();
+            while (result.next())
+            {
+                WishListItem foundWishlistItem = new WishListItem(
+                        result.getString(USERNAME_COLUMN_NAME),
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME)))
+                );
+
+                wishListItems.add(foundWishlistItem);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return wishListItems;
     }
 }
