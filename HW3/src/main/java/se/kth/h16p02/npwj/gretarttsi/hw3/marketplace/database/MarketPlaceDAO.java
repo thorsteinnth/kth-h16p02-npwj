@@ -1,20 +1,12 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
-
 import java.sql.*;
 
-/**
- * Created by GretarAtli on 30/11/2016.
- */
 public class MarketPlaceDAO {
 
     private static final String TRADER_TABLE_NAME = "TRADER";
     private static final String USERNAME_COLUMN_NAME = "USERNAME";
     private static final String PASSWORD_COLUMN_NAME = "PASSWORD";
-    private static final String ITEM_TABLE_NAME = "ITEM";
     private static final String SALEITEM_TABLE_NAME = "SALEITEM";
     private static final String WISHLISTITEM_TABLE_NAME = "WISHLISTITEM";
     private PreparedStatement createTraderStmt;
