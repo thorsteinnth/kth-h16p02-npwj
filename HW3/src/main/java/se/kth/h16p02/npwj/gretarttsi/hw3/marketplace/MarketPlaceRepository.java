@@ -77,12 +77,14 @@ public class MarketPlaceRepository
 
     public boolean deregisterTrader(Trader trader)
     {
+        //TODO laga þetta
         this.traders.remove(trader);
         return true;
     }
 
     public boolean isTraderRegistered(Trader trader)
     {
+        //TODO laga þetta
         if (this.traders.contains(trader))
             return true;
         else
@@ -93,20 +95,9 @@ public class MarketPlaceRepository
     {
         //TODO fara niður í grunn til þess að finna út hvort að usernameið sé unique
 
-        boolean isUnique = true;
-
         // if trader exists then the password is not unique
-        isUnique = !marketPlaceDAO.traderExists(trader.getUsername());
+        return !marketPlaceDAO.traderExists(trader.getUsername());
 
-        /*
-        for (Trader t : this.traders)
-        {
-            if (t.getUsername().equals(trader.getUsername()))
-                isUnique = false;
-        }
-        */
-
-        return isUnique;
     }
 
     //endregion
