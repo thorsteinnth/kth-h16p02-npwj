@@ -20,6 +20,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
@@ -189,7 +190,16 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public ArrayList<SaleItem> inspectAvailableItems() throws RemoteException
     {
-        return this.repository.getAllSaleItems();
+        // Return a list of sale items in the marketplace that have not been sold yet
+
+        ArrayList<SaleItem> allSaleItems = this.repository.getAllSaleItems();
+
+        ArrayList<SaleItem> unsoldSaleItems = allSaleItems
+                .stream()
+                .filter(si -> !si.isSold())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return unsoldSaleItems;
     }
 
     @Override
