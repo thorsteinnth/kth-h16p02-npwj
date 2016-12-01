@@ -29,6 +29,11 @@ public interface MarketPlace extends Remote
     ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException;
 
     /**
+     * Find all trader´s wishs list history. Returns list of wishes that came through
+     * */
+    ArrayList<WishListItem> getTradersWishListHistory() throws RemoteException;
+
+    /**
      * Register client (trader)
      * */
     boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException;

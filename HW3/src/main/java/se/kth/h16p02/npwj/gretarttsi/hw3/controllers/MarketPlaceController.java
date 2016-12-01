@@ -319,7 +319,7 @@ public class MarketPlaceController extends Controller
             StringBuilder wishListItemsString = new StringBuilder();
             for(WishListItem wishListItem: wishListItems)
             {
-                wishListItemsString.append(wishListItem.getItem().toDisplayString() + "\n");
+                wishListItemsString.append(wishListItem.getItem().toDisplayString() + " " + "bought : " + wishListItem.isBought() + "\n" );
             }
             return wishListItemsString.toString();
         }
