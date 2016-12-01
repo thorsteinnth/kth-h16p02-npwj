@@ -29,6 +29,7 @@ public class MarketPlaceDAO
     private PreparedStatement getAllTraderUsernamesStmt;
     private PreparedStatement insertSaleItem;
     private PreparedStatement getSaleItem;
+    private PreparedStatement getAllSaleItems;
     private PreparedStatement getSaleItemsBySeller;
     private PreparedStatement getSaleItemsByBuyer;
     private PreparedStatement insertWishListItem;
@@ -139,6 +140,8 @@ public class MarketPlaceDAO
         getSaleItem = connection.prepareStatement(
                 "SELECT * FROM " + SALEITEM_TABLE_NAME
                         + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?");
+
+        getAllSaleItems = connection.prepareStatement("SELECT * FROM " + SALEITEM_TABLE_NAME);
 
         getSaleItemsBySeller = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + SELLER_COLUMN_NAME + " = ?");
         getSaleItemsByBuyer = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + BUYER_COLUMN_NAME + " = ?");
@@ -371,6 +374,47 @@ public class MarketPlaceDAO
                 throw new MarketplaceDBException(failureMsg);
             }
         }
+    }
+
+    public ArrayList<SaleItem> getAllSaleItems() throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get all sale items";
+        ResultSet result = null;
+
+        ArrayList<SaleItem> saleItems = new ArrayList<>();
+
+        try
+        {
+            result = getAllSaleItems.executeQuery();
+            while (result.next())
+            {
+                SaleItem foundSaleItem = new SaleItem(
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getString(SELLER_COLUMN_NAME)
+                );
+
+                saleItems.add(foundSaleItem);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return saleItems;
     }
 
     public ArrayList<SaleItem> getSaleItemsBySeller(String sellerName) throws MarketplaceDBException
