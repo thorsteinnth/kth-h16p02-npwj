@@ -349,8 +349,8 @@ public class MarketPlaceDAO
             {
                 return new SaleItem(
                         new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
-                        result.getString(SELLER_COLUMN_NAME)
-                );
+                        result.getString(SELLER_COLUMN_NAME), result.getString(BUYER_COLUMN_NAME), result.getBoolean(SOLD_COLUMN_NAME)
+                        );
             }
             else
             {
@@ -390,7 +390,7 @@ public class MarketPlaceDAO
             {
                 SaleItem foundSaleItem = new SaleItem(
                         new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
-                        result.getString(SELLER_COLUMN_NAME)
+                        result.getString(SELLER_COLUMN_NAME), result.getString(BUYER_COLUMN_NAME), result.getBoolean(SOLD_COLUMN_NAME)
                 );
 
                 saleItems.add(foundSaleItem);
@@ -432,7 +432,7 @@ public class MarketPlaceDAO
             {
                 SaleItem foundSaleItem = new SaleItem(
                         new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
-                        result.getString(SELLER_COLUMN_NAME)
+                        result.getString(SELLER_COLUMN_NAME), result.getString(BUYER_COLUMN_NAME), result.getBoolean(SOLD_COLUMN_NAME)
                 );
 
                 saleItems.add(foundSaleItem);
@@ -474,7 +474,7 @@ public class MarketPlaceDAO
             {
                 SaleItem foundSaleItem = new SaleItem(
                         new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
-                        result.getString(SELLER_COLUMN_NAME)
+                        result.getString(SELLER_COLUMN_NAME), result.getString(BUYER_COLUMN_NAME), result.getBoolean(SOLD_COLUMN_NAME)
                 );
 
                 saleItems.add(foundSaleItem);
@@ -516,7 +516,8 @@ public class MarketPlaceDAO
             {
                 WishListItem foundWishlistItem = new WishListItem(
                         result.getString(USERNAME_COLUMN_NAME),
-                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME)))
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getBoolean(BOUGHT_COLUMN_NAME)
                 );
 
                 wishListItems.add(foundWishlistItem);

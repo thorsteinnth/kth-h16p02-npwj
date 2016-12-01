@@ -7,6 +7,7 @@ public class WishListItem implements Serializable
 {
     private String username;
     private final Item item;
+    private boolean bought;
 
     /**
      * WishListItem
@@ -18,6 +19,14 @@ public class WishListItem implements Serializable
     {
         this.username = username;
         this.item = item;
+        this.bought = false;
+    }
+
+    public WishListItem(String username, Item item, boolean bought)
+    {
+        this.username = username;
+        this.item = item;
+        this.bought = bought;
     }
 
     public String getUsername()
@@ -28,6 +37,11 @@ public class WishListItem implements Serializable
     public Item getItem()
     {
         return item;
+    }
+
+    public boolean isBought()
+    {
+        return bought;
     }
 
     public boolean equalsWithoutPrice(Object o) throws RemoteException
@@ -41,8 +55,7 @@ public class WishListItem implements Serializable
         return item.getName().equals(that.item.getName());
     }
 
-    @Override
-    public boolean equals(Object o)
+    public boolean equalsWithoutBought(Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -54,10 +67,24 @@ public class WishListItem implements Serializable
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WishListItem that = (WishListItem) o;
+
+        if (bought != that.bought) return false;
+        if (!username.equals(that.username)) return false;
+        return item.equals(that.item);
+    }
+
+    @Override
     public int hashCode()
     {
         int result = username.hashCode();
         result = 31 * result + item.hashCode();
+        result = 31 * result + (bought ? 1 : 0);
         return result;
     }
 
@@ -67,6 +94,7 @@ public class WishListItem implements Serializable
         return "WishListItem{" +
                 "username='" + username + '\'' +
                 ", item=" + item +
+                ", bought=" + bought +
                 '}';
     }
 
@@ -74,6 +102,7 @@ public class WishListItem implements Serializable
         return "WishListItem{" +
                 "username=" + username +
                 ", item=" + item.toDisplayString() +
+                ", bought=" + bought +
                 '}';
     }
 }
