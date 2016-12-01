@@ -12,6 +12,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderImpl;
 
 import java.io.IOException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
@@ -53,7 +54,9 @@ public class LoginController extends Controller
 
     private void register(String username, String password)
     {
-        // TODO Save to DB and stuff
+        pingMarketPlace(true);
+        pingBank(true);
+
         System.out.println("Registering user with username and password: " + username + " " + password);
         try
         {
@@ -107,6 +110,9 @@ public class LoginController extends Controller
 
     private void login(String username, String password)
     {
+        pingMarketPlace(true);
+        pingBank(true);
+
         // TODO Save to DB and stuff
         System.out.println("Logging in user with username and password: " + username + " " + password);
 
@@ -209,7 +215,12 @@ public class LoginController extends Controller
                 System.out.println("Closing program...");
                 System.exit(0);
                 return false;
-
+            case pingbank:
+                pingBank(true);
+                return true;
+            case pingmarketplace:
+                pingMarketPlace(true);
+                return true;
             case ls:
             case help:
                 for (LoginCommand.CommandType availableCommandType : LoginCommand.CommandType.values())
@@ -250,5 +261,65 @@ public class LoginController extends Controller
         }
 
         return true;
+    }
+
+    private void pingBank(boolean showMessage)
+    {
+        try
+        {
+            if(showMessage)
+                System.out.println(bank.ping());
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("lost connection to bank");
+            System.err.println(e);
+            intiateConnectionToBank();
+        }
+
+    }
+
+    private void intiateConnectionToBank()
+    {
+        try
+        {
+            System.out.println("Please wait -> restarting connection to marketplace");
+            bank = (Bank) Naming.lookup("Nordea");
+            System.out.println("TraderClient - Connected to Nordea bank");
+        }
+        catch (Exception e)
+        {
+            System.out.println("TraderClient: The runtime failed: " + e.getMessage());
+        }
+    }
+
+    private void pingMarketPlace(boolean showMessage)
+    {
+        try
+        {
+            if(showMessage)
+                System.out.println(marketPlace.ping());
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("lost connection to marketplace");
+            System.err.println(e);
+            intiateConnectionToMarketplace();
+            //printConsolePrompt();
+        }
+    }
+
+    private void intiateConnectionToMarketplace()
+    {
+        try
+        {
+            System.out.println("Please wait -> restarting connection to marketplace");
+            marketPlace = (MarketPlace) Naming.lookup("MarketPlace");
+            System.out.println("TraderClient - Connected to marketplace");
+        }
+        catch (Exception e)
+        {
+            System.out.println("TraderClient: The runtime failed: " + e.getMessage());
+        }
     }
 }

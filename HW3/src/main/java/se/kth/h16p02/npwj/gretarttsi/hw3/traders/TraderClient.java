@@ -13,6 +13,7 @@ public class TraderClient
     private static final int DEFAULT_PORT = 1099;
     private static final String DEFAULT_HOST = "localhost";
     private static final String DEFAULT_BANK_NAME = "Nordea";
+    public static boolean goToLogin = false;
 
     public TraderClient()
     {}

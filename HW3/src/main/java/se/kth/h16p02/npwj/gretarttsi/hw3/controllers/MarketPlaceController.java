@@ -9,6 +9,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ public class MarketPlaceController extends Controller
     {
         boolean run = true;
 
-        while (run)
+        while (run && TraderClient.goToLogin != true)
         {
             printConsolePrompt();
             try
@@ -62,7 +63,10 @@ public class MarketPlaceController extends Controller
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
+                System.out.print(username + "@" + "login" + ">");
+                TraderClient.goToLogin = true;
             }
         }
     }

@@ -73,4 +73,6 @@ public interface Bank extends Remote {
      *                           the balance, or if unable to perform the update.
      */
     public void withdraw(AccountDTO acct, int amt) throws RemoteException, RejectedException, BankAccountNotFoundException,InsufficientFundsException;
+
+    String ping() throws RemoteException;
 }

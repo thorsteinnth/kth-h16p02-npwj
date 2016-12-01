@@ -3,6 +3,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -23,7 +24,7 @@ public class HomeController extends Controller
     @Override
     public void run()
     {
-        while (true)
+        while (true && TraderClient.goToLogin != true)
         {
             printConsolePrompt();
             try

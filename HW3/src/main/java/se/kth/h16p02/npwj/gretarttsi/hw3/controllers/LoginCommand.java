@@ -11,6 +11,8 @@ public class LoginCommand extends Command
         login,
         register,
         quit,
+        pingmarketplace,
+        pingbank,
         ls,
         help
     }

@@ -99,4 +99,8 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
         return accounts.get(name);
     }
 
+    @Override
+    public String ping() throws RemoteException {
+        return "Ping to bank Ok";
+    }
 }
