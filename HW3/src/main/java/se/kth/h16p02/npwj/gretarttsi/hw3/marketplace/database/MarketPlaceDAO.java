@@ -141,7 +141,7 @@ public class MarketPlaceDAO
 
         setSaleItemSold = connection.prepareStatement(
                 "UPDATE " + SALEITEM_TABLE_NAME
-                + " SET " + SOLD_COLUMN_NAME + "=?"
+                + " SET " + SOLD_COLUMN_NAME + "=?, " + BUYER_COLUMN_NAME + "=?"
                 + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?"
         );
 
@@ -453,17 +453,18 @@ public class MarketPlaceDAO
         return wishListItems;
     }
 
-    public void setSaleItemSold(String itemname, int price, boolean isSold) throws MarketplaceDBException
+    public void setSaleItemSold(String itemname, int price, boolean isSold, String buyer) throws MarketplaceDBException
     {
         System.out.println(
-                "Setting sale item [" + itemname + "," + price + "] to sold: " + isSold + " in database");
+                "Setting sale item [" + itemname + "," + price + "] to sold: " + isSold + " by buyer: " + buyer + " in database");
 
         String failureMsg = "DatabaseError: Could not set item sold";
         try
         {
             setSaleItemSold.setBoolean(1, isSold);
-            setSaleItemSold.setString(2, itemname);
-            setSaleItemSold.setInt(3, price);
+            setSaleItemSold.setString(2, buyer);
+            setSaleItemSold.setString(3, itemname);
+            setSaleItemSold.setInt(4, price);
             int rowsAffected = setSaleItemSold.executeUpdate();
             if (rowsAffected == 0)
             {
