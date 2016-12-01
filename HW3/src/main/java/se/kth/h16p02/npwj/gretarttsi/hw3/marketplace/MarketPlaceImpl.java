@@ -1,8 +1,6 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.Account;
 import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model.AccountDTO;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.History;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
@@ -86,6 +84,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         System.out.println("Getting traders wishes");
         ArrayList<WishListItem> wishListItems = this.repository.getTradersWishes(trader.getUsername());
         return wishListItems;
+    }
+
+    @Override
+    public ArrayList<WishListItem> getTradersWishListHistory() throws RemoteException
+    {
+        //TODO
+        return null;
     }
 
     @Override
@@ -187,9 +192,8 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
             System.out.println("Could not mark item as sold in database, should rollback transaction"); // TODO
 
         // Remove the item from the buyer's wish list if it is there
-        WishListItem foundWishListItem = this.repository.findWishListItem(trader, item);
-        if (foundWishListItem != null)
-            this.repository.removeWishListItem(foundWishListItem);
+        WishListItem wishListItem = new WishListItem(trader.getUsername(), item);
+        this.repository.markWishListItemBought(wishListItem,true);
 
         return true;
     }

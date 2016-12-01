@@ -34,6 +34,11 @@ public interface MarketPlace extends Remote
      * */
     History getTradersHistory(Trader trader) throws RemoteException;
 
+    /*
+     * Find all trader´s wishs list history. Returns list of wishes that came through
+     * */
+    ArrayList<WishListItem> getTradersWishListHistory() throws RemoteException;
+
     /**
      * Register client (trader)
      * */
