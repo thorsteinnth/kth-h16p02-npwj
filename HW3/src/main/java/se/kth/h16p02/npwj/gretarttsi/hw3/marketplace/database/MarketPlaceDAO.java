@@ -24,7 +24,7 @@ public class MarketPlaceDAO
 
     private PreparedStatement createTraderStmt;
     private PreparedStatement findTraderStmt;
-    private PreparedStatement getAllTradersStmt;
+    private PreparedStatement getAllTraderUsernamesStmt;
     private PreparedStatement insertSaleItem;
     private PreparedStatement getSaleItemsForTrader;
     private PreparedStatement insertWishListItem;
@@ -125,6 +125,8 @@ public class MarketPlaceDAO
         createTraderStmt = connection.prepareStatement("INSERT INTO " + TRADER_TABLE_NAME + " VALUES (?, ?)");
         findTraderStmt = connection.prepareStatement("SELECT * from " + TRADER_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
 
+        getAllTraderUsernamesStmt = connection.prepareStatement("SELECT " + USERNAME_COLUMN_NAME + " FROM " + TRADER_TABLE_NAME);
+
         insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
         insertWishListItem = connection.prepareStatement("INSERT INTO " + WISHLISTITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
 
@@ -200,6 +202,41 @@ public class MarketPlaceDAO
                 throw new MarketplaceDBException(failureMsg);
             }
         }
+    }
+
+    public ArrayList<String> getAllTraderUsernames() throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get all trader usernames";
+        ResultSet result = null;
+        ArrayList<String> traderUsernames = new ArrayList<>();
+
+        try
+        {
+            result = getAllTraderUsernamesStmt.executeQuery();
+            while (result.next())
+            {
+                traderUsernames.add(result.getString(USERNAME_COLUMN_NAME));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return traderUsernames;
     }
 
     public String GetTradersPassword(String username) throws MarketplaceDBException, TraderNotFoundException
