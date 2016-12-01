@@ -2,13 +2,19 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database;
 
 import java.sql.*;
 
-public class MarketPlaceDAO {
-
+public class MarketPlaceDAO
+{
     private static final String TRADER_TABLE_NAME = "TRADER";
     private static final String USERNAME_COLUMN_NAME = "USERNAME";
     private static final String PASSWORD_COLUMN_NAME = "PASSWORD";
+
     private static final String SALEITEM_TABLE_NAME = "SALEITEM";
     private static final String WISHLISTITEM_TABLE_NAME = "WISHLISTITEM";
+    private static final String ITEMNAME_COLUMN_NAME = "ITEMNAME";
+    private static final String PRICE_COLUMN_NAME = "PRICE";
+    private static final String SOLD_COLUMN_NAME = "SOLD";
+    private static final String BOUGHT_COLUMN_NAME = "BOUGHT";
+
     private PreparedStatement createTraderStmt;
     private PreparedStatement findTraderStmt;
     private PreparedStatement getAllTradersStmt;
@@ -28,27 +34,71 @@ public class MarketPlaceDAO {
         }
     }
 
-    private Connection createDataSource () throws
-            ClassNotFoundException, SQLException, MarketplaceDBException
+    private Connection createDataSource () throws ClassNotFoundException, SQLException, MarketplaceDBException
     {
         Connection connection = getConnection();
-        boolean exist = false;
         int tableNameColumn = 3;
         DatabaseMetaData dbm = connection.getMetaData();
-        for (ResultSet rs = dbm.getTables(null, null, null, null); rs.next();) {
-            if (rs.getString(tableNameColumn).equals(TRADER_TABLE_NAME)) {
-                exist = true;
-                rs.close();
-                break;
-            }
+        ResultSet rs = dbm.getTables(null, null, null, null);
+
+        // Check what tables exist
+
+        boolean traderTableExists = false;
+        boolean saleItemTableExists = false;
+        boolean wishlistItemTableExists = false;
+
+        while (rs.next())
+        {
+            if (rs.getString(tableNameColumn).equals(TRADER_TABLE_NAME))
+                traderTableExists = true;
+            else if (rs.getString(tableNameColumn).equals(SALEITEM_TABLE_NAME))
+                saleItemTableExists = true;
+            else if (rs.getString(tableNameColumn).equals(WISHLISTITEM_TABLE_NAME))
+                wishlistItemTableExists = true;
         }
 
-        if (!exist) {
+        rs.close();
+
+        // Create missing tables
+
+        if (!traderTableExists)
+        {
             Statement statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE " + TRADER_TABLE_NAME
                     + " (" + USERNAME_COLUMN_NAME + " VARCHAR(32) PRIMARY KEY, "
                     + PASSWORD_COLUMN_NAME + " VARCHAR(32))");
         }
+
+        if (!saleItemTableExists)
+        {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("CREATE TABLE " + SALEITEM_TABLE_NAME
+                    + " ("
+                    + ITEMNAME_COLUMN_NAME + " VARCHAR(32), "
+                    + PRICE_COLUMN_NAME + " INT, "
+                    + USERNAME_COLUMN_NAME + " VARCHAR(32), "
+                    + SOLD_COLUMN_NAME + " BOOLEAN, "
+                    + "PRIMARY KEY (" + ITEMNAME_COLUMN_NAME + "," + PRICE_COLUMN_NAME + "), "
+                    + "FOREIGN KEY(" + USERNAME_COLUMN_NAME + ") REFERENCES " + TRADER_TABLE_NAME + "(" + USERNAME_COLUMN_NAME + ")"
+                    + ")"
+            );
+        }
+
+        if (!wishlistItemTableExists)
+        {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("CREATE TABLE " + WISHLISTITEM_TABLE_NAME
+                    + " ("
+                    + ITEMNAME_COLUMN_NAME + " VARCHAR(32), "
+                    + PRICE_COLUMN_NAME + " INT, "
+                    + USERNAME_COLUMN_NAME + " VARCHAR(32), "
+                    + BOUGHT_COLUMN_NAME + " BOOLEAN, "
+                    + "PRIMARY KEY (" + ITEMNAME_COLUMN_NAME + "," + PRICE_COLUMN_NAME + "," + USERNAME_COLUMN_NAME + "), "
+                    + "FOREIGN KEY(" + USERNAME_COLUMN_NAME + ") REFERENCES " + TRADER_TABLE_NAME + "(" + USERNAME_COLUMN_NAME + ")"
+                    + ")"
+            );
+        }
+
         return connection;
     }
 
