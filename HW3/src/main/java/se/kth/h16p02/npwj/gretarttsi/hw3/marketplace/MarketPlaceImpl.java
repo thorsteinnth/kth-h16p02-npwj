@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 {
@@ -137,6 +138,12 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         SaleItem saleItem = this.repository.findSaleItem(item);
 
+        // Don't allow buying of items that have already been sold
+        if (saleItem.isSold())
+        {
+            throw new ItemNotFoundException("Item not found: " + item);
+        }
+
         // Check if the seller and buyer are the same person
         if (trader.getUsername().equals(saleItem.getSellerName()))
         {
@@ -179,8 +186,9 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         if (seller != null)
             seller.itemSoldNotification(saleItem.getItem().getName());
 
-        // Remove sale item from the market repository
-        this.repository.removeSaleItem(saleItem);
+        // Mark sale item as sold
+        if (!this.repository.markSaleItemAsSold(saleItem, trader))
+            System.out.println("Could not mark item as sold in database, should rollback transaction"); // TODO
 
         // Remove the item from the buyer's wish list if it is there
         WishListItem wishListItem = new WishListItem(trader.getUsername(), item);
@@ -192,7 +200,16 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public ArrayList<SaleItem> inspectAvailableItems() throws RemoteException
     {
-        return this.repository.getAllSaleItems();
+        // Return a list of sale items in the marketplace that have not been sold yet
+
+        ArrayList<SaleItem> allSaleItems = this.repository.getAllSaleItems();
+
+        ArrayList<SaleItem> unsoldSaleItems = allSaleItems
+                .stream()
+                .filter(si -> !si.isSold())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return unsoldSaleItems;
     }
 
     @Override
