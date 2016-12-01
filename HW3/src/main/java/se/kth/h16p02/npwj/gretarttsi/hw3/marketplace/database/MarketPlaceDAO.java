@@ -18,6 +18,8 @@ public class MarketPlaceDAO
     private PreparedStatement createTraderStmt;
     private PreparedStatement findTraderStmt;
     private PreparedStatement getAllTradersStmt;
+    private PreparedStatement insertSaleItem;
+    private PreparedStatement insertWishListItem;
 
     public MarketPlaceDAO() throws MarketplaceDBException
     {
@@ -111,6 +113,9 @@ public class MarketPlaceDAO
     {
         createTraderStmt = connection.prepareStatement("INSERT INTO " + TRADER_TABLE_NAME + " VALUES (?, ?)");
         findTraderStmt = connection.prepareStatement("SELECT * from " + TRADER_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
+
+        insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
+        insertWishListItem = connection.prepareStatement("INSERT INTO " + WISHLISTITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
     }
 
     public void createTrader (String username, String password) throws MarketplaceDBException
@@ -168,6 +173,54 @@ public class MarketPlaceDAO
                 System.err.println(e);
                 throw new MarketplaceDBException(failureMsg);
             }
+        }
+    }
+
+    public void createSaleItem (String itemname, int price, String username, boolean sold) throws MarketplaceDBException
+    {
+        System.out.println("Trying to add sale item to database");
+
+        String failureMsg = "DatabaseError: Could not add sale item";
+        try
+        {
+            insertSaleItem.setString(1, itemname);
+            insertSaleItem.setInt(2, price);
+            insertSaleItem.setString(3, username);
+            insertSaleItem.setBoolean(4, sold);
+            int rowsCreated = insertSaleItem.executeUpdate();
+            if (rowsCreated != 1)
+            {
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+    }
+
+    public void createWishlistItem (String itemname, int price, String username, boolean bought) throws MarketplaceDBException
+    {
+        System.out.println("Trying to add wish list item to database");
+
+        String failureMsg = "DatabaseError: Could not add wish list item";
+        try
+        {
+            insertWishListItem.setString(1, itemname);
+            insertWishListItem.setInt(2, price);
+            insertWishListItem.setString(3, username);
+            insertWishListItem.setBoolean(4, bought);
+            int rowsCreated = insertWishListItem.executeUpdate();
+            if (rowsCreated != 1)
+            {
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
         }
     }
 }
