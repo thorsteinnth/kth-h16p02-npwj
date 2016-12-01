@@ -115,7 +115,6 @@ public class LoginController extends Controller
         pingMarketPlace(false);
         pingBank(false);
 
-        // TODO Save to DB and stuff
         System.out.println("Logging in user with username and password: " + username + " " + password);
 
         try
