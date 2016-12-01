@@ -1,19 +1,16 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
-
 import java.io.Serializable;
 
 public class SaleItem implements Serializable
 {
-
     private Item item;
-    private Trader trader;
+    private String sellerName;
 
-    public SaleItem(Item item, Trader trader)
+    public SaleItem(Item item, String sellerName)
     {
         this.item = item;
-        this.trader = trader;
+        this.sellerName = sellerName;
     }
 
     public Item getItem()
@@ -21,9 +18,9 @@ public class SaleItem implements Serializable
         return item;
     }
 
-    public Trader getTrader()
+    public String getSellerName()
     {
-        return trader;
+        return sellerName;
     }
 
     @Override
@@ -31,7 +28,7 @@ public class SaleItem implements Serializable
     {
         return "SaleItem{" +
                 "item=" + item +
-                ", trader=" + trader +
+                ", sellerName='" + sellerName + '\'' +
                 '}';
     }
 }

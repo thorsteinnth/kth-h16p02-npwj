@@ -79,10 +79,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     }
 
     @Override
-    public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException {
-
+    public ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException
+    {
         System.out.println("Getting traders wishes");
-        ArrayList<WishListItem>  wishListItems = this.repository.getTradersWishes(trader);
+        ArrayList<WishListItem> wishListItems = this.repository.getTradersWishes(trader.getUsername());
         return wishListItems;
     }
 
@@ -133,13 +133,13 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         SaleItem saleItem = this.repository.findSaleItem(item);
 
         // Check if the seller and buyer are the same person
-        if (trader.equals(saleItem.getTrader()))
+        if (trader.getUsername().equals(saleItem.getSellerName()))
         {
             throw new BuyException("Cannot buy an item that you are selling");
         }
 
         // Get the relevant bank accounts
-        AccountDTO sellerAccount = bank.getAccount(saleItem.getTrader().getUsername());
+        AccountDTO sellerAccount = bank.getAccount(saleItem.getSellerName());
         AccountDTO buyerAccount = bank.getAccount(trader.getUsername());
         if (sellerAccount == null)
             throw new BankAccountNotFoundException("Could not find bank account for seller");
@@ -169,8 +169,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         // Send sale notification to seller
-        Trader seller = saleItem.getTrader();
-        seller.itemSoldNotification(saleItem.getItem().getName());
+        Trader seller = this.repository.getTraderByUsername(saleItem.getSellerName());
+        // TODO Handle if he is null, i.e. not logged in. Save notification to DB to deliver it later?
+        if (seller != null)
+            seller.itemSoldNotification(saleItem.getItem().getName());
 
         // Remove sale item from the market repository
         this.repository.removeSaleItem(saleItem);
@@ -220,7 +222,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
     @Override
     public boolean deregister(Trader trader) throws RemoteException
     {
-        this.repository.removeTradersWishListItems(trader);
+        this.repository.removeTradersWishListItems(trader.getUsername());
         return this.repository.deregisterTrader(trader);
     }
 

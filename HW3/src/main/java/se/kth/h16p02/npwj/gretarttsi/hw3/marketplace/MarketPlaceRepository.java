@@ -17,6 +17,7 @@ public class MarketPlaceRepository
 {
     private MarketPlaceDAO marketPlaceDAO;
 
+    // TODO Rename this to loggedInUsers
     private ArrayList<Trader> traders;
     private ArrayList<SaleItem> saleItems;
     private ArrayList<WishListItem> wishListItems;
@@ -125,18 +126,32 @@ public class MarketPlaceRepository
 
     }
 
+    // TODO Rename this to getLoggedInTraderByUsername?
+    public Trader getTraderByUsername(String username) throws RemoteException
+    {
+        Trader foundTrader = null;
+
+        for (Trader trader : this.traders)
+        {
+            if (trader.getUsername().equals(username))
+                foundTrader = trader;
+        }
+
+        return foundTrader;
+    }
+
     //endregion
 
     //region Items
 
-    public synchronized boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException
+    public synchronized boolean addSaleItem(Trader trader, Item item) throws ItemAlreadyExistsException, RemoteException
     {
         if (!isItemUnique(item))
         {
            throw new ItemAlreadyExistsException("Item already exists in marketplace " + item.toString());
         }
 
-        this.saleItems.add(new SaleItem(item,trader));
+        this.saleItems.add(new SaleItem(item, trader.getUsername()));
 
         return true;
     }
@@ -193,7 +208,7 @@ public class MarketPlaceRepository
 
     public synchronized boolean addWishListItem(Trader trader, Item item) throws RemoteException
     {
-        WishListItem newWishListItem = new WishListItem(trader, item);
+        WishListItem newWishListItem = new WishListItem(trader.getUsername(), item);
 
         WishListItem containedWishListItem = findWishListItem(newWishListItem);
 
@@ -216,9 +231,9 @@ public class MarketPlaceRepository
         return true;
     }
 
-    public synchronized boolean removeTradersWishListItems(Trader trader)
+    public synchronized boolean removeTradersWishListItems(String username)
     {
-        ArrayList<WishListItem> wishListItems = getTradersWishes(trader);
+        ArrayList<WishListItem> wishListItems = getTradersWishes(username);
 
         for(WishListItem wishListItem: wishListItems)
         {
@@ -229,10 +244,10 @@ public class MarketPlaceRepository
 
     public synchronized WishListItem findWishListItem(Trader trader, Item item) throws RemoteException
     {
-        return findWishListItem(new WishListItem(trader, item));
+        return findWishListItem(new WishListItem(trader.getUsername(), item));
     }
 
-    public synchronized ArrayList<Trader> getTradersThatHaveItemInWishListForGreaterOrSamePrice(Item item)
+    public synchronized ArrayList<Trader> getTradersThatHaveItemInWishListForGreaterOrSamePrice(Item item) throws RemoteException
     {
         ArrayList<Trader> tradersWithItemInWishlistForGreaterOrSamePrice = new ArrayList<>();
         ArrayList<WishListItem> wishListEntriesForItemName = getWishlistItemsByItemName(item);
@@ -242,7 +257,10 @@ public class MarketPlaceRepository
             if (wishListEntryForItem.getItem().getPrice().compareTo(item.getPrice()) >= 0)
             {
                 // Wish list entry price is less than or equal to the price of the item
-                tradersWithItemInWishlistForGreaterOrSamePrice.add(wishListEntryForItem.getTrader());
+                // TODO Handle if trader is null, i.e. not logged in. Save notification to DB to deliver it later?
+                Trader trader = getTraderByUsername(wishListEntryForItem.getUsername());
+                if (trader != null)
+                    tradersWithItemInWishlistForGreaterOrSamePrice.add(trader);
             }
         }
 
@@ -275,11 +293,11 @@ public class MarketPlaceRepository
         return foundWishListItems;
     }
 
-    public synchronized ArrayList<WishListItem> getTradersWishes(Trader trader)
+    public synchronized ArrayList<WishListItem> getTradersWishes(String username)
     {
         ArrayList<WishListItem> wishListItems = this.wishListItems
                 .stream()
-                .filter(wi -> wi.getTrader().equals(trader))
+                .filter(wi -> wi.getUsername().equals(username))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         return wishListItems;
