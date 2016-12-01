@@ -5,6 +5,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBExcep
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemAlreadyExistsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
@@ -67,6 +68,11 @@ public class MarketPlaceRepository
             System.err.println(ex);
             return false;
         }
+        catch (MarketplaceDBException e)
+        {
+            //System.err.println(e); // this is printed out in the MarketplaceDAO
+            return false;
+        }
     }
 
     public boolean deregisterTrader(Trader trader)
@@ -83,17 +89,22 @@ public class MarketPlaceRepository
             return false;
     }
 
-    private boolean isUsernameUnique(Trader trader) throws RemoteException
+    private synchronized boolean isUsernameUnique(Trader trader) throws RemoteException, MarketplaceDBException
     {
+        //TODO fara niður í grunn til þess að finna út hvort að usernameið sé unique
+
         boolean isUnique = true;
 
+        // if trader exists then the password is not unique
+        isUnique = !marketPlaceDAO.traderExists(trader.getUsername());
+
+        /*
         for (Trader t : this.traders)
         {
             if (t.getUsername().equals(trader.getUsername()))
                 isUnique = false;
         }
-
-        // TODO fara í database og tékka á trader
+        */
 
         return isUnique;
     }

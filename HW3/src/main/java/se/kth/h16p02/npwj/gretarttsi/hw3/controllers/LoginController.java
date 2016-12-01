@@ -74,7 +74,6 @@ public class LoginController extends Controller
             {
                 //If an account under this name already exist then we return;
                 System.out.println(e.getMessage());
-                // TODO what happens if he is not able to register but has created a database
             }
 
             // After creating the account for the user we register to the marketplace
@@ -82,11 +81,12 @@ public class LoginController extends Controller
             {
                 if(this.marketPlace.register(newTrader))
                 {
-                    System.out.println("The user: "+ username + "is know registered to the marketplace and an account has been created in the bank");
+                    System.out.println("Marketplace registration and bank account creation was completed successfully for the user: "+ username);
                     new HomeController(newTrader, bank, marketPlace).run();
                 }
                 else
                 {
+                    //this.bank.deleteAccount(this.bank.getAccount(username));
                     System.out.println("Could not register user");
                 }
             }

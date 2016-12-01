@@ -93,7 +93,7 @@ public class MarketPlaceDAO {
         }
     }
 
-    public String traderExists(String username) throws MarketplaceDBException, TraderNotFoundException
+    public boolean traderExists(String username) throws MarketplaceDBException
     {
         String failureMsg = "Database Error: something went wrong, could not search for specified trader: " + username;
         ResultSet result = null;
@@ -104,11 +104,13 @@ public class MarketPlaceDAO {
             result = findTraderStmt.executeQuery();
             if(result.next())
             {
-                return result.getString(USERNAME_COLUMN_NAME);
+                //return result.getString(USERNAME_COLUMN_NAME);
+                return true;
             }
             else
             {
-                throw new TraderNotFoundException("No trader with the username: " + username);
+                //throw new TraderNotFoundException("No trader with the username: " + username);
+                return false;
             }
         }
         catch (SQLException e)
