@@ -130,11 +130,17 @@ public class MarketPlaceDAO
 
         getSaleItemsForTrader = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
         getWishListItemsForTrader = connection.prepareStatement("SELECT * from " + WISHLISTITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
-        
+
         setSaleItemSold = connection.prepareStatement(
                 "UPDATE " + SALEITEM_TABLE_NAME
                 + " SET " + SOLD_COLUMN_NAME + "=?"
                 + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?"
+        );
+
+        setWishListItemBought = connection.prepareStatement(
+                "UPDATE " + WISHLISTITEM_TABLE_NAME
+                        + " SET " + BOUGHT_COLUMN_NAME + "=?"
+                        + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=? AND " + USERNAME_COLUMN_NAME + "=?"
         );
     }
 
@@ -373,6 +379,31 @@ public class MarketPlaceDAO
             setSaleItemSold.setString(2, itemname);
             setSaleItemSold.setInt(3, price);
             int rowsAffected = setSaleItemSold.executeUpdate();
+            if (rowsAffected == 0)
+            {
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+    }
+
+    public void setWishlistItemBought(String itemname, int price, String username, boolean isBought) throws MarketplaceDBException
+    {
+        System.out.println(
+                "Setting wishlist item [" + itemname + "," + price + "," + username + "] to bought: " + isBought + " in database");
+
+        String failureMsg = "DatabaseError: Could not set wish list item bought";
+        try
+        {
+            setWishListItemBought.setBoolean(1, isBought);
+            setWishListItemBought.setString(2, itemname);
+            setWishListItemBought.setInt(3, price);
+            setWishListItemBought.setString(4, username);
+            int rowsAffected = setWishListItemBought.executeUpdate();
             if (rowsAffected == 0)
             {
                 throw new MarketplaceDBException(failureMsg);
