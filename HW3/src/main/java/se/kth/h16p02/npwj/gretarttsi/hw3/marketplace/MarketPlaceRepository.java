@@ -2,10 +2,7 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.marketplace;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketPlaceDAO;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.ItemNotFoundException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderNotFoundException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
@@ -74,6 +71,34 @@ public class MarketPlaceRepository
             return false;
         }
     }
+
+    public synchronized boolean loginTrader(Trader trader) throws
+            RemoteException,
+            TraderNotFoundException,
+            PasswordNotFoundException {
+        String password;
+        try
+        {
+            password = marketPlaceDAO.GetTradersPassword(trader.getUsername());
+
+            if(password.equals(trader.getPassword()))
+            {
+                // Add trader to TRADER cache to log him in
+                this.traders.add(trader);
+                return true;
+            }
+            else
+            {
+                throw new PasswordNotFoundException("Incorrect password");
+            }
+        }
+        catch (MarketplaceDBException e)
+        {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
 
     public boolean deregisterTrader(Trader trader)
     {
