@@ -10,14 +10,10 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class MarketPlaceRepository
 {
     private MarketPlaceDAO marketPlaceDAO;
-
-    // TODO Rename this to loggedInUsers
-    private ArrayList<Trader> traders;
 
     public MarketPlaceRepository()
     {
@@ -29,8 +25,6 @@ public class MarketPlaceRepository
         {
             System.out.println(e.getMessage());
         }
-
-        this.traders = new ArrayList<>();
     }
 
     //region Traders
@@ -46,7 +40,7 @@ public class MarketPlaceRepository
             try
             {
                 marketPlaceDAO.createTrader(trader.getUsername(), trader.getPassword());
-                this.traders.add(trader);
+                TraderManagement.loginTrader(trader);
             }
             catch (MarketplaceDBException e)
             {
@@ -80,7 +74,7 @@ public class MarketPlaceRepository
             if(password.equals(trader.getPassword()))
             {
                 // Add trader to TRADER cache to log him in
-                this.traders.add(trader);
+                TraderManagement.loginTrader(trader);
                 return true;
             }
             else
@@ -98,7 +92,7 @@ public class MarketPlaceRepository
 
     public boolean logoutTrader(Trader trader)
     {
-        this.traders.remove(trader);
+        TraderManagement.logoutTrader(trader);
         return true;
     }
 
@@ -117,24 +111,13 @@ public class MarketPlaceRepository
 
     private synchronized boolean isUsernameUnique(Trader trader) throws RemoteException, MarketplaceDBException
     {
-        // if trader exists then the password is not unique
+        // If trader exists then the username is not unique
         return !marketPlaceDAO.traderExists(trader.getUsername());
-
     }
 
-
-    // TODO Rename this to getLoggedInTraderByUsername?
-    public Trader getTraderByUsername(String username) throws RemoteException
+    public Trader getLoggedInTraderByUsername(String username)
     {
-        Trader foundTrader = null;
-
-        for (Trader trader : this.traders)
-        {
-            if (trader.getUsername().equals(username))
-                foundTrader = trader;
-        }
-
-        return foundTrader;
+        return TraderManagement.getLoggedInTraderByUsername(username);
     }
 
     //endregion
@@ -386,7 +369,7 @@ public class MarketPlaceRepository
             {
                 // Wish list entry price is less than or equal to the price of the item
                 // TODO Handle if trader is null, i.e. not logged in. Save notification to DB to deliver it later?
-                Trader trader = getTraderByUsername(wishListEntryForItem.getUsername());
+                Trader trader = getLoggedInTraderByUsername(wishListEntryForItem.getUsername());
                 if (trader != null)
                     tradersWithItemInWishlistForGreaterOrSamePrice.add(trader);
             }

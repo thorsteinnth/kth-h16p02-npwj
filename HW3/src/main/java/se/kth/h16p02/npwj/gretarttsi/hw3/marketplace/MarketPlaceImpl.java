@@ -182,7 +182,7 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         }
 
         // Send sale notification to seller
-        Trader seller = this.repository.getTraderByUsername(saleItem.getSellerName());
+        Trader seller = this.repository.getLoggedInTraderByUsername(saleItem.getSellerName());
         // TODO Handle if he is null, i.e. not logged in. Save notification to DB to deliver it later?
         if (seller != null)
             seller.itemSoldNotification(saleItem.getItem().getName());
