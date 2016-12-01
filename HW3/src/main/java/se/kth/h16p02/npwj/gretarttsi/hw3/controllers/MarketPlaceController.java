@@ -14,6 +14,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -62,12 +63,16 @@ public class MarketPlaceController extends Controller
                 String userInput = consoleIn.readLine();
                 run = execute(parse(userInput));
             }
-            catch (IOException e)
+            catch(ConnectException ex)
             {
                 System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
-                System.err.println(e);
+                System.err.println(ex);
                 System.out.print(username + "@" + "login" + ">");
                 TraderClient.goToLogin = true;
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
             }
         }
     }
@@ -93,7 +98,7 @@ public class MarketPlaceController extends Controller
                 }
                 else
                 {
-                    return false;
+                    return true;
                 }
 
                 /*

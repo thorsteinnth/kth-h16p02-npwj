@@ -8,6 +8,7 @@ public class BankCommand extends Command
 
     public enum CommandType
     {
+        logout,
         //newaccount,
         getaccount,
         //deleteaccount,
