@@ -34,6 +34,7 @@ public class MarketPlaceDAO
     private PreparedStatement getSaleItemsByBuyer;
     private PreparedStatement insertWishListItem;
     private PreparedStatement getWishListItemsForTrader;
+    private PreparedStatement getWishListItemsByItemName;
     private PreparedStatement setSaleItemSold;
     private PreparedStatement setWishListItemBought;
 
@@ -131,7 +132,6 @@ public class MarketPlaceDAO
     {
         createTraderStmt = connection.prepareStatement("INSERT INTO " + TRADER_TABLE_NAME + " VALUES (?, ?)");
         findTraderStmt = connection.prepareStatement("SELECT * from " + TRADER_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
-
         getAllTraderUsernamesStmt = connection.prepareStatement("SELECT " + USERNAME_COLUMN_NAME + " FROM " + TRADER_TABLE_NAME);
 
         insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?, ?)");
@@ -142,10 +142,10 @@ public class MarketPlaceDAO
                         + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?");
 
         getAllSaleItems = connection.prepareStatement("SELECT * FROM " + SALEITEM_TABLE_NAME);
-
         getSaleItemsBySeller = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + SELLER_COLUMN_NAME + " = ?");
         getSaleItemsByBuyer = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + BUYER_COLUMN_NAME + " = ?");
         getWishListItemsForTrader = connection.prepareStatement("SELECT * from " + WISHLISTITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
+        getWishListItemsByItemName = connection.prepareStatement("SELECT * FROM " + WISHLISTITEM_TABLE_NAME + " WHERE " + ITEMNAME_COLUMN_NAME + "=?");
 
         setSaleItemSold = connection.prepareStatement(
                 "UPDATE " + SALEITEM_TABLE_NAME
@@ -512,6 +512,49 @@ public class MarketPlaceDAO
         {
             getWishListItemsForTrader.setString(1, username);
             result = getWishListItemsForTrader.executeQuery();
+            while (result.next())
+            {
+                WishListItem foundWishlistItem = new WishListItem(
+                        result.getString(USERNAME_COLUMN_NAME),
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getBoolean(BOUGHT_COLUMN_NAME)
+                );
+
+                wishListItems.add(foundWishlistItem);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+
+        return wishListItems;
+    }
+
+    public ArrayList<WishListItem> getWishlistItemsByItemName(String itemName) throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get wish list items by item name: " + itemName;
+        ResultSet result = null;
+
+        ArrayList<WishListItem> wishListItems = new ArrayList<>();
+
+        try
+        {
+            getWishListItemsByItemName.setString(1, itemName);
+            result = getWishListItemsByItemName.executeQuery();
             while (result.next())
             {
                 WishListItem foundWishlistItem = new WishListItem(
