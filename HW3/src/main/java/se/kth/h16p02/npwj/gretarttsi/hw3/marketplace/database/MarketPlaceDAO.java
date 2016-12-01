@@ -28,6 +28,7 @@ public class MarketPlaceDAO
     private PreparedStatement findTraderStmt;
     private PreparedStatement getAllTraderUsernamesStmt;
     private PreparedStatement insertSaleItem;
+    private PreparedStatement getSaleItem;
     private PreparedStatement getSaleItemsBySeller;
     private PreparedStatement getSaleItemsByBuyer;
     private PreparedStatement insertWishListItem;
@@ -134,6 +135,10 @@ public class MarketPlaceDAO
 
         insertSaleItem = connection.prepareStatement("INSERT INTO " + SALEITEM_TABLE_NAME + " VALUES (?, ?, ?, ?, ?)");
         insertWishListItem = connection.prepareStatement("INSERT INTO " + WISHLISTITEM_TABLE_NAME + " VALUES (?, ?, ?, ?)");
+
+        getSaleItem = connection.prepareStatement(
+                "SELECT * FROM " + SALEITEM_TABLE_NAME
+                        + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?");
 
         getSaleItemsBySeller = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + SELLER_COLUMN_NAME + " = ?");
         getSaleItemsByBuyer = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + BUYER_COLUMN_NAME + " = ?");
@@ -324,6 +329,47 @@ public class MarketPlaceDAO
         {
             System.err.println(e);
             throw new MarketplaceDBException(failureMsg);
+        }
+    }
+
+    public SaleItem getSaleItem(String itemName, int price) throws MarketplaceDBException
+    {
+        String failureMsg = "Database Error: Could not get sale item: [" + itemName + "," + price + "]";
+        ResultSet result = null;
+
+        try
+        {
+            getSaleItem.setString(1, itemName);
+            getSaleItem.setInt(2, price);
+            result = getSaleItem.executeQuery();
+            if (result.next())
+            {
+                return new SaleItem(
+                        new Item(result.getString(ITEMNAME_COLUMN_NAME), new BigDecimal(result.getInt(PRICE_COLUMN_NAME))),
+                        result.getString(SELLER_COLUMN_NAME)
+                );
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
+        finally
+        {
+            try
+            {
+                result.close();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                throw new MarketplaceDBException(failureMsg);
+            }
         }
     }
 
