@@ -1,4 +1,4 @@
-package se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration;
+package se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.database;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

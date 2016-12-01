@@ -1,7 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.model;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDAO;
-import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.integration.BankDBException;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.database.BankDAO;
+import se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.database.BankDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.InsufficientFundsException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 
