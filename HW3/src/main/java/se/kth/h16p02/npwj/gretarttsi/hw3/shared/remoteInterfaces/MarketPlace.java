@@ -64,4 +64,7 @@ public interface MarketPlace extends Remote
      * Inspect what items are available on the marketplace
      * */
     ArrayList<SaleItem> inspectAvailableItems() throws RemoteException;
+
+    String ping () throws RemoteException;
+
 }

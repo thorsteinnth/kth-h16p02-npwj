@@ -232,5 +232,10 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
         return this.repository.isTraderRegistered(trader);
     }
 
+    @Override
+    public String ping() throws RemoteException {
+        return "ping to marketplace Ok";
+    }
+
     //endregion
 }

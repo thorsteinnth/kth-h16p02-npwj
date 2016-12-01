@@ -7,6 +7,7 @@ import se.kth.h16p02.npwj.gretarttsi.hw3.shared.exceptions.RejectedException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Bank;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.MarketPlace;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces.Trader;
+import se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -33,7 +34,7 @@ public class BankController extends Controller
     {
         boolean run = true;
 
-        while (run)
+        while (run && TraderClient.goToLogin != true)
         {
             printConsolePrompt();
 
@@ -48,7 +49,10 @@ public class BankController extends Controller
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                // e.printStackTrace();
+                System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
+                System.out.print(username + "@" + "login" + ">");
+                TraderClient.goToLogin = true;
             }
             catch (InsufficientFundsException ex)
             {
@@ -162,12 +166,14 @@ public class BankController extends Controller
             return true;
         }
 
+        /*
         switch (bankCommand.getCommandType())
         {
             case newaccount:
                 bank.newAccount(username);
                 return true;
         }
+        */
 
         // All further commands require an account reference
 
@@ -183,9 +189,11 @@ public class BankController extends Controller
                     System.out.println(acc);
                     break;
 
+                /*
                 case deleteaccount:
                     bank.deleteAccount(acc);
                     return true;
+                */
 
                 case deposit:
                     bank.deposit(acc, bankCommand.getAmount());
