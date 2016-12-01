@@ -29,6 +29,8 @@ public class MarketPlaceDAO
     private PreparedStatement getSaleItemsForTrader;
     private PreparedStatement insertWishListItem;
     private PreparedStatement getWishListItemsForTrader;
+    private PreparedStatement setSaleItemSold;
+    private PreparedStatement setWishListItemBought;
 
     public MarketPlaceDAO() throws MarketplaceDBException
     {
@@ -128,6 +130,12 @@ public class MarketPlaceDAO
 
         getSaleItemsForTrader = connection.prepareStatement("SELECT * from " + SALEITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
         getWishListItemsForTrader = connection.prepareStatement("SELECT * from " + WISHLISTITEM_TABLE_NAME + " WHERE " + USERNAME_COLUMN_NAME + " = ?");
+        
+        setSaleItemSold = connection.prepareStatement(
+                "UPDATE " + SALEITEM_TABLE_NAME
+                + " SET " + SOLD_COLUMN_NAME + "=?"
+                + " WHERE " + ITEMNAME_COLUMN_NAME + "=? AND " + PRICE_COLUMN_NAME + "=?"
+        );
     }
 
     public void createTrader (String username, String password) throws MarketplaceDBException
@@ -351,5 +359,29 @@ public class MarketPlaceDAO
         }
 
         return wishListItems;
+    }
+
+    public void setSaleItemSold(String itemname, int price, boolean isSold) throws MarketplaceDBException
+    {
+        System.out.println(
+                "Setting sale item [" + itemname + "," + price + "] to sold: " + isSold + " in database");
+
+        String failureMsg = "DatabaseError: Could not set item sold";
+        try
+        {
+            setSaleItemSold.setBoolean(1, isSold);
+            setSaleItemSold.setString(2, itemname);
+            setSaleItemSold.setInt(3, price);
+            int rowsAffected = setSaleItemSold.executeUpdate();
+            if (rowsAffected == 0)
+            {
+                throw new MarketplaceDBException(failureMsg);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e);
+            throw new MarketplaceDBException(failureMsg);
+        }
     }
 }
