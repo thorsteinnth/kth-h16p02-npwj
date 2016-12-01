@@ -1,6 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.History;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
@@ -63,8 +64,8 @@ public class MarketPlaceController extends Controller
             }
             catch (IOException e)
             {
-                //e.printStackTrace();
                 System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
+                System.err.println(e);
                 System.out.print(username + "@" + "login" + ">");
                 TraderClient.goToLogin = true;
             }
@@ -123,6 +124,11 @@ public class MarketPlaceController extends Controller
             case getwishes:
                 ArrayList<WishListItem> wishListItems = marketPlace.getTradersWishes(user);
                 System.out.println(getTradersWishesDisplayString(wishListItems));
+                return true;
+
+            case history:
+                History history = marketPlace.getTradersHistory(user);
+                System.out.println(history.toDisplayString());
                 return true;
 
             case ls:

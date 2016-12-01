@@ -1,6 +1,7 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.shared.remoteInterfaces;
 
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.*;
+import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.History;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.Item;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.SaleItem;
 import se.kth.h16p02.npwj.gretarttsi.hw3.shared.domain.WishListItem;
@@ -29,10 +30,14 @@ public interface MarketPlace extends Remote
     ArrayList<WishListItem> getTradersWishes(Trader trader) throws RemoteException;
 
     /**
+     * Get trader's history
+     * */
+    History getTradersHistory(Trader trader) throws RemoteException;
+
+    /**
      * Register client (trader)
      * */
     boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException;
-
 
     /**
      * Deregister client (trader)
