@@ -133,6 +133,12 @@ public class MarketPlaceImpl extends UnicastRemoteObject implements MarketPlace
 
         SaleItem saleItem = this.repository.findSaleItem(item);
 
+        // Don't allow buying of items that have already been sold
+        if (saleItem.isSold())
+        {
+            throw new ItemNotFoundException("Item not found: " + item);
+        }
+
         // Check if the seller and buyer are the same person
         if (trader.getUsername().equals(saleItem.getSellerName()))
         {
