@@ -101,30 +101,32 @@ public class MarketPlaceRepository
     }
 
 
-    public boolean deregisterTrader(Trader trader)
+    public boolean logoutTrader(Trader trader)
     {
-        //TODO laga þetta
         this.traders.remove(trader);
         return true;
     }
 
-    public boolean isTraderRegistered(Trader trader)
+    public boolean isTraderRegistered(Trader trader) throws RemoteException
     {
-        //TODO laga þetta
-        if (this.traders.contains(trader))
-            return true;
-        else
+        try
+        {
+            return marketPlaceDAO.traderExists(trader.getUsername());
+        }
+        catch (MarketplaceDBException e)
+        {
+            System.out.println(e.getMessage());
             return false;
+        }
     }
 
     private synchronized boolean isUsernameUnique(Trader trader) throws RemoteException, MarketplaceDBException
     {
-        //TODO fara niður í grunn til þess að finna út hvort að usernameið sé unique
-
         // if trader exists then the password is not unique
         return !marketPlaceDAO.traderExists(trader.getUsername());
 
     }
+
 
     // TODO Rename this to getLoggedInTraderByUsername?
     public Trader getTraderByUsername(String username) throws RemoteException

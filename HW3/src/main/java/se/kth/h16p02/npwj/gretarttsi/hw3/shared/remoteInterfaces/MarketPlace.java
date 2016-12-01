@@ -33,10 +33,11 @@ public interface MarketPlace extends Remote
      * */
     boolean register(Trader trader) throws RemoteException, TraderAlreadyExistsException, BankAccountNotFoundException;
 
+
     /**
      * Deregister client (trader)
      * */
-    boolean deregister(Trader trader) throws RemoteException;
+    boolean logOut(Trader trader) throws RemoteException;
 
     /**
      * Check if a trader is registered in the market place
