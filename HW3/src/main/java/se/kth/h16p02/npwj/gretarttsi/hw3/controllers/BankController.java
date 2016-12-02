@@ -23,6 +23,7 @@ public class BankController extends Controller
     public BankController(Trader user, Bank bank, MarketPlace marketPlace)
     {
         super(user, bank, marketPlace);
+        TraderClient.state = TraderClient.State.bank;
     }
 
     @Override
