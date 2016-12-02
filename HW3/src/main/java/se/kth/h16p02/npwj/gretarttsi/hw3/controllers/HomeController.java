@@ -40,7 +40,7 @@ public class HomeController extends Controller
             {
                 System.err.println(ex);
                 System.err.println("Something went wrong, we lost connection to the marketplace. You will be logged out");
-                System.out.print(username + "@" + "login" + ">");
+                System.out.print("Login>");
                 TraderClient.goToLogin = true;
             }
             catch (IOException e)
