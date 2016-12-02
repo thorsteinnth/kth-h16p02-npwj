@@ -77,6 +77,8 @@ public class TraderClient
         }
         catch (Exception e)
         {
+            System.err.println(e);
+            e.printStackTrace();
             System.out.println("TraderClient: The runtime failed: " + e.getMessage());
             System.exit(0);
         }
