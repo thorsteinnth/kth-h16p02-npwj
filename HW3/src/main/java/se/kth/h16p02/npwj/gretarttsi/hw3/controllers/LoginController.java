@@ -1,6 +1,5 @@
 package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
-import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.database.MarketplaceDBException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.BankAccountNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.PasswordNotFoundException;
 import se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.exceptions.TraderAlreadyExistsException;
@@ -19,7 +18,7 @@ import java.util.StringTokenizer;
 
 public class LoginController extends Controller
 {
-    private final int passwordLength = 8;
+    private final int minPasswordLength = 8;
 
     public LoginController(Bank bank, MarketPlace marketPlace)
     {
@@ -37,7 +36,7 @@ public class LoginController extends Controller
     {
         boolean run = true;
 
-        while (run )
+        while (run)
         {
             printConsolePrompt();
 
@@ -58,17 +57,22 @@ public class LoginController extends Controller
         pingMarketPlace(false);
         pingBank(false);
 
-        System.out.println("Registering user with username and password: " + username + " " + password);
         try
         {
-            Trader newTrader = new TraderImpl(username,password);
+            Trader newTrader = new TraderImpl(username, password);
 
-            //CheckIfRegister function onlu checks if there is a trader already registered with this username
+            // CheckIfRegistered function checks if there is a trader already registered with this username
             boolean userNameTaken = this.marketPlace.checkIfRegistered(newTrader);
 
-            if(userNameTaken == true)
+            if (userNameTaken == true)
             {
                 System.out.println("This username is taken. Please choose another name");
+                return;
+            }
+
+            if (password.length() < this.minPasswordLength)
+            {
+                System.out.println("Password is not legal. It has to be at least " + this.minPasswordLength + " characters");
                 return;
             }
 
@@ -86,7 +90,8 @@ public class LoginController extends Controller
             // After creating the account for the user we register to the marketplace
             try
             {
-                if(this.marketPlace.register(newTrader))
+                System.out.println("Registering user with username and password: " + username + " " + password);
+                if (this.marketPlace.register(newTrader))
                 {
                     TraderClient.goToLogin = false;
                     System.out.println("Marketplace registration and bank account creation was completed successfully for the user: "+ username);
@@ -115,15 +120,14 @@ public class LoginController extends Controller
         pingMarketPlace(false);
         pingBank(false);
 
-        System.out.println("Logging in user with username and password: " + username + " " + password);
-
         try
         {
             Trader newTrader = new TraderImpl(username,password);
 
             try
             {
-                 marketPlace.login(newTrader);
+                System.out.println("Logging in user with username and password: " + username + " " + password);
+                marketPlace.login(newTrader);
             }
             catch (TraderNotFoundException tnfe)
             {
@@ -243,12 +247,6 @@ public class LoginController extends Controller
         if (loginCommand.getPassword() == null || loginCommand.getPassword() == "")
         {
             System.out.println("Password is not specified");
-            return true;
-        }
-
-        if (loginCommand.getPassword().length() <= this.passwordLength)
-        {
-            System.out.println("Password is not legal. It has to be longer than 8 characters");
             return true;
         }
 

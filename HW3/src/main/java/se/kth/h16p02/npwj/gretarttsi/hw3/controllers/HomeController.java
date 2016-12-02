@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 
 public class HomeController extends Controller
 {
-    private static final String LOGOUT_SUCCESS = "User successfully logout";
+    private static final String LOGOUT_SUCCESS = "User successfully logged out";
 
     public HomeController(Trader user, Bank bank, MarketPlace marketPlace)
     {

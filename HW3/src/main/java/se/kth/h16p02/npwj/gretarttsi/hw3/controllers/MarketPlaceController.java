@@ -23,7 +23,7 @@ public class MarketPlaceController extends Controller
 {
     private static final String MARKETPLACE = "Marketplace";
     private static final String REGISTRATION_SUCCESS = "User successfully registered";
-    private static final String LOGOUT_SUCCESS = "User successfully logout";
+    private static final String LOGOUT_SUCCESS = "User successfully logged out";
     private static final String TRADER_ALREADY_EXIST = "Trader with this username already exist";
     private static final String TRADER_NOT_FOUND = "User not registered";
     private static final String BANKACCOUNT_NOT_FOUND = "Could not find bank account";

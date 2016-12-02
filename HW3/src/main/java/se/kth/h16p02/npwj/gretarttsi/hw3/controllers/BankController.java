@@ -18,7 +18,7 @@ public class BankController extends Controller
 {
     private static final String DEFAULT_BANK_NAME = "Nordea";
     private static final String INSUFFICIENT_FUNDS = "Insufficient funds";
-    private static final String LOGOUT_SUCCESS = "User successfully logout";
+    private static final String LOGOUT_SUCCESS = "User successfully logged out";
 
     public BankController(Trader user, Bank bank, MarketPlace marketPlace)
     {
