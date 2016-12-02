@@ -9,13 +9,11 @@ import java.util.ArrayList;
 /**
  * A wrapper for the traders (remote objects).
  * We have a remote trader object for the traders that are logged in.
+ * The marketplacerepository can only access those objects through here.
+ * We log users out if we get a ConnectException while trying to access them.
  * */
 public class TraderManagement
 {
-    // TODO We make it so all accesses to traders go through here.
-    // Then we could catch connection exceptions for traders that have gone offline, and then
-    // log them out automatically (by removing them from our list of logged in traders)
-
     private static ArrayList<Trader> loggedInTraders;
 
     static
@@ -33,9 +31,15 @@ public class TraderManagement
         loggedInTraders.remove(trader);
     }
 
+    /**
+     * Get trader by username.
+     * Log users out automatically if we get a ConnectException while trying to access them.
+     * (we assume that they have gone offline and should therefore be logged out).
+     * */
     public static Trader getLoggedInTraderByUsername(String username)
     {
         Trader foundTrader = null;
+        ArrayList<Trader> tradersToRemove = new ArrayList<>();
 
         for (Trader trader : loggedInTraders)
         {
@@ -55,10 +59,16 @@ public class TraderManagement
                 {
                     // We assume we have lost connection to the trader
                     // Let's log him out
-                    System.out.println("Logging out trader");
-                    logoutTrader(trader);
+                    tradersToRemove.add(trader);
                 }
             }
+        }
+
+        System.out.println("Logging out " + tradersToRemove.size() + " traders");
+        for (Trader traderToRemove : tradersToRemove)
+        {
+            System.out.println("Logging out trader");
+            logoutTrader(traderToRemove);
         }
 
         return foundTrader;
