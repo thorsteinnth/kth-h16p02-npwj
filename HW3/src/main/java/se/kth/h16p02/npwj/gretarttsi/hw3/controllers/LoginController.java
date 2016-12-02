@@ -267,8 +267,9 @@ public class LoginController extends Controller
     {
         try
         {
+            String result = bank.ping();
             if(showMessage)
-                System.out.println(bank.ping());
+                System.out.println(result);
         }
         catch (RemoteException e)
         {
@@ -297,8 +298,9 @@ public class LoginController extends Controller
     {
         try
         {
+            String result = marketPlace.ping();
             if(showMessage)
-                System.out.println(marketPlace.ping());
+                System.out.println(result);
         }
         catch (RemoteException e)
         {
