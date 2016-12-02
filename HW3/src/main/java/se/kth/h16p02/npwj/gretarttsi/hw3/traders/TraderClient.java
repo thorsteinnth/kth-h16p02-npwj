@@ -14,6 +14,14 @@ public class TraderClient
     private static final String DEFAULT_HOST = "localhost";
     private static final String DEFAULT_BANK_NAME = "Nordea";
     public static boolean goToLogin = false;
+    public static State state;
+
+    public enum State
+    {
+        bank,
+        marketplace,
+        home
+    }
 
     public TraderClient()
     {}

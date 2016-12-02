@@ -17,6 +17,7 @@ public class HomeController extends Controller
     public HomeController(Trader user, Bank bank, MarketPlace marketPlace)
     {
         super(user, bank, marketPlace);
+        TraderClient.state = TraderClient.State.home;
     }
 
     @Override

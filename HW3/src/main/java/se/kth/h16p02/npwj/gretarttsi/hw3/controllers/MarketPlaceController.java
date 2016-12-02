@@ -42,6 +42,7 @@ public class MarketPlaceController extends Controller
     public MarketPlaceController(Trader user, Bank bank, MarketPlace marketPlace)
     {
         super(user, bank, marketPlace);
+        TraderClient.state = TraderClient.State.marketplace;
     }
 
     @Override
@@ -128,7 +129,10 @@ public class MarketPlaceController extends Controller
 
             case getwishes:
                 ArrayList<WishListItem> wishListItems = marketPlace.getTradersWishes(user);
+                System.out.println();
+                System.out.println();
                 System.out.println(getTradersWishesDisplayString(wishListItems));
+                System.out.println();
                 return true;
 
             case history:
@@ -155,6 +159,7 @@ public class MarketPlaceController extends Controller
             System.out.println(PRODUCT_ERROR);
         }
 
+        /*
         if (marketPlaceCommand.getCommandType() == MarketPlaceCommand.CommandType.sell)
         {
             try
@@ -174,6 +179,7 @@ public class MarketPlaceController extends Controller
             }
             return true;
         }
+        */
 
         if (marketPlaceCommand.getAmount() < 0)
         {
@@ -185,6 +191,25 @@ public class MarketPlaceController extends Controller
 
         switch (marketPlaceCommand.getCommandType())
         {
+            case sell:
+                try
+                {
+                    if (marketPlace.sell(user, new Item(marketPlaceCommand.getProductName(), new BigDecimal(marketPlaceCommand.getAmount()))))
+                        System.out.println(String.format(SELLING_SUCCESSFUL, marketPlaceCommand.getProductName(), String.valueOf(marketPlaceCommand.getAmount())));
+                    else
+                        System.out.println(SELLING_FAILURE);
+                }
+                catch (ItemAlreadyExistsException e)
+                {
+                    System.out.println(String.format(ITEM_ALREADY_EXIST, marketPlaceCommand.getProductName()));
+                }
+                catch (TraderNotFoundException e)
+                {
+                    System.out.println(TRADER_NOT_FOUND);
+                }
+                return true;
+
+
             case buy:
                 try
                 {
