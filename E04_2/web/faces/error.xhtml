@@ -8,6 +8,7 @@
     </h:head>
     <h:body>
         <h1>Transaction Failed</h1>
+        <h1>TEST: #{acctManager.test}</h1>
         <c:choose>
             <c:when test="#{acctManager.exception.cause != null}">
                 <h3><h:outputText value="#{acctManager.exception.cause.message}"/></h3>

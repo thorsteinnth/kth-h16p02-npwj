@@ -25,6 +25,7 @@ public class AcctManager implements Serializable {
     private Exception transactionFailure;
     @Inject
     private Conversation conversation;
+    private boolean test;
 
     private void startConversation() {
         if (conversation.isTransient()) {
@@ -55,6 +56,13 @@ public class AcctManager implements Serializable {
      */
     public boolean getSuccess() {
         return transactionFailure == null;
+    }
+
+    public boolean getTest() { return test; }
+
+    public void setTest(boolean test)
+    {
+        this.test = test;
     }
 
     /**
@@ -134,6 +142,7 @@ public class AcctManager implements Serializable {
      */
     public String createAccount() {
         try {
+            this.test = true;
             startConversation();
             transactionFailure = null;
             currentAcct = cashierFacade.createAccount(newAccountHolderFirstName,
