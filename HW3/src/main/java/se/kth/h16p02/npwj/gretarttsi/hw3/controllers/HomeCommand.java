@@ -2,6 +2,8 @@ package se.kth.h16p02.npwj.gretarttsi.hw3.controllers;
 
 public class HomeCommand extends Command
 {
+    // test
+
     private CommandType commandType;
 
     public enum CommandType
