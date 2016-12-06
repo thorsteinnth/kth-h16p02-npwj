@@ -33,5 +33,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1 - JSF" level="application_server_libraries" />
+    <orderEntry type="library" name="cdi-api" level="project" />
+    <orderEntry type="library" name="eclipselink-2.3.0" level="project" />
+    <orderEntry type="library" name="javax.inject" level="project" />
+    <orderEntry type="library" name="javax.persistence" level="project" />
   </component>
 </module>
