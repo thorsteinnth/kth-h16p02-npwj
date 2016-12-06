@@ -22,3 +22,6 @@ build/
 **/.idea/tasks.xml
 
 *.sqlite
+/E04/dist/
+/E04/bank/nbproject/private/
+/E04/bank/dist/

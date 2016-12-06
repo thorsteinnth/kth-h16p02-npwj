@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="Derby (Remote) - jdbc:derby://localhost:1527/bank" uuid="0e01977d-88de-473f-b2bb-43f752438437">
+    <database-info product="Apache Derby" version="10.10.2.0 - (1582446)" jdbc-version="4.2" driver-name="Apache Derby Network Client JDBC Driver" driver-version="10.11.1.1 - (1616546)">
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
+    <schema name="APP" catalog=""/>
+    <schema name="ROOT" catalog=""/>
+    <table name="ACCOUNT" schema="ROOT" catalog="" type="TABLE">
+      <column name="ACCTNO" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="BALANCE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="FIRSTNAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="LASTNAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="SQL161206164824000" columns="ACCTNO"/>
+    </table>
+    <table name="SEQUENCE" schema="ROOT" catalog="" type="TABLE">
+      <column name="SEQ_NAME" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SEQ_COUNT" sqlType="DECIMAL" precision="15" scale="0" nullable="true" jdbcType="3"/>
+      <primary-key name="SQL161206155440420" columns="SEQ_NAME"/>
+    </table>
+  </data-source>
+</component>

@@ -19,3 +19,65 @@ dependencies {
     compile name: 'javax.persistence'
     compile name: 'eclipselink-2.3.0'
 }
+
+jar {
+    baseName='bankserver'
+
+    // Extract the dependency jars into the new one
+    from (zipTree('libs/eclipselink-2.3.0.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/javax.persistence.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/sqlite-jdbc-3.15.1.jar')) {
+        include '*'
+    }
+
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw3.bank.server.startup.Server'
+    }
+}
+
+task marketplacejar(type: Jar) {
+
+    from sourceSets.main.output
+
+    baseName = 'marketplaceserver'
+    // Extract the dependency jars into the new one
+    from (zipTree('libs/eclipselink-2.3.0.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/javax.persistence.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/sqlite-jdbc-3.15.1.jar')) {
+        include '*'
+    }
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw3.marketplace.MarketPlaceServer'
+    }
+}
+
+task traderclientjar(type: Jar) {
+
+    from sourceSets.main.output
+
+    baseName = 'traderclient'
+    // Extract the dependency jars into the new one
+    from (zipTree('libs/eclipselink-2.3.0.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/javax.persistence.jar')) {
+        include '*'
+    }
+    from (zipTree('libs/sqlite-jdbc-3.15.1.jar')) {
+        include '*'
+    }
+    manifest {
+        attributes 'Main-Class': 'se.kth.h16p02.npwj.gretarttsi.hw3.traders.TraderClient'
+    }
+}
+
+assemble.dependsOn(marketplacejar)
+assemble.dependsOn(traderclientjar)

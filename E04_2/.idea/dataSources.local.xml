@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="Derby (Remote) - jdbc:derby://localhost:1527/bank" uuid="0e01977d-88de-473f-b2bb-43f752438437">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>*.APP *.ROOT</schema-pattern>
+      <default-schemas>*.APP *.ROOT</default-schemas>
+    </data-source>
+  </component>
+</project>
