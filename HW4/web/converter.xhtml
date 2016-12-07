@@ -11,9 +11,14 @@
     <h:form>
         <h3>Create a New Account</h3>
         <p>
-            <h:commandButton value="Create Currency" action="#{converterManager.createCurrency}"/>
+            <h:commandButton value="Initialize data" action="#{converterManager.createInitialData}"/>
         </p>
         <hr/>
+
+        <p>
+            <h:commandButton value="check data" action="#{converterManager.checkData}"/>
+        </p>
+
     </h:form>
 
 </h:body>

@@ -20,14 +20,73 @@
     <schema id="12" parent="1" name="SYSPROC"/>
     <schema id="13" parent="1" name="SYSSTAT"/>
     <table id="14" parent="4" name="CURRENCY"/>
-    <column id="15" parent="14" name="CODE">
+    <table id="15" parent="4" name="RATE"/>
+    <table id="16" parent="4" name="SEQUENCE"/>
+    <column id="17" parent="14" name="CODE">
       <Position>1</Position>
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="16" parent="14" name="SQL161206225435140">
+    <key id="18" parent="14" name="SQL161207003347300">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>CODE</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="19" parent="15" name="ID">
+      <Position>1</Position>
+      <DataType>INTEGER(10)|4</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="20" parent="15" name="RATE">
+      <Position>2</Position>
+      <DataType>DOUBLE(52)|8</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="21" parent="15" name="CODE_1">
+      <Position>3</Position>
+      <DataType>VARCHAR(255)|12</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="15" name="CODE_2">
+      <Position>4</Position>
+      <DataType>VARCHAR(255)|12</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="23" parent="15" name="SQL161207003347310">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="24" parent="15" name="FK_RATE_CODE_1">
+      <ColNames>CODE_1</ColNames>
+      <RefSchemaName>ROOT</RefSchemaName>
+      <RefTableName>CURRENCY</RefTableName>
+      <RefKeyName>SQL161207003347300</RefKeyName>
+      <RefColNames>CODE</RefColNames>
+      <OnDelete>no-action</OnDelete>
+      <OnUpdate>no-action</OnUpdate>
+    </foreign-key>
+    <foreign-key id="25" parent="15" name="FK_RATE_CODE_2">
+      <ColNames>CODE_2</ColNames>
+      <RefSchemaName>ROOT</RefSchemaName>
+      <RefTableName>CURRENCY</RefTableName>
+      <RefKeyName>SQL161207003347300</RefKeyName>
+      <RefColNames>CODE</RefColNames>
+      <OnDelete>no-action</OnDelete>
+      <OnUpdate>no-action</OnUpdate>
+    </foreign-key>
+    <column id="26" parent="16" name="SEQ_NAME">
+      <Position>1</Position>
+      <DataType>VARCHAR(50)|12</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="16" name="SEQ_COUNT">
+      <Position>2</Position>
+      <DataType>DECIMAL(15)|3</DataType>
+    </column>
+    <key id="28" parent="16" name="SQL161206234901230">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>SEQ_NAME</ColNames>
       <Primary>1</Primary>
     </key>
   </database-model>

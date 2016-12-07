@@ -35,7 +35,7 @@ public class ConverterManager implements Serializable{
     }
 
 
-    public String createCurrency() {
+    public String createInitialData() {
         try {
             startConversation();
             converterController.createCurrency();
@@ -44,6 +44,17 @@ public class ConverterManager implements Serializable{
         }
         return jsf22Bugfix();
     }
+
+    public String checkData() {
+        try {
+            startConversation();
+            converterController.checkData();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        return jsf22Bugfix();
+    }
+
 
     /**
      * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10
