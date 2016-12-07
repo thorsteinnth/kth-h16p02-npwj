@@ -2,17 +2,15 @@ package converter.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created by GretarAtli on 06/12/2016.
  */
 
 @Entity
-@Table(name = "currency")
+@Table(name = "CURRENCY")
 public class Currency implements Serializable
 {
 
@@ -25,32 +23,34 @@ public class Currency implements Serializable
     @OneToMany(mappedBy = "code2")
     private List<Rate> reverseRates;
 
+    @Version
+    @Column(name = "LAST_UPDATED_TIME")
+    private Timestamp updatedTime;
 
     public Currency()
     {}
 
     public Currency(String code) {
         this.code = code;
-        this.rates = new ArrayList<>();
-        this.reverseRates = new ArrayList<>();
+        //this.rates = new ArrayList<>();
+        //this.reverseRates = new ArrayList<>();
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+
+    /*
+    public ArrayList<Rate> getRates()
+    {
+
     }
 
-    public List<Rate> getRates()
+    public ArrayList<Rate> getReverseRates()
     {
-        return this.rates;
-    }
 
-    public List<Rate> getReverseRates()
-    {
-        return  this.reverseRates;
     }
+    */
 }
 

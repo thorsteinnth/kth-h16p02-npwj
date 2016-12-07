@@ -9,6 +9,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,15 +78,46 @@ public class ConverterController {
     public void checkData()
     {
         Currency EURc = em.find(Currency.class,EUR);
+        Currency ISKc = em.find(Currency.class,ISK);
+        getRatesForCurrency(EURc);
+        getReverseRatesForCurrency(EURc);
+        getRateForCurrencies(EURc,ISKc);
 
-        List<Rate> rates = EURc.getRates();
+    }
 
-        for (Rate rate: rates)
-        {
-            System.out.println(rate.getCode1());
-        }
+    public ArrayList<Rate> getRatesForCurrency(Currency currency)
+    {
+        List<Rate> rates = em.createNamedQuery("findRatesForCurrency", Rate.class).
+                setParameter("currencyCode", currency.getCode()).getResultList();
 
         System.out.println(rates);
+
+        return new ArrayList<>(rates);
     }
+
+    public ArrayList<Rate> getReverseRatesForCurrency(Currency currency)
+    {
+        List<Rate> rates = em.createNamedQuery("findReverseRatesForCurrency", Rate.class).
+                setParameter("currencyCode", currency.getCode()).getResultList();
+
+        System.out.println(rates);
+
+        return new ArrayList<>(rates);
+    }
+
+    public Rate getRateForCurrencies(Currency currency1, Currency currency2)
+    {
+          Query query = em.createNamedQuery("findRateForCurrencies", Rate.class);
+          query.setParameter("currencyCode1", currency1.getCode());
+          query.setParameter("currencyCode2", currency2.getCode());
+
+          Rate rate = (Rate)query.getSingleResult();
+
+          System.out.println(rate.getCode1());
+          System.out.println(rate.getCode2());
+
+          return rate;
+    }
+
 }
 

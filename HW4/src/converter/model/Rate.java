@@ -2,11 +2,34 @@ package converter.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+
+
+@NamedQueries({
+        @NamedQuery(
+                name = "findRatesForCurrency",
+                query = "SELECT rate FROM Rate rate WHERE rate.code1.code LIKE :currencyCode",
+                lockMode = LockModeType.OPTIMISTIC
+        ),
+        @NamedQuery(
+                name = "findReverseRatesForCurrency",
+                query = "SELECT rate FROM Rate rate WHERE rate.code2.code LIKE :currencyCode",
+                lockMode = LockModeType.OPTIMISTIC
+        ),
+        @NamedQuery(
+                name = "findRateForCurrencies",
+                query = "SELECT rate FROM Rate rate WHERE " +
+                        "rate.code1.code LIKE :currencyCode1 AND " +
+                        "rate.code2.code LIKE :currencyCode2",
+                lockMode = LockModeType.OPTIMISTIC
+        )
+})
 
 @Entity
-@Table(name = "rate")
-public class Rate implements Serializable{
-
+@Table(name = "RATE")
+public class Rate implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -21,6 +44,10 @@ public class Rate implements Serializable{
 
     @Column(name="RATE", nullable = false)
     private float rate;
+
+    @Version
+    @Column(name = "LAST_UPDATED_TIME")
+    private Timestamp updatedTime;
 
 
     public Rate() {
