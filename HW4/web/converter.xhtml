@@ -11,22 +11,18 @@
 
     <h:form>
         <h3>Please choose currency </h3>
-        <h:selectOneMenu value="#{converterManager.selectedCurrencyFrom}">
-            <f:selectItems value="#{converterManager.currenciesFrom}" var="c"
-                           itemLabel="#{c.code}" />
+        <h:selectOneMenu value="#{converterManager.selectedCurrencyFromCode}">
+            <f:selectItems value="#{converterManager.currenciesFromCodes}"/>
         </h:selectOneMenu>
-        <h:selectOneMenu value="#{converterManager.selectedCurrencyTo}">
-            <f:selectItems value="#{converterManager.currenciesTo}" var="c"
-                           itemLabel="#{c.code}" />
+        <h:selectOneMenu value="#{converterManager.selectedCurrencyToCode}">
+            <f:selectItems value="#{converterManager.currenciesToCodes}"/>
         </h:selectOneMenu>
         <hr/>
         <p>
             <h:outputLabel for="theValue" value="Enter amount: "/>
             <h:inputText id="theValue" value="#{converterManager.amount}"/>
         </p>
-    </h:form>
 
-    <h:form>
         <hr/>
         <p>
             <h:commandButton value="Calculate" action="#{converterManager.calculate}"/>

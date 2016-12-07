@@ -9,106 +9,105 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-
 
 @Named("converterManager")
 @SessionScoped
-public class ConverterManager implements Serializable{
-
+public class ConverterManager implements Serializable
+{
     @EJB
     ConverterController converterController;
-    private Currency selectedCurrencyFrom;
-    private List<Currency> currenciesFrom;
 
-    private Currency selectedCurrencyTo;
-    private List<Currency> currenciesTo;
+    private String selectedCurrencyFromCode;
+    private List<String> currenciesFromCodes;
+
+    private String selectedCurrencyToCode;
+    private List<String> currenciesToCodes;
 
     private float amount;
     private float convertedAmount;
 
-    //@Inject
-    //private Conversation conversation;
-
-    /*
-    private void startConversation() {
-        if (conversation.isTransient()) {
-            conversation.begin();
-        }
-    }
-
-    private void stopConversation() {
-        if (!conversation.isTransient()) {
-            conversation.end();
-        }
-    }*/
-
-    public Currency getSelectedCurrencyFrom() {
-        return selectedCurrencyFrom;
-    }
-
-    public void setSelectedCurrencyFrom(Currency selectedCurrencyFrom) {
-        this.selectedCurrencyFrom = selectedCurrencyFrom;
-    }
-
-    public List<Currency> getCurrenciesFrom() {
-        return currenciesFrom;
-    }
-
-    public void setCurrenciesFrom(List<Currency> currenciesFrom)
+    public String getSelectedCurrencyFromCode()
     {
-        this.currenciesFrom = currenciesFrom;
+        return selectedCurrencyFromCode;
     }
 
-    public Currency getSelectedCurrencyTo() {
-        return selectedCurrencyTo;
+    public void setSelectedCurrencyFromCode(String selectedCurrencyFromCode)
+    {
+        this.selectedCurrencyFromCode = selectedCurrencyFromCode;
     }
 
-    public void setSelectedCurrencyTo(Currency selectedCurrencyTo) {
-        this.selectedCurrencyTo = selectedCurrencyTo;
+    public List<String> getCurrenciesFromCodes()
+    {
+        return currenciesFromCodes;
     }
 
-    public List<Currency> getCurrenciesTo() {
-        return currenciesTo;
+    public void setCurrenciesFromCodes(List<String> currenciesFromCodes)
+    {
+        this.currenciesFromCodes = currenciesFromCodes;
     }
 
-    public void setCurrenciesTo(List<Currency> currenciesTo) {
-        this.currenciesTo = currenciesTo;
+    public String getSelectedCurrencyToCode()
+    {
+        return selectedCurrencyToCode;
     }
 
-    public float getAmount() {
+    public void setSelectedCurrencyToCode(String selectedCurrencyToCode)
+    {
+        this.selectedCurrencyToCode = selectedCurrencyToCode;
+    }
+
+    public List<String> getCurrenciesToCodes()
+    {
+        return currenciesToCodes;
+    }
+
+    public void setCurrenciesToCodes(List<String> currenciesToCodes)
+    {
+        this.currenciesToCodes = currenciesToCodes;
+    }
+
+    public float getAmount()
+    {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(float amount)
+    {
         this.amount = amount;
     }
 
-    public float getConvertedAmount() {
+    public float getConvertedAmount()
+    {
         return convertedAmount;
     }
 
-    public String createInitialData() {
-        try {
-            //startConversation();
+    public String createInitialData()
+    {
+        try
+        {
             converterController.createCurrency();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             handleException(e);
         }
+
         return jsf22Bugfix();
     }
 
-    public String checkData() {
-        try {
-            //startConversation();
+    public String checkData()
+    {
+        try
+        {
             converterController.checkData();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             handleException(e);
         }
+
         return jsf22Bugfix();
     }
 
@@ -116,15 +115,11 @@ public class ConverterManager implements Serializable{
     {
         try
         {
-            Rate rate = converterController.getRateForCurrencies(selectedCurrencyFrom, selectedCurrencyTo);
-            if (rate != null)
-            {
-                this.convertedAmount = amount * rate.getRate();
-            }
-            else
-            {
-                this.convertedAmount = 0;
-            }
+            Currency currencyFrom = converterController.getCurrency(selectedCurrencyFromCode);
+            Currency currencyTo = converterController.getCurrency(selectedCurrencyToCode);
+
+            Rate rate = converterController.getRateForCurrencies(currencyFrom, currencyTo);
+            this.convertedAmount = amount * rate.getRate();
         }
         catch (Exception ex)
         {
@@ -140,19 +135,27 @@ public class ConverterManager implements Serializable{
     {
         try
         {
-            amount = 0;
             createInitialData();
 
             ArrayList<Currency> currencies = this.converterController.getCurrencies();
 
-            if (currencies.size() > 0)
-            {
-                this.setSelectedCurrencyFrom(currencies.get(0));
-                this.setCurrenciesFrom(currencies);
+            ArrayList<String> currenciesFromCodes = new ArrayList<>();
+            ArrayList<String> currenciesToCodes = new ArrayList<>();
 
-                this.setSelectedCurrencyTo(currencies.get(0));
-                this.setCurrenciesTo(currencies);
+            for (Currency c : currencies)
+            {
+                currenciesFromCodes.add(c.getCode());
+                currenciesToCodes.add(c.getCode());
             }
+
+            setCurrenciesFromCodes(currenciesFromCodes);
+            setCurrenciesToCodes(currenciesToCodes);
+
+            if (currenciesFromCodes.size() > 0)
+                setSelectedCurrencyFromCode(currenciesFromCodes.get(0));
+
+            if (currenciesToCodes.size() > 0)
+                setSelectedCurrencyToCode(currenciesToCodes.get(0));
         }
         catch (Exception e)
         {
@@ -169,13 +172,13 @@ public class ConverterManager implements Serializable{
      *
      * @return an empty string.
      */
-    private String jsf22Bugfix() {
+    private String jsf22Bugfix()
+    {
         return "";
     }
 
-
-    private void handleException(Exception e) {
-        //stopConversation();
+    private void handleException(Exception e)
+    {
         e.printStackTrace(System.err);
     }
 }

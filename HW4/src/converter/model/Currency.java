@@ -13,11 +13,12 @@ import java.util.*;
         ),
 })
 
-
 @Entity
 @Table(name = "CURRENCY")
 public class Currency implements Serializable
 {
+    // NOTE: Having trouble getting OneToMany and ManyToOne to work, actually not used. We use queries instead.
+
     @Id
     private String code;
 
@@ -34,13 +35,15 @@ public class Currency implements Serializable
     public Currency()
     {}
 
-    public Currency(String code) {
+    public Currency(String code)
+    {
         this.code = code;
         //this.rates = new ArrayList<>();
         //this.reverseRates = new ArrayList<>();
     }
 
-    public String getCode() {
+    public String getCode()
+    {
         return code;
     }
 

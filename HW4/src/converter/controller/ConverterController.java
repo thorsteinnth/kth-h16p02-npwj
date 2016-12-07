@@ -27,7 +27,6 @@ public class ConverterController {
     private static final String ISK = "ISK";
     private static final String SEK = "SEK";
 
-
     public void createCurrency()
     {
         Currency EURc = new Currency(EUR);
@@ -68,20 +67,15 @@ public class ConverterController {
         em.persist(ISKToEURRate);
         em.persist(ISKToUSDRate);
         em.persist(ISKToSEKRate);
-
-
-        //List<Rate> rates = EURc.getRates();
-        //System.out.println(rates);
     }
 
     public void checkData()
     {
-        Currency EURc = em.find(Currency.class,EUR);
-        Currency ISKc = em.find(Currency.class,ISK);
+        Currency EURc = em.find(Currency.class, EUR);
+        Currency ISKc = em.find(Currency.class, ISK);
         getRatesForCurrency(EURc);
         getReverseRatesForCurrency(EURc);
         getRateForCurrencies(EURc,ISKc);
-
     }
 
     public ArrayList<Rate> getRatesForCurrency(Currency currency)
@@ -121,8 +115,12 @@ public class ConverterController {
     public ArrayList<Currency> getCurrencies()
     {
         List<Currency> currencies = em.createNamedQuery("getAllCurrencies", Currency.class).getResultList();
-
         return new ArrayList<>(currencies);
+    }
+
+    public Currency getCurrency(String currencyCode)
+    {
+        return em.find(Currency.class, currencyCode);
     }
 }
 

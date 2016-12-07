@@ -28,6 +28,8 @@ import java.sql.Timestamp;
 @Table(name = "RATE")
 public class Rate implements Serializable
 {
+    // NOTE: Having trouble getting OneToMany and ManyToOne to work, actually not used. We use queries instead.
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
