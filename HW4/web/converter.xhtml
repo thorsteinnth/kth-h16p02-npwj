@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>Welcome to the converter</title>
 </h:head>
@@ -9,16 +10,42 @@
     <h1>Welcome to the converter</h1>
 
     <h:form>
-        <h3>Create a New Account</h3>
+        <h3>Please choose currency </h3>
+        <h:selectOneMenu value="#{converterManager.selectedCurrencyFrom}">
+            <f:selectItems value="#{converterManager.currenciesFrom}" var="c"
+                           itemLabel="#{c.code}" />
+        </h:selectOneMenu>
+        <h:selectOneMenu value="#{converterManager.selectedCurrencyTo}">
+            <f:selectItems value="#{converterManager.currenciesTo}" var="c"
+                           itemLabel="#{c.code}" />
+        </h:selectOneMenu>
+        <hr/>
+        <p>
+            <h:outputLabel for="theValue" value="Enter amount: "/>
+            <h:inputText id="theValue" value="#{converterManager.amount}"/>
+        </p>
+    </h:form>
+
+    <h:form>
+        <hr/>
+        <p>
+            <h:commandButton value="Calculate" action="#{converterManager.calculate}"/>
+        </p>
+        <hr/>
+        <p>
+            <h:outputLabel for="result" value="Result: "/>
+            <h:outputText id="result" value="#{converterManager.convertedAmount}"/>
+        </p>
+    </h:form>
+
+    <h:form>
+        <h3>!!!!!! Initializing data !!!!!!!</h3>
         <p>
             <h:commandButton value="Initialize data" action="#{converterManager.createInitialData}"/>
         </p>
-        <hr/>
-
         <p>
             <h:commandButton value="check data" action="#{converterManager.checkData}"/>
         </p>
-
     </h:form>
 
 </h:body>

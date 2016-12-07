@@ -5,6 +5,15 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllCurrencies",
+                query = "SELECT currency FROM Currency currency",
+                lockMode = LockModeType.OPTIMISTIC
+        ),
+})
+
+
 @Entity
 @Table(name = "CURRENCY")
 public class Currency implements Serializable
