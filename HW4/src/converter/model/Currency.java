@@ -5,15 +5,10 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
-/**
- * Created by GretarAtli on 06/12/2016.
- */
-
 @Entity
 @Table(name = "CURRENCY")
 public class Currency implements Serializable
 {
-
     @Id
     private String code;
 
@@ -40,16 +35,17 @@ public class Currency implements Serializable
         return code;
     }
 
-
     /*
+    This was not working.
+    Could not get the rates through the OneToMany and ManyToOne relationships.
     public ArrayList<Rate> getRates()
     {
-
+        return new ArrayList(rates);
     }
 
     public ArrayList<Rate> getReverseRates()
     {
-
+        return new ArrayList(reverseRates);
     }
     */
 }

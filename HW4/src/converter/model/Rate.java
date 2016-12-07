@@ -3,8 +3,6 @@ package converter.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-
 
 @NamedQueries({
         @NamedQuery(
@@ -50,10 +48,11 @@ public class Rate implements Serializable
     private Timestamp updatedTime;
 
 
-    public Rate() {
-    }
+    public Rate()
+    {}
 
-    public Rate(Currency code1, Currency code2, float rate) {
+    public Rate(Currency code1, Currency code2, float rate)
+    {
         this.code1 = code1;
         this.code2 = code2;
         this.rate = rate;
@@ -67,16 +66,8 @@ public class Rate implements Serializable
         return code1;
     }
 
-    public void setCode1(Currency code1) {
-        this.code1 = code1;
-    }
-
     public Currency getCode2() {
         return code2;
-    }
-
-    public void setCode2(Currency code2) {
-        this.code2 = code2;
     }
 
     public float getRate() {
