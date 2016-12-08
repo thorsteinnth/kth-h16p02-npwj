@@ -9,15 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named("converterManager")
-@SessionScoped
+@ConversationScoped
 public class ConverterManager implements Serializable
 {
     @EJB
     ConverterController converterController;
+    @Inject
+    private Conversation conversation;
 
     private String selectedCurrencyFromCode;
     private List<String> currenciesFromCodes;
@@ -29,6 +34,19 @@ public class ConverterManager implements Serializable
     private float convertedAmount;
 
     private Exception exception;
+
+    private void startConversation() {
+        if (conversation.isTransient()) {
+            conversation.begin();
+        }
+    }
+
+    private void stopConversation() {
+        if (!conversation.isTransient()) {
+            conversation.end();
+        }
+    }
+
 
     public String getSelectedCurrencyFromCode()
     {
@@ -90,10 +108,12 @@ public class ConverterManager implements Serializable
         return convertedAmount;
     }
 
+    /*
     public String createInitialData()
     {
         try
         {
+
             converterController.createCurrency();
         }
         catch (Exception e)
@@ -103,7 +123,9 @@ public class ConverterManager implements Serializable
 
         return jsf22Bugfix();
     }
+    */
 
+    /*
     public String checkData()
     {
         try
@@ -117,11 +139,13 @@ public class ConverterManager implements Serializable
 
         return jsf22Bugfix();
     }
+    */
 
     public String calculate()
     {
         try
         {
+            startConversation();
             Currency currencyFrom = converterController.getCurrency(selectedCurrencyFromCode);
             Currency currencyTo = converterController.getCurrency(selectedCurrencyToCode);
 
@@ -144,7 +168,7 @@ public class ConverterManager implements Serializable
         try
         {
             //createInitialData();
-
+            startConversation();
             ArrayList<Currency> currencies = this.converterController.getCurrencies();
 
             ArrayList<String> currenciesFromCodes = new ArrayList<>();
@@ -188,6 +212,7 @@ public class ConverterManager implements Serializable
 
     private void handleException(Exception e)
     {
+        stopConversation();
         e.printStackTrace(System.err);
         exception = e;
     }

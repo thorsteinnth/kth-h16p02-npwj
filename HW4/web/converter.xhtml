@@ -5,44 +5,65 @@
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>Welcome to the converter</title>
+    <h:outputStylesheet library="css" name="style.css"  />
 </h:head>
-<h:body>
+<h:body style="align-content: center">
     <h1>Welcome to the converter</h1>
 
-    <h:form>
-        <h3>Please choose currency </h3>
-        <h:selectOneMenu value="#{converterManager.selectedCurrencyFromCode}">
+    <h:form style="vertical-align: middle">
+        <h3 style="font-size: x-large; color: darkred">
+            Please choose currency
+        </h3>
+        <h:outputLabel
+                style="font-style: inherit; font-size: larger; margin-right: 10px"
+                id="selectFromLabel"
+                for="selectFrom"
+                value="FROM: "/>
+
+        <h:selectOneMenu id="selectFrom" value="#{converterManager.selectedCurrencyFromCode}">
             <f:selectItems value="#{converterManager.currenciesFromCodes}"/>
         </h:selectOneMenu>
-        <h:selectOneMenu value="#{converterManager.selectedCurrencyToCode}">
+
+        <h:outputLabel
+                style="font-style: inherit; font-size: larger; margin-left: 10px"
+                id="selectToLabel"
+                for="selectTo"
+                value="TO: "/>
+
+
+        <h:selectOneMenu id="selectTo" value="#{converterManager.selectedCurrencyToCode}">
             <f:selectItems value="#{converterManager.currenciesToCodes}"/>
         </h:selectOneMenu>
         <hr/>
         <p>
-            <h:outputLabel for="theValue" value="Enter amount: "/>
-            <h:inputText id="theValue" value="#{converterManager.amount}"/>
+            <h:outputLabel
+                    style="font-size: larger; margin-right: 10px"
+                    for="theValue"
+                    value="Enter amount: "/>
+            <h:inputText
+                    style="vertical-align: middle; font-size: large"
+                    id="theValue"
+                    value="#{converterManager.amount}"/>
         </p>
 
         <hr/>
         <p>
-            <h:commandButton value="Calculate" action="#{converterManager.calculate}"/>
+            <h:commandButton
+                    style="padding-bottom: 10px; padding-left: 200px; padding-right: 200px; padding-top: 10px; background-color: darkred; color: white; font-size: medium"
+                    value="Calculate"
+                    action="#{converterManager.calculate}"/>
         </p>
         <hr/>
         <p>
-            <h:outputLabel for="result" value="Result: "/>
-            <h:outputText id="result" value="#{converterManager.convertedAmount}"/>
+            <h:outputLabel
+                    style="margin-right: 30px; font-size: larger"
+                    for="result"
+                    value="Result: "/>
+            <h:outputText
+                    style="font-size: larger"
+                    id="result"
+                    value="#{converterManager.convertedAmount}"/>
         </p>
     </h:form>
-
-    <h:form>
-        <h3>!!!!!! Initializing data !!!!!!!</h3>
-        <p>
-            <h:commandButton value="Initialize data" action="#{converterManager.createInitialData}"/>
-        </p>
-        <p>
-            <h:commandButton value="check data" action="#{converterManager.checkData}"/>
-        </p>
-    </h:form>
-
 </h:body>
 </html>
