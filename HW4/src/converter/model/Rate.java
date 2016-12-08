@@ -7,20 +7,17 @@ import java.sql.Timestamp;
 @NamedQueries({
         @NamedQuery(
                 name = "findRatesForCurrency",
-                query = "SELECT rate FROM Rate rate WHERE rate.code1.code LIKE :currencyCode",
-                lockMode = LockModeType.OPTIMISTIC
+                query = "SELECT rate FROM Rate rate WHERE rate.code1.code LIKE :currencyCode"
         ),
         @NamedQuery(
                 name = "findReverseRatesForCurrency",
-                query = "SELECT rate FROM Rate rate WHERE rate.code2.code LIKE :currencyCode",
-                lockMode = LockModeType.OPTIMISTIC
+                query = "SELECT rate FROM Rate rate WHERE rate.code2.code LIKE :currencyCode"
         ),
         @NamedQuery(
                 name = "findRateForCurrencies",
                 query = "SELECT rate FROM Rate rate WHERE " +
                         "rate.code1.code LIKE :currencyCode1 AND " +
-                        "rate.code2.code LIKE :currencyCode2",
-                lockMode = LockModeType.OPTIMISTIC
+                        "rate.code2.code LIKE :currencyCode2"
         )
 })
 
@@ -44,10 +41,6 @@ public class Rate implements Serializable
 
     @Column(name="RATE", nullable = false)
     private float rate;
-
-    @Version
-    @Column(name = "LAST_UPDATED_TIME")
-    private Timestamp updatedTime;
 
 
     public Rate()

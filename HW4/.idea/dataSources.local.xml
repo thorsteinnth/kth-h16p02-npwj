@@ -2,7 +2,7 @@
 <project version="4">
   <component name="dataSourceStorageLocal">
     <data-source name="converter@localhost" uuid="eddcd6f7-aae6-4f27-961d-25fb30743a75">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="">
+      <database-info product="Apache Derby" version="10.13.1.1 - (1765088)" jdbc-version="4.2" driver-name="Apache Derby Network Client JDBC Driver" driver-version="10.11.1.1 - (1616546)">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />

@@ -27,7 +27,7 @@
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="18" parent="14" name="SQL161207003347300">
+    <key id="18" parent="14" name="SQL161208143215420">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>CODE</ColNames>
       <Primary>1</Primary>
@@ -52,7 +52,7 @@
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="23" parent="15" name="SQL161207003347310">
+    <key id="23" parent="15" name="SQL161208143215430">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
@@ -61,7 +61,7 @@
       <ColNames>CODE_1</ColNames>
       <RefSchemaName>ROOT</RefSchemaName>
       <RefTableName>CURRENCY</RefTableName>
-      <RefKeyName>SQL161207003347300</RefKeyName>
+      <RefKeyName>SQL161208143215420</RefKeyName>
       <RefColNames>CODE</RefColNames>
       <OnDelete>no-action</OnDelete>
       <OnUpdate>no-action</OnUpdate>
@@ -70,7 +70,7 @@
       <ColNames>CODE_2</ColNames>
       <RefSchemaName>ROOT</RefSchemaName>
       <RefTableName>CURRENCY</RefTableName>
-      <RefKeyName>SQL161207003347300</RefKeyName>
+      <RefKeyName>SQL161208143215420</RefKeyName>
       <RefColNames>CODE</RefColNames>
       <OnDelete>no-action</OnDelete>
       <OnUpdate>no-action</OnUpdate>

@@ -8,8 +8,7 @@ import java.util.*;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllCurrencies",
-                query = "SELECT currency FROM Currency currency",
-                lockMode = LockModeType.OPTIMISTIC
+                query = "SELECT currency FROM Currency currency"
         ),
 })
 
@@ -27,10 +26,6 @@ public class Currency implements Serializable
 
     @OneToMany(mappedBy = "code2")
     private List<Rate> reverseRates;
-
-    @Version
-    @Column(name = "LAST_UPDATED_TIME")
-    private Timestamp updatedTime;
 
     public Currency()
     {}

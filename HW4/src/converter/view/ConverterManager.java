@@ -137,12 +137,13 @@ public class ConverterManager implements Serializable
         return jsf22Bugfix();
     }
 
+
     @PostConstruct
     public void init()
     {
         try
         {
-            createInitialData();
+            //createInitialData();
 
             ArrayList<Currency> currencies = this.converterController.getCurrencies();
 
@@ -169,6 +170,7 @@ public class ConverterManager implements Serializable
             handleException(e);
         }
     }
+
 
     /**
      * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10
