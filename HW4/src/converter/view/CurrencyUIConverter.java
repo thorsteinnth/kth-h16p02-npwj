@@ -2,6 +2,8 @@ package converter.view;
 
 import converter.model.Currency;
 
+
+/*
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -33,3 +35,4 @@ public class CurrencyUIConverter implements Converter
         }
     }
 }
+*/

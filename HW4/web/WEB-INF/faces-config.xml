@@ -7,7 +7,7 @@
     <navigation-rule>
         <from-view-id>/converter.xhtml</from-view-id>
         <navigation-case>
-            <if>#{false}</if>
+            <if>#{!converterManager.success}</if>
             <to-view-id>/error.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>

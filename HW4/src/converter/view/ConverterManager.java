@@ -28,6 +28,8 @@ public class ConverterManager implements Serializable
     private float amount;
     private float convertedAmount;
 
+    private Exception exception;
+
     public String getSelectedCurrencyFromCode()
     {
         return selectedCurrencyFromCode;
@@ -36,6 +38,11 @@ public class ConverterManager implements Serializable
     public void setSelectedCurrencyFromCode(String selectedCurrencyFromCode)
     {
         this.selectedCurrencyFromCode = selectedCurrencyFromCode;
+    }
+
+    public Exception getException()
+    {
+        return exception;
     }
 
     public List<String> getCurrenciesFromCodes()
@@ -180,5 +187,10 @@ public class ConverterManager implements Serializable
     private void handleException(Exception e)
     {
         e.printStackTrace(System.err);
+        exception = e;
+    }
+
+    public boolean getSuccess() {
+        return exception == null;
     }
 }
