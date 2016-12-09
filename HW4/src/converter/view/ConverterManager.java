@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -101,6 +100,11 @@ public class ConverterManager implements Serializable
     public void setAmount(float amount)
     {
         this.amount = amount;
+    }
+
+
+    public String getConvertedAmountDisplayString() {
+        return  getAmount() + " " + getSelectedCurrencyFromCode() + " = " + getConvertedAmount() + " " + getSelectedCurrencyToCode();
     }
 
     public float getConvertedAmount()
