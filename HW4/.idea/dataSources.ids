@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="converter@localhost" uuid="eddcd6f7-aae6-4f27-961d-25fb30743a75">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+    <database-info product="Apache Derby" version="10.13.1.1 - (1765088)" jdbc-version="4.2" driver-name="Apache Derby Network Client JDBC Driver" driver-version="10.11.1.1 - (1616546)">
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
     <schema name="APP" catalog=""/>
     <schema name="NULLID" catalog=""/>
+    <schema name="ROOT" catalog=""/>
     <schema name="SQLJ" catalog=""/>
     <schema name="SYS" catalog=""/>
     <schema name="SYSCAT" catalog=""/>
@@ -13,6 +17,25 @@
     <schema name="SYSIBM" catalog=""/>
     <schema name="SYSPROC" catalog=""/>
     <schema name="SYSSTAT" catalog=""/>
+    <table name="CURRENCY" schema="ROOT" catalog="" type="TABLE">
+      <column name="CODE" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="LAST_UPDATED_TIME" sqlType="TIMESTAMP" precision="29" scale="9" nullable="true" jdbcType="93"/>
+      <primary-key name="SQL161207230803200" columns="CODE"/>
+    </table>
+    <table name="RATE" schema="ROOT" catalog="" type="TABLE">
+      <column name="ID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="RATE" sqlType="DOUBLE" precision="52" scale="0" nullable="false" jdbcType="8"/>
+      <column name="CODE_1" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="CODE_2" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="SQL161209095945180" columns="ID"/>
+      <foreign-key name="FK_RATE_CODE_2" columns="CODE_2" ref-table="CURRENCY" ref-schema="ROOT" ref-catalog="" ref-columns="CODE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="FK_RATE_CODE_1" columns="CODE_1" ref-table="CURRENCY" ref-schema="ROOT" ref-catalog="" ref-columns="CODE" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="SEQUENCE" schema="ROOT" catalog="" type="TABLE">
+      <column name="SEQ_NAME" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SEQ_COUNT" sqlType="DECIMAL" precision="15" scale="0" nullable="true" jdbcType="3"/>
+      <primary-key name="SQL161207204355500" columns="SEQ_NAME"/>
+    </table>
     <table name="SYSALIASES" schema="SYS" catalog="" type="TABLE">
       <column name="ALIASID" sqlType="CHAR" precision="36" scale="0" nullable="false" jdbcType="1"/>
       <column name="ALIAS" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>

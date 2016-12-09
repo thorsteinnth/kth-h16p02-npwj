@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+  <component name="DataSourceManagerImpl" format="xml" hash="268010041">
     <data-source source="LOCAL" name="converter@localhost" uuid="eddcd6f7-aae6-4f27-961d-25fb30743a75">
       <driver-ref>derby.remote</driver-ref>
       <synchronize>true</synchronize>
