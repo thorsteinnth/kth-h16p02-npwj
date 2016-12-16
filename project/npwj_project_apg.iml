@@ -40,5 +40,6 @@
     <orderEntry type="library" name="JPA 2.0-2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1 - JSF" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1" level="application_server_libraries" />
+    <orderEntry type="library" name="eclipselink-2.3.0" level="project" />
   </component>
 </module>
