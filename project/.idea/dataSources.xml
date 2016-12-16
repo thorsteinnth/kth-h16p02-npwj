@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="converter@localhost" uuid="eddcd6f7-aae6-4f27-961d-25fb30743a75">
-      <driver-ref>derby.remote</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.apache.derby.jdbc.ClientDriver</jdbc-driver>
-      <jdbc-url>jdbc:derby://localhost:1527/converter;create=true</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="APGWebShop@localhost" uuid="de889692-e467-41e4-97f6-9f36062413dc">
+    <data-source source="LOCAL" name="APGWebShop@localhost" uuid="bd5321b4-631c-4793-9876-7eb1a6187a70">
       <driver-ref>derby.remote</driver-ref>
       <synchronize>true</synchronize>
       <configured-by-url>true</configured-by-url>

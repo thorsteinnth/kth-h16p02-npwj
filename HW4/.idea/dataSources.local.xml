@@ -10,5 +10,14 @@
       <user-name>root</user-name>
       <resolve-scope>:APP,ROOT</resolve-scope>
     </data-source>
+    <data-source name="APGWebShop@localhost" uuid="de889692-e467-41e4-97f6-9f36062413dc">
+      <database-info product="Apache Derby" version="10.13.1.1 - (1765088)" jdbc-version="4.2" driver-name="Apache Derby Network Client JDBC Driver" driver-version="10.11.1.1 - (1616546)">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <resolve-scope>:ROOT,APP</resolve-scope>
+    </data-source>
   </component>
 </project>
