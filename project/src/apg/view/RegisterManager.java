@@ -1,5 +1,8 @@
 package apg.view;
 
+import apg.controller.LoginController;
+import apg.exceptions.UserAlreadyExistException;
+
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +18,9 @@ import javax.inject.Named;
 @RequestScoped
 public class RegisterManager
 {
+    @EJB
+    LoginController loginController;
+
     private String email;
     private String password;
 
@@ -67,9 +73,20 @@ public class RegisterManager
     {
         if(isEmailValid() && isPasswordValid())
         {
-            return "Success";
+            try
+            {
+                loginController.createUser(email,password);
+            }
+            catch (UserAlreadyExistException userAlreadyExistException)
+            {
+                //TODO handle that shit
+            }
+            catch (Exception e)
+            {
 
-            //TODO add the person to database
+            }
+
+            return "Success";
         }
         else
         {

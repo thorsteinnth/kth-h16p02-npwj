@@ -16,8 +16,10 @@
                 <table style="margin: 0 auto">
                     <tr>
                         <td><h:outputText value="Enter Your email:" /></td>
-                        <td><h:inputText id="email" value="#{registerManager.email}"
-                                         required="true" requiredMessage="Please enter your email" /></td>
+                        <td><h:inputText id="email"
+                                         value="#{registerManager.email}"
+                                         required="true"
+                                         requiredMessage="Please enter your email" /></td>
                         <td><h:message for="email" style="color:red" /></td>
                         <td><h:outputText value="Email syntax not correct"
                                           style="color:red"
@@ -25,16 +27,20 @@
                     </tr>
                     <tr>
                         <td><h:outputText value="Enter Password :" /></td>
-                        <td><h:inputSecret id="psw" value="#{registerManager.password}"
-                                           required="true" requiredMessage="Please enter your password" /></td>
-                        <td><h:message for="psw" style="color:red" /></td>
+                        <td><h:inputSecret id="psw"
+                                           value="#{registerManager.password}"
+                                           required="true"
+                                           requiredMessage="Please enter your password" /></td>
+                        <td><h:message for="psw"
+                                       style="color:red" /></td>
                         <td><h:outputText value="The password needs to be longer than 8 characters"
                                           style="color:red"
                                           rendered="#{registerManager.showErrorPassword == 'syntexError'}"/></td>
                     </tr>
                     <tr>
                         <td />
-                        <td><h:commandButton value="Register" action="#{registerManager.add}" /></td>
+                        <td><h:commandButton value="Register"
+                                             action="#{registerManager.add}" /></td>
                     </tr>
                     <tr>
                         <td><h:outputLink value="login.xhtml">Log in</h:outputLink></td>

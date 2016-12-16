@@ -1,10 +1,14 @@
 package apg.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+
+@NamedQueries({
+        @NamedQuery(
+                name = "findUserByEmail",
+                query = "SELECT user FROM User user WHERE user.email LIKE :email"
+        ),
+})
 
 @Entity
 @Table(name = "USERS")
