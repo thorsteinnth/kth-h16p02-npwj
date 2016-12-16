@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
-@Named("converterManager")
+@Named("loginManager")
 @ConversationScoped
 public class LoginManager implements Serializable
 {
@@ -21,6 +21,11 @@ public class LoginManager implements Serializable
 
     @PostConstruct
     public void init()
+    {
+        //createTestUser();
+    }
+
+    public void createTestUser()
     {
         controller.createTestUser();
     }

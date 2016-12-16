@@ -1,15 +1,23 @@
 package apg.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
-public class User
+@Table(name = "USER")
+public class User implements Serializable
 {
     @Id
+    @Column(name="EMAIL", nullable = false)
     private String email;
+    @Column(name="PASSWORD", nullable = false)
     private String password;
+    @Column(name="ISADMIN", nullable = false)
     private boolean isAdmin;
+    @Column(name="ISBANNED", nullable = false)
     private boolean isBanned;
 
     public User()
