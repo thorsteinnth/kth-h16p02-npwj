@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="Derby (Remote) - apgwebshop@localhost" uuid="d769045d-c88d-4f5d-aa78-85fb1a01a982">
-      <secret-storage>memory</secret-storage>
+    <data-source name="apgwebshop@localhost" uuid="cc52cac3-f458-4a81-9e31-1f06e451cfc9">
+      <database-info product="Apache Derby" version="10.13.1.1 - (1765088)" jdbc-version="4.2" driver-name="Apache Derby Network Client JDBC Driver" driver-version="10.11.1.1 - (1616546)">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
       <user-name>root</user-name>
+      <resolve-scope>:ROOT,APP</resolve-scope>
     </data-source>
   </component>
 </project>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1154151656">
-    <data-source source="LOCAL" name="Derby (Remote) - apgwebshop@localhost" uuid="d769045d-c88d-4f5d-aa78-85fb1a01a982">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="apgwebshop@localhost" uuid="cc52cac3-f458-4a81-9e31-1f06e451cfc9">
       <driver-ref>derby.remote</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.apache.derby.jdbc.ClientDriver</jdbc-driver>
