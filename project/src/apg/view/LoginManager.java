@@ -1,7 +1,6 @@
 package apg.view;
 
 import apg.controller.LoginController;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
