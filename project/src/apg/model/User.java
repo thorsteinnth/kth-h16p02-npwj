@@ -17,7 +17,7 @@ public class User implements Serializable
     @Id
     @Column(name="EMAIL", nullable = false)
     private String email;
-    @Column(name="PASSWORD", nullable = false)
+    @Column(name="PASSW", nullable = false)
     private String password;
     @Column(name="ISADMIN", nullable = false)
     private boolean isAdmin;
