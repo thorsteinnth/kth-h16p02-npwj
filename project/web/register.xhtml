@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://www.w3.org/1999/XSL/Transform">
 
     <h:head>
         <title>Registration Page</title>
@@ -15,19 +16,28 @@
                 <table style="margin: 0 auto">
                     <tr>
                         <td><h:outputText value="Enter Your email:" /></td>
-                        <td><h:inputText id="email" value="#{user.email}"
-                                         required="true" requiredMessage="Please enter your email id" /></td>
+                        <td><h:inputText id="email" value="#{registerManager.email}"
+                                         required="true" requiredMessage="Please enter your email" /></td>
                         <td><h:message for="email" style="color:red" /></td>
+                        <c:choose>
+                            <c:when test="#{registerManager.showErrorEmail == true}">
+                                <td><h:outputText value="Email syntax not correct" style="color:red"  /></td>
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
+
                     </tr>
                     <tr>
                         <td><h:outputText value="Enter Password :" /></td>
-                        <td><h:inputSecret id="psw" value="#{user.password}"
+                        <td><h:inputSecret id="psw" value="#{registerManager.password}"
                                            required="true" requiredMessage="Please enter your password" /></td>
                         <td><h:message for="psw" style="color:red" /></td>
+                        <td><h:outputText value="password syntax not correct" style="color:red"  /></td>
                     </tr>
                     <tr>
                         <td />
-                        <td><h:commandButton value="Register" action="#{user.add}" /></td>
+                        <td><h:commandButton value="Register" action="#{registerManager.add}" /></td>
                     </tr>
                     <tr>
                         <td><h:outputLink value="login.xhtml">Log in</h:outputLink></td>
