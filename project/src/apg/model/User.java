@@ -2,18 +2,22 @@ package apg.model;
 
 public class User
 {
-    private String username;
+    private String email;
     private String password;
+    private boolean isAdmin;
+    private boolean isBanned;
 
-    public User(String username, String password)
+    public User(String email, String password, boolean isAdmin, boolean isBanned)
     {
-        this.username = username;
+        this.email = email;
         this.password = password;
+        this.isAdmin = isAdmin;
+        this.isBanned = isBanned;
     }
 
-    public String getUsername()
+    public String getEmail()
     {
-        return username;
+        return email;
     }
 
     public String getPassword()
@@ -21,12 +25,29 @@ public class User
         return password;
     }
 
+    public boolean isAdmin()
+    {
+        return isAdmin;
+    }
+
+    public boolean isBanned()
+    {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned)
+    {
+        isBanned = banned;
+    }
+
     @Override
     public String toString()
     {
         return "User{" +
-                "username='" + username + '\'' +
+                "email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", isBanned=" + isBanned +
                 '}';
     }
 }
