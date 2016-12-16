@@ -19,21 +19,18 @@
                         <td><h:inputText id="email" value="#{registerManager.email}"
                                          required="true" requiredMessage="Please enter your email" /></td>
                         <td><h:message for="email" style="color:red" /></td>
-                        <c:choose>
-                            <c:when test="#{registerManager.showErrorEmail == true}">
-                                <td><h:outputText value="Email syntax not correct" style="color:red"  /></td>
-                            </c:when>
-                            <c:otherwise>
-                            </c:otherwise>
-                        </c:choose>
-
+                        <td><h:outputText value="Email syntax not correct"
+                                          style="color:red"
+                                          rendered="#{registerManager.showErrorEmail == 'syntexError'}"/></td>
                     </tr>
                     <tr>
                         <td><h:outputText value="Enter Password :" /></td>
                         <td><h:inputSecret id="psw" value="#{registerManager.password}"
                                            required="true" requiredMessage="Please enter your password" /></td>
                         <td><h:message for="psw" style="color:red" /></td>
-                        <td><h:outputText value="password syntax not correct" style="color:red"  /></td>
+                        <td><h:outputText value="The password needs to be longer than 8 characters"
+                                          style="color:red"
+                                          rendered="#{registerManager.showErrorPassword == 'syntexError'}"/></td>
                     </tr>
                     <tr>
                         <td />
