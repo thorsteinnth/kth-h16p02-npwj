@@ -1,1 +1,1 @@
-/*INSERT INTO USERS VALUES ('thorsteinnth@gmail.com', 'mypassword', TRUE, FALSE)*/
+INSERT INTO USERS (EMAIL, PASSW, ISADMIN, ISBANNED) VALUES ('thorsteinnth@gmail.com', 'mypassword', 1, 0)
