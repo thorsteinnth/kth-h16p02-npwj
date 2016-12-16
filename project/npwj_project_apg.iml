@@ -14,6 +14,7 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="NewPersistenceUnit" />
+          <factory-entry name="apgPU" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/resources/META-INF/persistence.xml" />
       </configuration>
