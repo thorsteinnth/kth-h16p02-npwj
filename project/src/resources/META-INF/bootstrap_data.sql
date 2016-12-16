@@ -1,0 +1,1 @@
+INSERT INTO User VALUES ('thorsteinnth@gmail.com', 'mypassword', TRUE, FALSE)

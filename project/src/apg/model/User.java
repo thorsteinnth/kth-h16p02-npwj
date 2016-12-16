@@ -1,11 +1,19 @@
 package apg.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class User
 {
+    @Id
     private String email;
     private String password;
     private boolean isAdmin;
     private boolean isBanned;
+
+    public User()
+    {}
 
     public User(String email, String password, boolean isAdmin, boolean isBanned)
     {
