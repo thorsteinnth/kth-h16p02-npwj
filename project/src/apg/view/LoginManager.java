@@ -1,13 +1,6 @@
 package apg.view;
 
-<<<<<<< HEAD
-
-public class LoginManager
-{
-
-=======
 import apg.controller.LoginController;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -30,5 +23,4 @@ public class LoginManager implements Serializable
     {
         controller.createTestUser();
     }
->>>>>>> 17aec543c556e21ea823a55125bbc792cebd033e
 }
