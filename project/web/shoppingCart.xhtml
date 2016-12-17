@@ -5,7 +5,41 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
+
+    <ui:composition template="/templates/default/main.xhtml">
+    <ui:define name="content">
+        <h:body>
+            <f:view>
+
+                <h3 style="margin: 0 auto">Shopping card</h3>
+
+                <ul style="margin: 0 auto">
+                    <h:form>
+                        <h:outputLabel for="emailId" value="Welcome  "/>
+                        <h:outputText id="emailId" value="#{shoppingCartItem.username}"/>
+
+                        <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
+                            <li>
+                                <div id="Price">
+                                    <h:outputLabel for="priceText" value="Price: "/>
+                                    <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>
+                                </div>
+
+                                <div id="Stock">
+                                    <h:outputLabel for="stockText" value="Quantity: "/>
+                                    <h:outputText id="stockText" value="#{shoppingCartItem.quantity}"/>
+                                </div>
+
+                                <div id="Description">
+                                    <h:outputLabel for="descriptionText" value="Description: "/>
+                                    <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
+                                </div>
+                            </li>
+                        </ui:repeat>
+                    </h:form>
+                </ul>
+            </f:view>
+        </h:body>
+    </ui:define>
+    </ui:composition>
 </html>

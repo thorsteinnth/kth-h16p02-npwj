@@ -1,6 +1,7 @@
 package apg.view;
 
 import apg.controller.HomeController;
+import apg.controller.ShoppingCardController;
 import apg.model.ShoppingCartItem;
 
 import javax.ejb.EJB;
@@ -9,24 +10,32 @@ import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @ManagedBean
 @SessionScoped
-public class ShoppingCardManager implements Serializable
+public class ShoppingCartManager implements Serializable
 {
     @EJB
-    HomeController homeController;
+    ShoppingCardController shoppingCardController;
 
-    private ArrayList<ShoppingCartItem> shoppingCartItems;
+    private List<ShoppingCartItem> shoppingCartItems;
     private ShoppingCartItem shoppingCartItem;
     private int total;
+    private String username;
 
-    //region ########## Getter and Setter
-    public ArrayList<ShoppingCartItem> getShoppingCartItems() {
+    //region ########## Getter and Setter ##########
+    public List<ShoppingCartItem> getShoppingCartItems() {
+
+        if(shoppingCartItems == null)
+        {
+               shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
+        }
+
         return shoppingCartItems;
     }
 
-    public void setShoppingCartItems(ArrayList<ShoppingCartItem> shoppingCartItems) {
+    public void setShoppingCartItems(List<ShoppingCartItem> shoppingCartItems) {
         this.shoppingCartItems = shoppingCartItems;
     }
 
@@ -44,6 +53,14 @@ public class ShoppingCardManager implements Serializable
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public String getUsername() {
+        return shoppingCardController.getEmail();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     //endregion

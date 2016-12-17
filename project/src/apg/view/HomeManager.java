@@ -26,13 +26,6 @@ public class HomeManager implements Serializable
 
     //region ########## Getter and Setter ##########
     public List<Item> getItems() {
-
-        /*
-        items = new ArrayList<Item>();
-        items.add(new Item("Þorsteinn","small with small hat",10));
-        items.add(new Item("Stinni","big with big hat",10));
-        */
-
         if(items == null)
         {
             try
