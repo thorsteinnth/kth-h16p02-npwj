@@ -2,6 +2,7 @@ package apg.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @NamedQueries({
         @NamedQuery(
@@ -29,6 +30,8 @@ public class User implements Serializable
     private boolean isAdmin;
     @Column(name="ISBANNED", nullable = false)
     private boolean isBanned;
+    @OneToMany(mappedBy="user")
+    private List<ShoppingCartItem> shoppingCart;
 
     public User()
     {}

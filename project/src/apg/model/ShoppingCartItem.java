@@ -3,23 +3,35 @@ package apg.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "SCITEM")
 public class ShoppingCartItem
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="ITEM_SKU")
     private Item item;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="USER_ID")
+    private User user;
+    @Column(name = "QTY")
     private int quantity;
 
     public ShoppingCartItem()
     {}
 
-    public ShoppingCartItem(Item item)
+    public ShoppingCartItem(User user, Item item)
     {
+        this.user = user;
         this.item = item;
         this.quantity = 1;
+    }
+
+    public Long getId()
+    {
+        return id;
     }
 
     public Item getItem()
@@ -27,9 +39,9 @@ public class ShoppingCartItem
         return item;
     }
 
-    public void setItem(Item item)
+    public User getUser()
     {
-        this.item = item;
+        return user;
     }
 
     public int getQuantity()
@@ -46,7 +58,9 @@ public class ShoppingCartItem
     public String toString()
     {
         return "ShoppingCartItem{" +
-                "item=" + item +
+                "id=" + id +
+                ", item=" + item +
+                ", user=" + user +
                 ", quantity=" + quantity +
                 '}';
     }
