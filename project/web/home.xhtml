@@ -5,51 +5,51 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Welcome to Acme Plastic Gnomes Enter CyperSpace</title>
-        <h:outputStylesheet library="css" name="style.css"  />
-    </h:head>
 
-    <h:body>
+    <ui:composition template="/templates/default/main.xhtml">
+    <ui:define name="content">
 
-        <h1 style="margin: 0 auto">Welcome to the APG Web store</h1>
+        <h:body>
 
-        <h3 style="margin: 0 auto">Available gnomes</h3>
+            <h3 style="margin: 0 auto">Available gnomes</h3>
 
-        <ul style="margin: 0 auto">
-            <h:form>
-                <ui:repeat value="#{homeManager.items}" var="item">
-                    <li>
-                        <div id="Price">
-                            <h:outputLabel for="priceText" value="Price: "/>
-                            <h:outputText id="priceText" value="#{item.price}"/>
-                        </div>
+            <ul style="margin: 0 auto">
+                <h:form>
+                    <ui:repeat value="#{homeManager.items}" var="item">
+                        <li>
+                            <div id="Price">
+                                <h:outputLabel for="priceText" value="Price: "/>
+                                <h:outputText id="priceText" value="#{item.price}"/>
+                            </div>
 
-                        <div id="Stock">
-                            <h:outputLabel for="stockText" value="Stock: "/>
-                            <h:outputText id="stockText" value="#{item.stock}"/>
-                        </div>
+                            <div id="Stock">
+                                <h:outputLabel for="stockText" value="Stock: "/>
+                                <h:outputText id="stockText" value="#{item.stock}"/>
+                            </div>
 
-                        <div id="Description">
-                            <h:outputLabel for="descriptionText" value="Description: "/>
-                            <h:outputText id="descriptionText" value="#{item.description}"/>
-                        </div>
+                            <div id="Description">
+                                <h:outputLabel for="descriptionText" value="Description: "/>
+                                <h:outputText id="descriptionText" value="#{item.description}"/>
+                            </div>
 
-                        <div>
-                            <h:commandButton value="AddToBasket" action="#{homeManager.plusOnClickEventHandler}">
-                                <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
-                            </h:commandButton>
+                            <div>
+                                <h:commandButton value="AddToBasket" action="#{homeManager.plusOnClickEventHandler}">
+                                    <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
+                                </h:commandButton>
 
-                            <!--
-                            <h:link value="+" outcome="item" onclick="homeManager.plusOnClickEventHandler">
-                                <f:param name="id" value="#{item.SKU}" />
-                            </h:link>
-                            -->
-                        </div>
-                    </li>
-                </ui:repeat>
-            </h:form>
-        </ul>
-    </h:body>
+                                <!--
+                                <h:link value="+" outcome="item" onclick="homeManager.plusOnClickEventHandler">
+                                    <f:param name="id" value="#{item.SKU}" />
+                                </h:link>
+                                -->
+                            </div>
+                        </li>
+                    </ui:repeat>
+                </h:form>
+            </ul>
+        </h:body>
+
+    </ui:define>
+    </ui:composition>
 
 </html>
