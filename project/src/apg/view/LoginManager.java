@@ -5,8 +5,7 @@ import apg.model.User;
 import apg.utils.SessionUtils;
 
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -14,8 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named("loginManager")
-@ManagedBean
-@SessionScoped
+@RequestScoped
 public class LoginManager implements Serializable
 {
     @EJB
