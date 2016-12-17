@@ -11,11 +11,16 @@
     </h:head>
 
     <h:body>
+
+        <h1>Welcome to the APG Web store</h1>
+
+        <h3>Available gnomes</h3>
+
         <ul>
-            <ui:repeat value="#{bookCatalog.books}" var="book">
+            <ui:repeat value="#{homeManager.items}" var="item">
                 <li>
-                    <h:link value="#{book.title}" outcome="book">
-                        <f:param name="id" value="#{book.id}" />
+                    <h:link value="#{item.description}" outcome="item" onclick="">
+                        <f:param name="id" value="#{item.SKU}" />
                     </h:link>
                 </li>
             </ui:repeat>
