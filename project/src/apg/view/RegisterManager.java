@@ -16,7 +16,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
 @Named("registerManager")
 @RequestScoped
 public class RegisterManager
