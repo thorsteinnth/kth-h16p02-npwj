@@ -15,7 +15,8 @@ import java.util.List;
 
 @Named("homeManager")
 @SessionScoped
-public class HomeManager implements Serializable{
+public class HomeManager implements Serializable
+{
 
     @EJB
     HomeController homeController;
