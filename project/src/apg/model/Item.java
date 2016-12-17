@@ -1,10 +1,18 @@
 package apg.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+
+@NamedQueries({
+        @NamedQuery(
+                name = "findItemBySku",
+                query = "SELECT item FROM Item item WHERE item.SKU LIKE :SKU"
+        ),
+        @NamedQuery(
+                name = "getAllItems",
+                query = "SELECT item FROM Item item"
+        )
+})
 
 @Entity
 @Table(name = "ITEM")
@@ -13,19 +21,22 @@ public class Item implements Serializable
     @Id
     @Column(name="SKU", nullable = false)
     private String SKU;
-    @Column(name="DESCRIPTION", nullable = false)
+    @Column(name="DESCRIPTION", nullable = true)
     private String description;
     @Column(name="PRICE", nullable = false)
     private int price;
+    @Column(name="STOCK", nullable = false)
+    private int stock;
 
     public Item()
     {}
 
-    public Item(String SKU, String description, int price)
+    public Item(String SKU, String description, int price, int stock)
     {
         this.SKU = SKU;
         this.description = description;
         this.price = price;
+        this.stock = stock;
     }
 
     public String getSKU()
@@ -43,6 +54,11 @@ public class Item implements Serializable
         return price;
     }
 
+    public int getStock()
+    {
+        return stock;
+    }
+
     @Override
     public String toString()
     {
@@ -50,6 +66,7 @@ public class Item implements Serializable
                 "SKU='" + SKU + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
+                ", stock=" + stock +
                 '}';
     }
 }
