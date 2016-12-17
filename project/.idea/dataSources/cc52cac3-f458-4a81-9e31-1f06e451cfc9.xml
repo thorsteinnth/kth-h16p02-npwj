@@ -40,7 +40,7 @@
       <DataType>INTEGER(10)|4</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="20" parent="14" name="SQL161217155011670">
+    <key id="20" parent="14" name="SQL161217191935910">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>SKU</ColNames>
       <Primary>1</Primary>
@@ -67,7 +67,7 @@
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="25" parent="15" name="SQL161217155011660">
+    <key id="25" parent="15" name="SQL161217191935900">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>EMAIL</ColNames>
       <Primary>1</Primary>
