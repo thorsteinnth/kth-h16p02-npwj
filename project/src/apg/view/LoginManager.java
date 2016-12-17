@@ -25,9 +25,14 @@ public class LoginManager
     private String password;
 
     private String showErrorEmail;
+    private String emailErrorMsg;
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+
+    public static final String userOrPasswordIncorrectErrorMSG = "Either username or password is incorrect";
+    public static final String emailSyntexError = "Email syntex Error";
 
     //region ########## Getter and Setter ##########
     public String getEmail() {
@@ -52,6 +57,14 @@ public class LoginManager
 
     public void setShowErrorEmail(String showErrorEmail) {
         this.showErrorEmail = showErrorEmail;
+    }
+
+    public String getEmailErrorMsg() {
+        return emailErrorMsg;
+    }
+
+    public void setEmailErrorMsg(String emailErrorMsg) {
+        this.emailErrorMsg = emailErrorMsg;
     }
 
     //endregion
@@ -79,6 +92,19 @@ public class LoginManager
                 User user = loginController.getUser("bla", "bla");
                 return "success";
             }
+            catch (javax.ejb.EJBException ejbException)
+            {
+                if(ejbException.getCausedByException() instanceof javax.persistence.NoResultException)
+                {
+                    setShowErrorEmail("syntexError");
+                    setEmailErrorMsg(userOrPasswordIncorrectErrorMSG);
+                }
+                else
+                {
+                    throw ejbException;
+                }
+                return "failure";
+            }
             catch (Exception e)
             {
                 System.err.println(e);
@@ -88,6 +114,7 @@ public class LoginManager
         else
         {
             setShowErrorEmail("syntexError");
+            setEmailErrorMsg(emailSyntexError);
             return "failure";
         }
     }
