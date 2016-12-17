@@ -1,10 +1,18 @@
 package apg.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+
+@NamedQueries({
+        @NamedQuery(
+                name = "findItemBySku",
+                query = "SELECT item FROM Item item WHERE item.SKU LIKE :SKU"
+        ),
+        @NamedQuery(
+                name = "getAllItems",
+                query = "SELECT item FROM Item item"
+        )
+})
 
 @Entity
 @Table(name = "ITEM")
