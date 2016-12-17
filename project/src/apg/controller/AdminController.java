@@ -1,6 +1,7 @@
 package apg.controller;
 
 import apg.model.Item;
+import apg.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -19,6 +20,12 @@ public class AdminController
     public List<Item> getAllItems()
     {
         Query query = em.createNamedQuery("getAllItems", Item.class);
+        return query.getResultList();
+    }
+
+    public List<User> getAllUsers()
+    {
+        Query query = em.createNamedQuery("getAllUsers", User.class);
         return query.getResultList();
     }
 }

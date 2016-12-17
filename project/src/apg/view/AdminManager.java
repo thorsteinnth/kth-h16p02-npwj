@@ -2,6 +2,7 @@ package apg.view;
 
 import apg.controller.AdminController;
 import apg.model.Item;
+import apg.model.User;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -19,5 +20,10 @@ public class AdminManager implements Serializable
     public List<Item> getAllItems()
     {
         return this.controller.getAllItems();
+    }
+
+    public List<User> getAllUsers()
+    {
+        return this.controller.getAllUsers();
     }
 }
