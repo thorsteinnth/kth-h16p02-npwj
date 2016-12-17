@@ -2,6 +2,20 @@ package apg.model;
 
 import javax.persistence.*;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "findScItemsBySkyAndEmail",
+                query = "SELECT scItem FROM ShoppingCartItem scItem WHERE" +
+                        " scItem.item.SKU LIKE :SKU AND" +
+                        " scItem.user.email LIKE :email"
+        ),
+        @NamedQuery(
+                name = "findScItemsByEmail",
+                query = "SELECT scItem FROM ShoppingCartItem scItem WHERE" +
+                        " scItem.user.email LIKE :email"
+        )
+})
+
 @Entity
 @Table(name = "SCITEM")
 public class ShoppingCartItem
@@ -52,6 +66,16 @@ public class ShoppingCartItem
     public void setQuantity(int quantity)
     {
         this.quantity = quantity;
+    }
+
+    public void increaseQuantity()
+    {
+        this.quantity++;
+    }
+
+    public void decreaseQuantity()
+    {
+        this.quantity--;
     }
 
     public int getTotalAmount()
