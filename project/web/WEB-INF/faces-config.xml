@@ -7,17 +7,19 @@
     <navigation-rule>
         <from-view-id>/login.xhtml</from-view-id>
         <navigation-case>
-            <if>#{!loginManager.success}</if>
+            <from-action>#{loginManager.login}</from-action>
+            <from-outcome>login-success</from-outcome>
             <to-view-id>/home.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>/register.xhtml</from-view-id>
+        <from-view-id>/login.xhtml</from-view-id>
         <navigation-case>
-            <if>#{!registerManager.success}</if>
-            <to-view-id>/home.xhtml</to-view-id>
+            <from-action>#{loginManager.login}</from-action>
+            <from-outcome>login-failure</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-  
+
 </faces-config>
