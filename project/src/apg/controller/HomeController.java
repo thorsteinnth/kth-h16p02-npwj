@@ -34,7 +34,7 @@ public class HomeController
 
     public User getUser(String email)
     {
-        Query query = em.createNamedQuery("findUser", User.class);
+        Query query = em.createNamedQuery("findUserWithoutPassword", User.class);
         query.setParameter("email",email);
 
         User user = (User)query.getSingleResult();
@@ -45,10 +45,12 @@ public class HomeController
     @PostConstruct
     public void init()
     {
+        /*
         if(user != null)
         {
             user = getUser(SessionUtils.getUsername());
         }
+        */
     }
 
     //Get shoppingListForUser

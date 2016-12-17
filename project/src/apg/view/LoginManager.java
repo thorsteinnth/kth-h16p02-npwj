@@ -6,6 +6,7 @@ import apg.utils.SessionUtils;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;

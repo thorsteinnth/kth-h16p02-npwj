@@ -62,9 +62,24 @@ public class HomeManager implements Serializable
 
     //endregion
 
-    public void plusOnClickEventHandler()
+    public String plusOnClickEventHandler()
     {
         System.out.println("yeah I am here");
-        homeController.addShoppingCartItem(item);
+        //homeController.addShoppingCartItem(item);
+        return jsf22Bugfix();
+    }
+
+    /**
+     * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10
+     * of the JSF 2.2 specification states that action handling methods may be
+     * void. In JSF 2.2, however, a void action handling method plus an
+     * if-element that evaluates to true in the faces-config navigation case
+     * causes an exception.
+     *
+     * @return an empty string.
+     */
+    private String jsf22Bugfix()
+    {
+        return "";
     }
 }
