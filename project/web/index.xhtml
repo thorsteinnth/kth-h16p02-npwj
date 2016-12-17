@@ -5,7 +5,13 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-   <f:view>
-      <h:outputLabel value="Hello, world. This is the gnome shop."/>
-   </f:view>
+
+   <ui:composition template="/templates/default/main.xhtml">
+      <ui:define name="content">
+         <f:view>
+            <h:outputLabel value="Hello, world. This is the gnome shop."/>
+         </f:view>
+      </ui:define>
+   </ui:composition>
+
 </html>
