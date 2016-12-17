@@ -22,8 +22,8 @@ public class RegisterManager
     private String email;
     private String password;
 
-    private String showErrorEmail;
-    private String showErrorPassword;
+    private Boolean showEmailError;
+    private Boolean showPasswordError;
 
     private final int minPasswordLength = 8;
 
@@ -48,20 +48,24 @@ public class RegisterManager
         this.password = password;
     }
 
-    public String getShowErrorEmail() {
-        return showErrorEmail;
+    public Boolean getShowEmailError()
+    {
+        return showEmailError;
     }
 
-    public void setShowErrorEmail(String showErrorEmail) {
-        this.showErrorEmail = showErrorEmail;
+    public void setShowEmailError(Boolean showEmailError)
+    {
+        this.showEmailError = showEmailError;
     }
 
-    public String getShowErrorPassword() {
-        return showErrorPassword;
+    public Boolean getShowPasswordError()
+    {
+        return showPasswordError;
     }
 
-    public void setShowErrorPassword(String showErrorPassword) {
-        this.showErrorPassword = showErrorPassword;
+    public void setShowPasswordError(Boolean showPasswordError)
+    {
+        this.showPasswordError = showPasswordError;
     }
 
     //endregion
@@ -94,12 +98,12 @@ public class RegisterManager
         {
             if (!isEmailValid())
             {
-                setShowErrorEmail("syntexError");
+                setShowEmailError(true);
             }
 
             if (!isPasswordValid())
             {
-                setShowErrorPassword("syntexError");
+                setShowPasswordError(true);
             }
 
             return "registration-failure";

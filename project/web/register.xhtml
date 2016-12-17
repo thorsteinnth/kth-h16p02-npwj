@@ -23,7 +23,7 @@
                         <td><h:message for="email" style="color:red" /></td>
                         <td><h:outputText value="Email syntax not correct"
                                           style="color:red"
-                                          rendered="#{registerManager.showErrorEmail == 'syntexError'}"/></td>
+                                          rendered="#{registerManager.showEmailError}"/></td>
                     </tr>
                     <tr>
                         <td><h:outputText value="Enter Password :" /></td>
@@ -35,7 +35,7 @@
                                        style="color:red" /></td>
                         <td><h:outputText value="The password needs to be longer than 8 characters"
                                           style="color:red"
-                                          rendered="#{registerManager.showErrorPassword == 'syntexError'}"/></td>
+                                          rendered="#{registerManager.showPasswordError}"/></td>
                     </tr>
                     <tr>
                         <td />
