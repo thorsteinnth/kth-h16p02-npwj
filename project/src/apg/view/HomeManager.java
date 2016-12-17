@@ -65,7 +65,7 @@ public class HomeManager implements Serializable
     public String plusOnClickEventHandler()
     {
         System.out.println("yeah I am here");
-        //homeController.addShoppingCartItem(item);
+        homeController.addShoppingCartItem(item);
         return jsf22Bugfix();
     }
 

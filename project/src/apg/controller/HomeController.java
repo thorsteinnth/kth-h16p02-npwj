@@ -10,6 +10,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateful
@@ -28,8 +29,22 @@ public class HomeController
 
     public void addShoppingCartItem(Item item)
     {
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem(user,item);
-        em.persist(shoppingCartItem);
+        //VIRKAR
+
+        Query query = em.createNamedQuery("findScItemsBySkyAndEmail",ShoppingCartItem.class);
+        query.setParameter("SKU",item.getSKU());
+        query.setParameter("email",user.getEmail());
+        List<ShoppingCartItem> shoppingCartItems = query.getResultList();
+
+        if(shoppingCartItems.size() == 0)
+        {
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem(user,item);
+            em.persist(shoppingCartItem);
+        }
+        else
+        {
+            shoppingCartItems.get(0).increaseQuantity();
+        }
     }
 
     public User getUser(String email)
@@ -45,12 +60,10 @@ public class HomeController
     @PostConstruct
     public void init()
     {
-        /*
-        if(user != null)
+        if(user == null)
         {
             user = getUser(SessionUtils.getUsername());
         }
-        */
     }
 
     //Get shoppingListForUser

@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html">
 
 <ui:composition>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -15,7 +15,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Basket</a></li>
+                    <li><h:link value="Shopping cart" outcome="shoppingCart" /></li>
                     <li><a href="#">Logout</a></li>
                 </ul>
                 <!--<form class="navbar-form navbar-right">
