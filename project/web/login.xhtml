@@ -25,7 +25,7 @@
                                          requiredMessage="Email field must not be empty" />
                         </td>
                         <td><h:message for="inputName" style="color:red" /></td>
-                        <td><h:outputText value="Email syntax not correct"
+                        <td><h:outputText value="#{loginManager.emailErrorMsg}"
                                           style="color:red"
                                           rendered="#{loginManager.showErrorEmail == 'syntexError'}"/></td>
                     </tr>
