@@ -3,19 +3,14 @@ package apg.view;
 import apg.controller.LoginController;
 import apg.exceptions.UserAlreadyExistException;
 import apg.model.User;
+import apg.utils.SessionUtils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-
+import javax.servlet.http.HttpSession;
 
 @Named("registerManager")
 @RequestScoped
@@ -72,28 +67,32 @@ public class RegisterManager
     //endregion
 
     //region ########## Action Handlers ##########
-    public String add()
+
+    public String register()
     {
-        if(isEmailValid() && isPasswordValid())
+        if (isEmailValid() && isPasswordValid())
         {
             try
             {
-                loginController.createUser(email,password);
+                User user = loginController.createUser(email, password);
+                HttpSession session = SessionUtils.getSession();
+                session.setAttribute("username", user.getEmail());
+                return "registration-success";
             }
             catch (UserAlreadyExistException userAlreadyExistException)
             {
                 //TODO handle that shit
+                return "registration-failure";
             }
             catch (Exception e)
             {
-
+                System.err.println(e);
+                return "registration-failure";
             }
-
-            return "Success";
         }
         else
         {
-            if(!isEmailValid())
+            if (!isEmailValid())
             {
                 setShowErrorEmail("syntexError");
             }
@@ -102,12 +101,15 @@ public class RegisterManager
             {
                 setShowErrorPassword("syntexError");
             }
-            return "fail";
+
+            return "registration-failure";
         }
     }
+
     //endregion
 
     //region ########## Functions ##########
+
     private boolean isEmailValid()
     {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
@@ -120,8 +122,10 @@ public class RegisterManager
         {
             return false;
         }
+
         return true;
     }
+
     //endregion
 }
 

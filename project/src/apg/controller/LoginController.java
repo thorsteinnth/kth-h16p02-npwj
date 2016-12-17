@@ -27,16 +27,16 @@ public class LoginController
         em.persist(user);
     }
 
-    public void createUser(String email, String password) throws UserAlreadyExistException
+    public User createUser(String email, String password) throws UserAlreadyExistException
     {
-
         List<User> users = em.createNamedQuery("findUserByEmail", User.class)
                 .setParameter("email",email).getResultList();
 
-        if(users.size() == 0)
+        if (users.size() == 0)
         {
             User user = new User(email, password, true, false);
             em.persist(user);
+            return user;
         }
         else
         {
