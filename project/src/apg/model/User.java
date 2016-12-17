@@ -19,6 +19,10 @@ import java.util.List;
                 name = "findUserWithoutPassword",
                 query = "SELECT user FROM User user WHERE " +
                         "user.email LIKE :email "
+        ),
+        @NamedQuery(
+        name = "getAllUsers",
+        query = "SELECT user FROM User user"
         )
 })
 

@@ -25,12 +25,12 @@ public class ShoppingCartItem
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="ITEM_SKU")
+    @JoinColumn(name="ITEM_SKU", nullable = false)
     private Item item;
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="USER_ID")
+    @JoinColumn(name="USER_ID", nullable = false)
     private User user;
-    @Column(name = "QTY")
+    @Column(name = "QTY", nullable = false)
     private int quantity;
 
     public ShoppingCartItem()
@@ -76,6 +76,11 @@ public class ShoppingCartItem
     public void decreaseQuantity()
     {
         this.quantity--;
+    }
+
+    public int getTotalAmount()
+    {
+        return this.item.getPrice() * quantity;
     }
 
     @Override
