@@ -2,10 +2,13 @@ package apg.view;
 
 import apg.controller.LoginController;
 import apg.exceptions.UserAlreadyExistException;
+import apg.model.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -104,7 +107,7 @@ public class RegisterManager
     }
     //endregion
 
-    //region ########## Function ##########
+    //region ########## Functions ##########
     private boolean isEmailValid()
     {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
@@ -120,6 +123,5 @@ public class RegisterManager
         return true;
     }
     //endregion
-
 }
 

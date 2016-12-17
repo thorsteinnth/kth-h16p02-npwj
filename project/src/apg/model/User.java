@@ -8,6 +8,12 @@ import java.io.Serializable;
                 name = "findUserByEmail",
                 query = "SELECT user FROM User user WHERE user.email LIKE :email"
         ),
+        @NamedQuery(
+                name = "findUser",
+                query = "SELECT user FROM User user WHERE " +
+                        "user.email LIKE :email AND " +
+                        "user.password LIKE :password"
+        )
 })
 
 @Entity

@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -41,5 +42,16 @@ public class LoginController
         {
             throw new UserAlreadyExistException (userAlreadyExistSTR);
         }
+    }
+
+    public User getUser(String email, String password)
+    {
+        Query query = em.createNamedQuery("findUser", User.class);
+        query.setParameter("email",email);
+        query.setParameter("password",password);
+
+        User user = (User)query.getSingleResult();
+
+        return user;
     }
 }
