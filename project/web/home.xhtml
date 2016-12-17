@@ -5,7 +5,21 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world. This is my home page."/>
-</f:view>
+    <h:head>
+        <title>Welcome to Acme Plastic Gnomes Enter CyperSpace</title>
+        <h:outputStylesheet library="css" name="style.css"  />
+    </h:head>
+
+    <h:body>
+        <ul>
+            <ui:repeat value="#{bookCatalog.books}" var="book">
+                <li>
+                    <h:link value="#{book.title}" outcome="book">
+                        <f:param name="id" value="#{book.id}" />
+                    </h:link>
+                </li>
+            </ui:repeat>
+        </ul>
+    </h:body>
+
 </html>
