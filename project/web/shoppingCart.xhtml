@@ -11,12 +11,12 @@
         <h:body>
             <f:view>
 
-                <h3 style="margin: 0 auto">Shopping card</h3>
+                <h3 style="margin: 0 auto">Shopping cart</h3>
 
                 <ul style="margin: 0 auto">
-                    <h:form>
+                    <h:form rendered="#{!shoppingCartManager.shoppingCartEmpty}">
                         <h:outputLabel for="emailId" value="Welcome  "/>
-                        <h:outputText id="emailId" value="#{shoppingCartItem.username}"/>
+                        <h:outputText id="emailId" value="#{shoppingCartManager.username}"/>
 
                         <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
                             <li>
@@ -34,10 +34,33 @@
                                     <h:outputLabel for="descriptionText" value="Description: "/>
                                     <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
                                 </div>
+                                <div>
+                                    <h:commandButton value="Increase" action="#{shoppingCartManager.increaseQuantity}">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton value="Decrease" action="#{shoppingCartManager.decreaseQuantity}">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
+
+                                </div>
+
                             </li>
                         </ui:repeat>
+
+                        <div>
+                            <h:commandButton value="Buy"
+                                             action="#{shoppingCartManager.buy}"
+                                             rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
+                        </div>
+
                     </h:form>
                 </ul>
+
+                <h:outputText id="shoppingCartEmpty"
+                              value="Shopping cart empty! Please make us some money by buying stuff "
+                              rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
+
             </f:view>
         </h:body>
     </ui:define>

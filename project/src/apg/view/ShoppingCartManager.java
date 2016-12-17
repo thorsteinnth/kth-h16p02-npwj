@@ -1,15 +1,12 @@
 package apg.view;
 
-import apg.controller.HomeController;
 import apg.controller.ShoppingCardController;
 import apg.model.ShoppingCartItem;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -23,15 +20,24 @@ public class ShoppingCartManager implements Serializable
     private ShoppingCartItem shoppingCartItem;
     private int total;
     private String username;
+    private boolean isShoppingCartEmpty;
 
     //region ########## Getter and Setter ##########
     public List<ShoppingCartItem> getShoppingCartItems() {
 
         if(shoppingCartItems == null)
         {
-               shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
+            shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
         }
 
+        if(shoppingCartItems.size() == 0)
+        {
+            isShoppingCartEmpty = true;
+        }
+        else
+        {
+            isShoppingCartEmpty = false;
+        }
         return shoppingCartItems;
     }
 
@@ -63,15 +69,42 @@ public class ShoppingCartManager implements Serializable
         this.username = username;
     }
 
-    //endregion
+    public boolean isShoppingCartEmpty() {
+        return isShoppingCartEmpty;
+    }
+
+    public void setShoppingCartEmpty(boolean shoppingCartEmpty) {
+        isShoppingCartEmpty = shoppingCartEmpty;
+    }
+
+//endregion
 
     //region ########## Action handler ##########
     public String buy()
     {
         return jsf22Bugfix();
     }
-    //endregion
 
+    public String increaseQuantity()
+    {
+        for(ShoppingCartItem scItem : shoppingCartItems )
+        {
+            if(scItem.getId() == shoppingCartItem.getId())
+                scItem.increaseQuantity();
+        }
+        return jsf22Bugfix();
+    }
+
+    public String decreaseQuantity()
+    {
+        for(ShoppingCartItem scItem : shoppingCartItems )
+        {
+            if(scItem.getId() == shoppingCartItem.getId())
+                scItem.decreaseQuantity();
+        }
+        return jsf22Bugfix();
+    }
+    //endregion
 
     /**
      * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10
