@@ -5,7 +5,64 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
+
+    <ui:composition template="/templates/default/main.xhtml">
+    <ui:define name="content">
+        <h:body>
+            <f:view>
+
+                <h3 style="margin: 0 auto">Shopping cart</h3>
+
+                <ul style="margin: 0 auto">
+                    <h:form rendered="#{!shoppingCartManager.shoppingCartEmpty}">
+                        <h:outputLabel for="emailId" value="Welcome  "/>
+                        <h:outputText id="emailId" value="#{shoppingCartManager.username}"/>
+
+                        <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
+                            <li>
+                                <div id="Price">
+                                    <h:outputLabel for="priceText" value="Price: "/>
+                                    <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>
+                                </div>
+
+                                <div id="Stock">
+                                    <h:outputLabel for="stockText" value="Quantity: "/>
+                                    <h:outputText id="stockText" value="#{shoppingCartItem.quantity}"/>
+                                </div>
+
+                                <div id="Description">
+                                    <h:outputLabel for="descriptionText" value="Description: "/>
+                                    <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
+                                </div>
+                                <div>
+                                    <h:commandButton value="Increase" action="#{shoppingCartManager.increaseQuantity}">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton value="Decrease" action="#{shoppingCartManager.decreaseQuantity}">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
+
+                                </div>
+
+                            </li>
+                        </ui:repeat>
+
+                        <div>
+                            <h:commandButton value="Buy"
+                                             action="#{shoppingCartManager.buy}"
+                                             rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
+                        </div>
+
+                    </h:form>
+                </ul>
+
+                <h:outputText id="shoppingCartEmpty"
+                              value="Shopping cart empty! Please make us some money by buying stuff "
+                              rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
+
+            </f:view>
+        </h:body>
+    </ui:define>
+    </ui:composition>
 </html>
