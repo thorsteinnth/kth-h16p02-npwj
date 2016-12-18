@@ -9,6 +9,8 @@
     <ui:composition template="/templates/admin/main.xhtml">
     <ui:define name="content">
 
+        <h1>Users:</h1>
+
         <ul class = "list-group">
             <ui:repeat value="#{adminManager.allUsers}" var="user">
                 <li class = "list-group-item">

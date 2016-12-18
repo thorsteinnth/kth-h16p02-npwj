@@ -9,6 +9,12 @@
     <ui:composition template="/templates/admin/main.xhtml">
     <ui:define name="content">
 
+        <div style="margin-bottom: 50px;">
+            <h:button class="btn btn-primary" value="Create item" outcome="/admin/createItem" />
+        </div>
+
+        <h1>Current inventory:</h1>
+
         <ul class = "list-group">
             <ui:repeat value="#{adminManager.allItems}" var="inventoryItem">
                 <li class = "list-group-item">

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/templates/admin/main.xhtml">
+    <ui:define name="content">
+
+        <h1>Create item</h1>
+
+        <h:panelGroup layout="block" class="alert alert-success" rendered="#{adminManager.newItemItemCreatedSuccess}">
+            <h:outputText value="Success! Item successfully created" />
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" class="alert alert-danger" rendered="#{adminManager.newItemIllegalSku}">
+            <h:outputText value="Illegal SKU" />
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" class="alert alert-danger" rendered="#{adminManager.newItemItemAlreadyExists}">
+            <h:outputText value="Item already exists" />
+        </h:panelGroup>
+
+        <h:form>
+
+            <h:outputLabel for="newItemSKU" value="SKU: "/>
+            <div style="margin-bottom: 10px;">
+            <h:inputTextarea rows="1" cols="50" id="newItemSKU" value="#{adminManager.newItemSKU}"/>
+            </div>
+
+            <h:outputLabel for="newItemDescription" value="Description: "/>
+            <div style="margin-bottom: 10px;">
+            <h:inputTextarea rows="5" cols="50" id="newItemDescription" value="#{adminManager.newItemDescription}"/>
+            </div>
+
+            <h:outputLabel for="newItemPrice" value="Price: "/>
+            <div style="margin-bottom: 10px;">
+            <h:inputText id="newItemPrice" value="#{adminManager.newItemPrice}"/>
+            </div>
+
+            <h:outputLabel for="newItemStock" value="Stock: "/>
+            <div style="margin-bottom: 10px;">
+            <h:inputText id="newItemStock" value="#{adminManager.newItemStock}"/>
+            </div>
+
+            <h:commandButton class="btn btn-success" value="Create item" type="submit" action="#{adminManager.createNewItem}"/>
+
+        </h:form>
+
+    </ui:define>
+    </ui:composition>
+
+</html>
