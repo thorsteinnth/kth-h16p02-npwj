@@ -1,6 +1,7 @@
 package apg.view;
 
 import apg.controller.ShoppingCardController;
+import apg.exceptions.NotEnoughStockException;
 import apg.model.ShoppingCartItem;
 
 import javax.ejb.EJB;
@@ -21,14 +22,12 @@ public class ShoppingCartManager implements Serializable
     private int total;
     private String username;
     private boolean isShoppingCartEmpty;
+    private boolean showPopUp;
 
     //region ########## Getter and Setter ##########
     public List<ShoppingCartItem> getShoppingCartItems() {
 
-        if(shoppingCartItems == null)
-        {
-            shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
-        }
+        shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
 
         if(shoppingCartItems.size() == 0)
         {
@@ -77,40 +76,70 @@ public class ShoppingCartManager implements Serializable
         isShoppingCartEmpty = shoppingCartEmpty;
     }
 
-//endregion
+    public boolean isShowPopUp() {
+        return showPopUp;
+    }
+
+    public void setShowPopUp(boolean showPopUp) {
+        this.showPopUp = showPopUp;
+    }
+
+    //endregion
 
     //region ########## Action handler ##########
     public String buy()
     {
+        //showPopUp = true;
+        boolean buyResult;
+        try
+        {
+            buyResult = shoppingCardController.buy();
+        }
+        catch (NotEnoughStockException notEnoughStockException)
+        {
+            buyResult = false;
+
+            //TODO go to error msg view og eyða út shoppingCartinu
+        }
+        catch (Exception e)
+        {
+            buyResult = false;
+        }
+
         return jsf22Bugfix();
     }
 
     public String increaseQuantity()
     {
-        for(ShoppingCartItem scItem : shoppingCartItems )
-        {
-            if(scItem.getId() == shoppingCartItem.getId())
-                scItem.increaseQuantity();
-        }
+        shoppingCardController.increaseQuantity(shoppingCartItem);
         return jsf22Bugfix();
     }
 
     public String decreaseQuantity()
     {
-        for(ShoppingCartItem scItem : shoppingCartItems )
-        {
-            if(scItem.getId() == shoppingCartItem.getId())
-                scItem.decreaseQuantity();
-        }
+        shoppingCardController.decreaseQuantity(shoppingCartItem);
         return jsf22Bugfix();
     }
+
+    public String popupYes()
+    {
+        showPopUp = false;
+        return jsf22Bugfix();
+    }
+
+    public String popupNo()
+    {
+        showPopUp = false;
+        return jsf22Bugfix();
+    }
+
     //endregion
 
     /**
      * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10
      * of the JSF 2.2 specification states that action handling methods may be
      * void. In JSF 2.2, however, a void action handling method plus an
-     * if-element that evaluates to true in the faces-config navigation case
+     * if-element that evaluates to true in the faces-conffoig navigation case
      * causes an exception.
      *
      * @return an empty string.

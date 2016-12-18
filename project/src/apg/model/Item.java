@@ -1,5 +1,7 @@
 package apg.model;
 
+import apg.exceptions.NotEnoughStockException;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -49,6 +51,10 @@ public class Item implements Serializable
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getPrice()
     {
         return price;
@@ -57,6 +63,14 @@ public class Item implements Serializable
     public int getStock()
     {
         return stock;
+    }
+
+    public void withdraw(int amount) throws NotEnoughStockException
+    {
+        if(amount > stock)
+            throw new NotEnoughStockException("Overdraft attempted, stock: " + stock + ", amount: " + amount);
+
+        stock = stock - amount;
     }
 
     @Override

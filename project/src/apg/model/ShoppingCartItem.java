@@ -78,6 +78,11 @@ public class ShoppingCartItem
         this.quantity--;
     }
 
+    public void decreaseQuantity(int amount)
+    {
+        this.quantity = this.quantity - amount;
+    }
+
     public int getTotalAmount()
     {
         return this.item.getPrice() * quantity;

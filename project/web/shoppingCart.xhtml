@@ -8,8 +8,18 @@
 
     <ui:composition template="/templates/default/main.xhtml">
     <ui:define name="content">
+
+        <h:panelGroup layout="block" class="alert alert-success" rendered="#{adminManager.newItemItemCreatedSuccess}">
+            <h:outputText value="Success! Item successfully created" />
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" class="alert alert-danger" rendered="#{adminManager.newItemIllegalSku}">
+            <h:outputText value="Illegal SKU" />
+        </h:panelGroup>
+
+
         <h:body>
-            <f:view>
+            <f:view >
 
                 <h3 style="margin: 0 auto">Shopping cart</h3>
 
@@ -51,7 +61,7 @@
                         <div>
                             <h:commandButton value="Buy"
                                              action="#{shoppingCartManager.buy}"
-                                             rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
+                                             rendered="#{!shoppingCartManager.shoppingCartEmpty}"/>
                         </div>
 
                     </h:form>
@@ -62,6 +72,38 @@
                               rendered="#{shoppingCartManager.shoppingCartEmpty}"/>
 
             </f:view>
+            <!--  background-color: rgba(0,0,0,0.5);
+                  position: absolute;
+                  top: 0px;
+                  left: 0px;
+                  width: 100%;
+                  height: 100%;"-->
+
+            <h:panelGroup layout="block"
+                          class="popup-panel-overlay"
+                          rendered="#{shoppingCartManager.showPopUp}">
+
+                <div class="popup-panel"
+                     style="
+                            margin:100px;
+                            background-color: white;
+                            padding: 20px;
+                            border-radius: 5px;
+                            border: 1px solid #DDD;">
+
+                    <h:outputText id="popupBuyText" value="Are you sure you want to finish your purchase?"/>
+                    <br/>
+                    <h:commandButton value="Yes"
+                                     action="#{shoppingCartManager.popupYes}"
+                                     rendered="#{!shoppingCartManager.shoppingCartEmpty}"
+                                     style="margin-right: 20px"/>
+
+                    <h:commandButton value="No"
+                                     action="#{shoppingCartManager.popupYes}"
+                                     rendered="#{!shoppingCartManager.shoppingCartEmpty}"/>
+                </div>
+            </h:panelGroup>
+
         </h:body>
     </ui:define>
     </ui:composition>
