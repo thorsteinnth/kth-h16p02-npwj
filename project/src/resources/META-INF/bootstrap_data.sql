@@ -1,4 +1,4 @@
-INSERT INTO USERS (EMAIL, PASSW, ISADMIN, ISBANNED) VALUES ('thorsteinnth@gmail.com', 'mypassword', 1, 0)
+INSERT INTO USERS (EMAIL, PASSW, ISADMIN, ISBANNED) VALUES ('thorsteinnth@gmail.com', 'a', 1, 0)
 INSERT INTO USERS (EMAIL, PASSW, ISADMIN, ISBANNED) VALUES ('gretarg09@gmail.com', 'mypassword', 1, 0)
 
 INSERT INTO ITEM (SKU, DESCRIPTION, PRICE, STOCK) VALUES ('argur', 'Argur is mad', 999, 2)

@@ -35,37 +35,38 @@
 
         <h:body>
 
-            <h:outputText id="AvailableGnomes" value="Available gnomes: " style="margin-bottom: 20px; font-size: large"/>
+            <h:outputText id="AvailableGnomes"
+                          value="Available gnomes: "
+                          style="margin-bottom: 40px; font-size: large; font-style: italic"/>
 
             <ul style="margin: 0 auto">
                 <h:form>
                     <ui:repeat value="#{homeManager.items}" var="item">
-                        <li>
                             <div id="Name" style="font-size: large; color: #2b542c; ">
                                 <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
                                 <h:outputText id="nameText" value="#{item.SKU}"/>
                             </div>
-                            
-                            <div id="Price">
+                            <div id="Price" style="margin-left: 30px">
                                 <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
                                 <h:outputText id="priceText" value="#{item.price}"/>
                             </div>
 
-                            <div id="Stock">
+                            <div id="Stock" style="margin-left: 30px; margin-top: -5px">
                                 <h:outputLabel for="stockText" value="Stock: " style="margin-right: 5px"/>
                                 <h:outputText id="stockText" value="#{item.stock}"/>
                             </div>
 
-                            <div id="Description">
+                            <div id="Description" style="margin-left: 30px; margin-top: -5px">
                                 <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
                                 <h:outputText id="descriptionText" value="#{item.description}"/>
                             </div>
 
-                            <div>
+                            <div style="margin-bottom: 10px">
                                 <h:commandButton class="btn btn-default"
                                                  value="Add to shopping cart"
                                                  action="#{homeManager.plusOnClickEventHandler}"
-                                                 rendered="#{homeManager.userLoggedIn}">
+                                                 rendered="#{homeManager.userLoggedIn}"
+                                                 style="border: none; color: #122b40">
                                     <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
                                 </h:commandButton>
 
@@ -75,7 +76,6 @@
                                 </h:link>
                                 -->
                             </div>
-                        </li>
                     </ui:repeat>
                 </h:form>
             </ul>
