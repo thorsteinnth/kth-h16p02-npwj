@@ -2,6 +2,7 @@ package apg.controller;
 
 import apg.exceptions.UserAlreadyExistException;
 import apg.model.User;
+import apg.utils.SessionUtils;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -53,5 +54,11 @@ public class LoginController
         User user = (User)query.getSingleResult();
 
         return user;
+    }
+
+    public String getUsername()
+    {
+        String username = SessionUtils.getUsername();
+        return username;
     }
 }

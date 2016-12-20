@@ -3,6 +3,7 @@ package apg.view;
 import apg.controller.LoginController;
 import apg.model.User;
 import apg.utils.SessionUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -68,6 +69,13 @@ public class LoginManager implements Serializable
         this.emailErrorMsg = emailErrorMsg;
     }
 
+    public boolean isUserLoggedIn()
+    {
+        if(loginController.getUsername() == SessionUtils.unknownUser)
+            return false;
+        else
+            return true;
+    }
     //endregion
 
     //region ########## Action Handler ##########
@@ -123,6 +131,17 @@ public class LoginManager implements Serializable
         }
     }
 
+    public String logout()
+    {
+        HttpSession session = SessionUtils.getSession();
+        session.setAttribute("username", "");
+        return "logout";
+    }
+
+    public String cancel()
+    {
+        return "cancel";
+    }
     //endregion
 
     //region ########## Functions ##########
@@ -132,6 +151,6 @@ public class LoginManager implements Serializable
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
         return matcher.find();
     }
-    
+
     //endregion
 }

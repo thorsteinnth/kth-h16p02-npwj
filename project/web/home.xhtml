@@ -43,29 +43,30 @@
                     <ui:repeat value="#{homeManager.items}" var="item">
                         <li>
                             <div id="Name" style="font-size: large; color: #2b542c; ">
-                                <h:outputLabel for="nameText" value="Name: " style="margin-right: 10px"/>
+                                <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
                                 <h:outputText id="nameText" value="#{item.SKU}"/>
                             </div>
                             
                             <div id="Price">
-                                <h:outputLabel for="priceText" value="Price: " style="margin-right: 10px"/>
+                                <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
                                 <h:outputText id="priceText" value="#{item.price}"/>
                             </div>
 
                             <div id="Stock">
-                                <h:outputLabel for="stockText" value="Stock: " style="margin-right: 10px"/>
+                                <h:outputLabel for="stockText" value="Stock: " style="margin-right: 5px"/>
                                 <h:outputText id="stockText" value="#{item.stock}"/>
                             </div>
 
                             <div id="Description">
-                                <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 10px"/>
+                                <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
                                 <h:outputText id="descriptionText" value="#{item.description}"/>
                             </div>
 
                             <div>
                                 <h:commandButton class="btn btn-default"
                                                  value="Add to shopping cart"
-                                                 action="#{homeManager.plusOnClickEventHandler}">
+                                                 action="#{homeManager.plusOnClickEventHandler}"
+                                                 rendered="#{homeManager.userLoggedIn}">
                                     <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
                                 </h:commandButton>
 

@@ -102,6 +102,14 @@ public class ShoppingCartManager implements Serializable
         this.showFailureBanner = showFailureBanner;
     }
 
+    public boolean isShowTitleBanner()
+    {
+        if(!showSuccessBanner && !showFailureBanner)
+            return true;
+        else
+            return false;
+    }
+
     //endregion
 
     //region ########## Action handler ##########

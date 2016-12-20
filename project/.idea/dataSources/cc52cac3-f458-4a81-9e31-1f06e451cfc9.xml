@@ -42,7 +42,7 @@
       <DataType>INTEGER(10)|4</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="22" parent="14" name="SQL161218192632991">
+    <key id="22" parent="14" name="SQL161220160425240">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>SKU</ColNames>
       <Primary>1</Primary>
@@ -67,7 +67,7 @@
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="27" parent="15" name="SQL161218192633000">
+    <key id="27" parent="15" name="SQL161220160425250">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
@@ -76,7 +76,7 @@
       <ColNames>ITEM_SKU</ColNames>
       <RefSchemaName>ROOT</RefSchemaName>
       <RefTableName>ITEM</RefTableName>
-      <RefKeyName>SQL161218192632991</RefKeyName>
+      <RefKeyName>SQL161220160425240</RefKeyName>
       <RefColNames>SKU</RefColNames>
       <OnDelete>no-action</OnDelete>
       <OnUpdate>no-action</OnUpdate>
@@ -85,7 +85,7 @@
       <ColNames>USER_ID</ColNames>
       <RefSchemaName>ROOT</RefSchemaName>
       <RefTableName>USERS</RefTableName>
-      <RefKeyName>SQL161218192632990</RefKeyName>
+      <RefKeyName>SQL161220160425230</RefKeyName>
       <RefColNames>EMAIL</RefColNames>
       <OnDelete>no-action</OnDelete>
       <OnUpdate>no-action</OnUpdate>
@@ -126,7 +126,7 @@
       <DataType>VARCHAR(255)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="37" parent="17" name="SQL161218192632990">
+    <key id="37" parent="17" name="SQL161220160425230">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>EMAIL</ColNames>
       <Primary>1</Primary>

@@ -19,37 +19,40 @@
             Some items where not available in stock at the moment.
             The basket has been modified to correspond to the inventory status. TODO laga orðalag" />
             </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{shoppingCartManager.showTitleBanner}">
+                <h3 style="margin: 0 auto">Shopping cart</h3>
+            </h:panelGroup>
+
         </div>
 
         <h:body>
             <f:view >
 
-                <h3 style="margin: 0 auto">Shopping cart</h3>
+                <h:outputLabel for="emailId" value="Welcome  " style="margin-right: 5px; font-size: large"/>
+                <h:outputText id="emailId" value="#{shoppingCartManager.username}" style="margin-bottom: 20px; font-size: large"/>
 
                 <ul style="margin: 0 auto">
                     <h:form rendered="#{!shoppingCartManager.shoppingCartEmpty}">
-                        <h:outputLabel for="emailId" value="Welcome  "/>
-                        <h:outputText id="emailId" value="#{shoppingCartManager.username}"/>
-
                         <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
                             <li>
                                 <div id="Name">
-                                    <h:outputLabel for="nameText" value="Name: "/>
+                                    <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
                                     <h:outputText id="nameText" value="#{shoppingCartItem.item.SKU}"/>
                                 </div>
 
                                 <div id="Price">
-                                    <h:outputLabel for="priceText" value="Price: "/>
+                                    <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
                                     <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>
                                 </div>
 
                                 <div id="Stock">
-                                    <h:outputLabel for="stockText" value="Quantity: "/>
+                                    <h:outputLabel for="stockText" value="Quantity: " style="margin-right: 5px"/>
                                     <h:outputText id="stockText" value="#{shoppingCartItem.quantity}"/>
                                 </div>
 
                                 <div id="Description">
-                                    <h:outputLabel for="descriptionText" value="Description: "/>
+                                    <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
                                     <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
                                 </div>
                                 <div>

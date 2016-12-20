@@ -4,18 +4,11 @@ package apg.view;
 import apg.controller.HomeController;
 import apg.model.Item;
 import apg.utils.SessionUtils;
-import com.sun.deploy.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.PostActivate;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
-import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Named("homeManager")
@@ -79,12 +72,11 @@ public class HomeManager implements Serializable
         this.showFailureBanner = showFailureBanner;
     }
 
-    public String getWelcomeBannerText() {
-
-        String username = this.homeController.getUsername();
-        if(username != null && !username.isEmpty())
+    public String getWelcomeBannerText()
+    {
+        if(isUserLoggedIn())
         {
-            welcomeBannerText = String.format(welcomeBannerTextKnownUser, username);
+            welcomeBannerText = String.format(welcomeBannerTextKnownUser, homeController.getUsername());
         }
         else
         {
@@ -110,6 +102,27 @@ public class HomeManager implements Serializable
 
     public void setSuccessBannerText(String successBannerText) {
         this.successBannerText = successBannerText;
+    }
+
+    public boolean isUserLoggedIn()
+    {
+        if(homeController.getUsername() == SessionUtils.unknownUser)
+            return false;
+        else
+            return true;
+
+    }
+
+    public boolean isUserAdmin()
+    {
+        if(isUserLoggedIn())
+        {
+            return homeController.isUserAdmin();
+        }
+        else
+        {
+            return false;
+        }
     }
 
     //endregion

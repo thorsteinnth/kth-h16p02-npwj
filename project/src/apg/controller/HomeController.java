@@ -7,6 +7,7 @@ import apg.utils.SessionUtils;
 import org.eclipse.persistence.sessions.Session;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.SessionBean;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -73,17 +74,31 @@ public class HomeController
 
     public String getUsername()
     {
-        return SessionUtils.getUsername();
+        String username = SessionUtils.getUsername();
+        return username;
     }
 
     @PostConstruct
     public void init()
     {
-        if(user == null)
+        String username = SessionUtils.getUsername();
+
+        if(user == null && username != SessionUtils.unknownUser)
         {
             user = getUser(SessionUtils.getUsername());
         }
     }
 
+    public boolean isUserAdmin ()
+    {
+        if(user != null)
+        {
+            return user.isAdmin();
+        }
+        else
+        {
+            return false;
+        }
+    }
     //Get shoppingListForUser
 }
