@@ -136,11 +136,11 @@ public class ShoppingCardController {
                 //hérna þurfum við eitthvað transaction til þess að geta rollbackað ef ekki allt heppnast
 
                 try {
-                    tx = em.getTransaction();
-                    tx.begin();
+                    //tx = em.getTransaction();
+                    //tx.begin();
                     item.withdraw(scItem.getQuantity());
                     removeShoppingCartItemFromDatabase(scItem);
-                    tx.commit();
+                    //tx.commit();
                 }
                 catch (RuntimeException e) {
                     if ( tx != null && tx.isActive() ) tx.rollback();

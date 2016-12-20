@@ -9,14 +9,17 @@
     <ui:composition template="/templates/default/main.xhtml">
     <ui:define name="content">
 
-        <h:panelGroup layout="block" class="alert alert-success" rendered="#{adminManager.newItemItemCreatedSuccess}">
-            <h:outputText value="Success! Item successfully created" />
-        </h:panelGroup>
+        <div style="height: 80px">
+            <h:panelGroup layout="block" class="alert alert-success" rendered="#{shoppingCartManager.showSuccessBanner}">
+                <h:outputText value="purchase completed successfully" />
+            </h:panelGroup>
 
-        <h:panelGroup layout="block" class="alert alert-danger" rendered="#{adminManager.newItemIllegalSku}">
-            <h:outputText value="Illegal SKU" />
-        </h:panelGroup>
-
+            <h:panelGroup layout="block" class="alert alert-danger" rendered="#{shoppingCartManager.showFailureBanner}">
+                <h:outputText value="purchase did not go through.
+            Some items where not available in stock at the moment.
+            The basket has been modified to correspond to the inventory status. TODO laga orðalag" />
+            </h:panelGroup>
+        </div>
 
         <h:body>
             <f:view >
@@ -30,6 +33,11 @@
 
                         <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
                             <li>
+                                <div id="Name">
+                                    <h:outputLabel for="nameText" value="Name: "/>
+                                    <h:outputText id="nameText" value="#{shoppingCartItem.item.SKU}"/>
+                                </div>
+
                                 <div id="Price">
                                     <h:outputLabel for="priceText" value="Price: "/>
                                     <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>

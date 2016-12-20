@@ -3,8 +3,12 @@ package apg.view;
 
 import apg.controller.HomeController;
 import apg.model.Item;
+import apg.utils.SessionUtils;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.PostActivate;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
@@ -14,30 +18,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named("homeManager")
-@SessionScoped
+@RequestScoped
 public class HomeManager implements Serializable
 {
-
     @EJB
     HomeController homeController;
+
+    private static final String bannerTextModel = "You have: %1$d in your shopping cart" ;
 
     private List<Item> items;
     private Item item;
 
+    private String bannerText;
+    private boolean showSuccessBanner;
+    private boolean showFailureBanner;
+
     //region ########## Getter and Setter ##########
     public List<Item> getItems() {
-        if(items == null)
+        try
         {
-            try
-            {
-                items = homeController.getAllItems();
-            }
-            catch (Exception e)
-            {
-                System.err.println(e);
-            }
-            //TODO fara í controller og ná í items
+            items = homeController.getItems();
         }
+        catch (Exception e)
+        {
+            System.err.println(e);
+        }
+        //TODO fara í controller og ná í items
         return items;
     }
 
@@ -53,13 +59,47 @@ public class HomeManager implements Serializable
         this.item = item;
     }
 
-    //endregion
+    public String getBannerText() {
+        return bannerText;
+    }
+
+    public void setBannerText(String bannerText) {
+        this.bannerText = bannerText;
+    }
+
+    public boolean isShowSuccessBanner() {
+        return showSuccessBanner;
+    }
+
+    public void setShowSuccessBanner(boolean showSuccessBanner) {
+        this.showSuccessBanner = showSuccessBanner;
+    }
+
+    public boolean isShowFailureBanner() {
+        return showFailureBanner;
+    }
+
+    public void setShowFailureBanner(boolean showFailureBanner) {
+        this.showFailureBanner = showFailureBanner;
+    }
+
+//endregion
 
     public String plusOnClickEventHandler()
     {
-        System.out.println("yeah I am here");
-        homeController.addShoppingCartItem(item);
-        return jsf22Bugfix();
+        if(item.getStock() > 0)
+        {
+            homeController.addShoppingCartItem(item);
+            int nrOfItems = homeController.getNumberOfShoppingListItems();
+            bannerText = String.format(bannerTextModel, nrOfItems);
+            showSuccessBanner = true;
+            return jsf22Bugfix();
+        }
+        else
+        {
+            showFailureBanner = true;
+            return jsf22Bugfix();
+        }
     }
 
     /**
@@ -75,4 +115,5 @@ public class HomeManager implements Serializable
     {
         return "";
     }
+
 }

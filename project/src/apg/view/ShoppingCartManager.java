@@ -23,6 +23,8 @@ public class ShoppingCartManager implements Serializable
     private String username;
     private boolean isShoppingCartEmpty;
     private boolean showPopUp;
+    private boolean showSuccessBanner;
+    private boolean showFailureBanner;
 
     //region ########## Getter and Setter ##########
     public List<ShoppingCartItem> getShoppingCartItems() {
@@ -84,26 +86,49 @@ public class ShoppingCartManager implements Serializable
         this.showPopUp = showPopUp;
     }
 
+    public boolean isShowSuccessBanner() {
+        return showSuccessBanner;
+    }
+
+    public void setShowSuccessBanner(boolean showSuccessBanner) {
+        this.showSuccessBanner = showSuccessBanner;
+    }
+
+    public boolean isShowFailureBanner() {
+        return showFailureBanner;
+    }
+
+    public void setShowFailureBanner(boolean showFailureBanner) {
+        this.showFailureBanner = showFailureBanner;
+    }
+
     //endregion
 
     //region ########## Action handler ##########
     public String buy()
     {
         //showPopUp = true;
+        hideBanner();
         boolean buyResult;
         try
         {
             buyResult = shoppingCardController.buy();
+
+            if(buyResult)
+                showSuccessBanner = true;
+            else
+                showFailureBanner = true;
         }
         catch (NotEnoughStockException notEnoughStockException)
         {
             buyResult = false;
-
+            showFailureBanner = true;
             //TODO go to error msg view og eyða út shoppingCartinu
         }
         catch (Exception e)
         {
             buyResult = false;
+            showFailureBanner = false;
         }
 
         return jsf22Bugfix();
@@ -111,12 +136,14 @@ public class ShoppingCartManager implements Serializable
 
     public String increaseQuantity()
     {
+        hideBanner();
         shoppingCardController.increaseQuantity(shoppingCartItem);
         return jsf22Bugfix();
     }
 
     public String decreaseQuantity()
     {
+        hideBanner();
         shoppingCardController.decreaseQuantity(shoppingCartItem);
         return jsf22Bugfix();
     }
@@ -131,6 +158,12 @@ public class ShoppingCartManager implements Serializable
     {
         showPopUp = false;
         return jsf22Bugfix();
+    }
+
+    private void hideBanner()
+    {
+        this.showSuccessBanner = false;
+        this.showFailureBanner = false;
     }
 
     //endregion

@@ -21,7 +21,7 @@ public class HomeController
     @PersistenceContext(unitName = "apgPU")
     private EntityManager em;
 
-    public List<Item> getAllItems()
+    public List<Item> getItems()
     {
         Query query = em.createNamedQuery("getAllItems", Item.class);
         return query.getResultList();
@@ -43,6 +43,21 @@ public class HomeController
         {
             shoppingCartItems.get(0).increaseQuantity();
         }
+    }
+
+    public int getNumberOfShoppingListItems()
+    {
+        Query query = em.createNamedQuery("findScItemsByEmail",ShoppingCartItem.class);
+        query.setParameter("email",user.getEmail());
+        List<ShoppingCartItem> shoppingCartItems = query.getResultList();
+        int i = 0;
+
+        for(ShoppingCartItem scItems: shoppingCartItems)
+        {
+            i = i + scItems.getQuantity();
+        }
+
+        return i;
     }
 
     public User getUser(String email)
