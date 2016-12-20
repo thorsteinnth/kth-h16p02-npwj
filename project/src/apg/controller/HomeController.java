@@ -4,6 +4,7 @@ import apg.model.Item;
 import apg.model.ShoppingCartItem;
 import apg.model.User;
 import apg.utils.SessionUtils;
+import org.eclipse.persistence.sessions.Session;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -68,6 +69,11 @@ public class HomeController
         User user = (User)query.getSingleResult();
 
         return user;
+    }
+
+    public String getUsername()
+    {
+        return SessionUtils.getUsername();
     }
 
     @PostConstruct

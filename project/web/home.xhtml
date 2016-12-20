@@ -9,13 +9,27 @@
     <ui:composition template="/templates/default/main.xhtml">
     <ui:define name="content">
 
-        <div style="height: 80px">
+        <div style="height: 80px; vertical-align: middle">
             <h:panelGroup layout="block" class="alert alert-success" rendered="#{homeManager.showSuccessBanner}">
-                <h:outputText value="#{homeManager.bannerText}" />
+                <h:outputLabel for="successText"
+                               value="Success! "
+                               style="margin-right: 10px; font-size: large"/>
+                <h:outputText id="successText" value="#{homeManager.successBannerText}" />
             </h:panelGroup>
 
             <h:panelGroup layout="block" class="alert alert-danger" rendered="#{homeManager.showFailureBanner}">
-                <h:outputText value="Sorry this item is not available at the moment" />
+                <h:outputLabel for="failureText"
+                               value="Failure! "
+                               style="margin-right: 10px; font-size: large"/>
+                <h:outputText id="failureText" value="Sorry this item is not available at the moment" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{homeManager.showWelcomeBanner}">
+                <h:outputLabel for="welcomeText"
+                               value="Welcome "
+                               style="margin-right: 10px; font-size: x-large; margin-top: 10 px"/>
+                <h:outputText id="welcomeText"
+                              value="#{homeManager.welcomeBannerText}" style="font-size: large" />
             </h:panelGroup>
 
         </div>
@@ -49,7 +63,9 @@
                             </div>
 
                             <div>
-                                <h:commandButton value="AddToBasket" action="#{homeManager.plusOnClickEventHandler}">
+                                <h:commandButton class="btn btn-default"
+                                                 value="Add to shopping cart"
+                                                 action="#{homeManager.plusOnClickEventHandler}">
                                     <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
                                 </h:commandButton>
 

@@ -53,11 +53,17 @@
                                     <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
                                 </div>
                                 <div>
-                                    <h:commandButton value="Increase" action="#{shoppingCartManager.increaseQuantity}">
+                                    <h:commandButton class="btn btn-default"
+                                                     value="+"
+                                                     action="#{shoppingCartManager.increaseQuantity}"
+                                                     style="font-size: larger">
                                         <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
                                     </h:commandButton>
 
-                                    <h:commandButton value="Decrease" action="#{shoppingCartManager.decreaseQuantity}">
+                                    <h:commandButton class="btn btn-default"
+                                                     value="-"
+                                                     action="#{shoppingCartManager.decreaseQuantity}"
+                                                     style="font-size: larger">
                                         <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
                                     </h:commandButton>
 
@@ -68,8 +74,10 @@
 
                         <div>
                             <h:commandButton value="Buy"
+                                             class="btn btn-success"
                                              action="#{shoppingCartManager.buy}"
-                                             rendered="#{!shoppingCartManager.shoppingCartEmpty}"/>
+                                             rendered="#{!shoppingCartManager.shoppingCartEmpty}"
+                                             style="margin-top: 20px"/>
                         </div>
 
                     </h:form>

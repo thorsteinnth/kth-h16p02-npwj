@@ -4,6 +4,7 @@ package apg.view;
 import apg.controller.HomeController;
 import apg.model.Item;
 import apg.utils.SessionUtils;
+import com.sun.deploy.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,12 +25,15 @@ public class HomeManager implements Serializable
     @EJB
     HomeController homeController;
 
-    private static final String bannerTextModel = "You have: %1$d in your shopping cart" ;
+    private static final String successBannerTextModel = "You have: %1$d item(s) in your shopping cart" ;
+    private static final String welcomeBannerTextNoUser = "Unknown user please log in or register";
+    private static final String welcomeBannerTextKnownUser = "%1$s please enjoy our selection of gnomes.";
 
     private List<Item> items;
     private Item item;
 
-    private String bannerText;
+    private String successBannerText;
+    private String welcomeBannerText;
     private boolean showSuccessBanner;
     private boolean showFailureBanner;
 
@@ -59,14 +63,6 @@ public class HomeManager implements Serializable
         this.item = item;
     }
 
-    public String getBannerText() {
-        return bannerText;
-    }
-
-    public void setBannerText(String bannerText) {
-        this.bannerText = bannerText;
-    }
-
     public boolean isShowSuccessBanner() {
         return showSuccessBanner;
     }
@@ -83,7 +79,40 @@ public class HomeManager implements Serializable
         this.showFailureBanner = showFailureBanner;
     }
 
-//endregion
+    public String getWelcomeBannerText() {
+
+        String username = this.homeController.getUsername();
+        if(username != null && !username.isEmpty())
+        {
+            welcomeBannerText = String.format(welcomeBannerTextKnownUser, username);
+        }
+        else
+        {
+            welcomeBannerText = welcomeBannerTextNoUser;
+        }
+        return welcomeBannerText;
+    }
+
+    public void setWelcomeBannerText(String welcomeBannerText) {
+        this.welcomeBannerText = welcomeBannerText;
+    }
+
+    public boolean isShowWelcomeBanner()
+    {
+
+        boolean toReturn = (!showSuccessBanner && !showFailureBanner);
+        return toReturn;
+    }
+
+    public String getSuccessBannerText() {
+        return successBannerText;
+    }
+
+    public void setSuccessBannerText(String successBannerText) {
+        this.successBannerText = successBannerText;
+    }
+
+    //endregion
 
     public String plusOnClickEventHandler()
     {
@@ -91,7 +120,7 @@ public class HomeManager implements Serializable
         {
             homeController.addShoppingCartItem(item);
             int nrOfItems = homeController.getNumberOfShoppingListItems();
-            bannerText = String.format(bannerTextModel, nrOfItems);
+            successBannerText = String.format(successBannerTextModel, nrOfItems);
             showSuccessBanner = true;
             return jsf22Bugfix();
         }
