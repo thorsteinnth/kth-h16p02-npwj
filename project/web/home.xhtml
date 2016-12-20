@@ -25,18 +25,17 @@
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{homeManager.showWelcomeBanner}">
-                <h:outputLabel for="welcomeText"
-                               value="Welcome "
-                               style="margin-right: 10px; font-size: x-large; margin-top: 10 px"/>
+                <h3 style="margin: 0 auto">Welcome</h3>
                 <h:outputText id="welcomeText"
-                              value="#{homeManager.welcomeBannerText}" style="font-size: large" />
+                              value="#{homeManager.welcomeBannerText}"
+                              style="font-size: large" />
             </h:panelGroup>
 
         </div>
 
         <h:body>
 
-            <h3 style="margin: 0 auto" >Available gnomes</h3>
+            <h:outputText id="AvailableGnomes" value="Available gnomes: " style="margin-bottom: 20px; font-size: large"/>
 
             <ul style="margin: 0 auto">
                 <h:form>

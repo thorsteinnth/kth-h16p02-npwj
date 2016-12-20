@@ -20,8 +20,13 @@
             The basket has been modified to correspond to the inventory status. TODO laga orðalag" />
             </h:panelGroup>
 
-            <h:panelGroup layout="block" rendered="#{shoppingCartManager.showTitleBanner}">
+            <h:panelGroup layout="block" rendered="#{shoppingCartManager.showTitleBanner}" style="margin-right: 10px">
                 <h3 style="margin: 0 auto">Shopping cart</h3>
+                <!--<h:outputLabel for="emailId" value="Welcome  " style="margin-right: 5px; font-size: large"/>-->
+                <h:outputText id="emailId"
+                              value="#{shoppingCartManager.username}"
+                              style="margin-bottom: 20px;
+                              font-size: large"/>
             </h:panelGroup>
 
         </div>
@@ -29,8 +34,7 @@
         <h:body>
             <f:view >
 
-                <h:outputLabel for="emailId" value="Welcome  " style="margin-right: 5px; font-size: large"/>
-                <h:outputText id="emailId" value="#{shoppingCartManager.username}" style="margin-bottom: 20px; font-size: large"/>
+                <h:outputText id="Items" value="Items: " style="margin-bottom: 20px; font-size: large"/>
 
                 <ul style="margin: 0 auto">
                     <h:form rendered="#{!shoppingCartManager.shoppingCartEmpty}">
