@@ -5,22 +5,29 @@ import apg.exceptions.NotEnoughStockException;
 import apg.model.ShoppingCartItem;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class ShoppingCartManager implements Serializable
 {
     @EJB
     ShoppingCardController shoppingCardController;
 
+    private final static String purchaseFailureEdit ="purchase did not go through." +
+            " Some items where not available in stock at the moment." +
+            " The basket has been modified to correspond to the inventory status. TODO laga orðalag";
+    private final static String purchaseFailureTryAgain = "Purchase did not go through." +
+            "Something went wrong. Please try again.";
+
     private List<ShoppingCartItem> shoppingCartItems;
     private ShoppingCartItem shoppingCartItem;
-    private int total;
     private String username;
+    private String purchaseFailure;
     private boolean isShoppingCartEmpty;
     private boolean showPopUp;
     private boolean showSuccessBanner;
@@ -52,14 +59,6 @@ public class ShoppingCartManager implements Serializable
 
     public void setShoppingCartItem(ShoppingCartItem shoppingCartItem) {
         this.shoppingCartItem = shoppingCartItem;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
     }
 
     public String getUsername() {
@@ -110,6 +109,29 @@ public class ShoppingCartManager implements Serializable
             return false;
     }
 
+    public String getPurchaseFailure() {
+        return purchaseFailure;
+    }
+
+    public void setPurchaseFailure(String purchaseFailure) {
+        this.purchaseFailure = purchaseFailure;
+    }
+
+    public String getTotal()
+    {
+        int total = 0;
+
+        if(shoppingCartItems != null && shoppingCartItems.size() > 0)
+        {
+            for (ShoppingCartItem scItem: shoppingCartItems)
+            {
+                total += scItem.getQuantity() * scItem.getItem().getPrice();
+            }
+        }
+
+        return Integer.toString(total);
+    }
+
     //endregion
 
     //region ########## Action handler ##########
@@ -123,13 +145,19 @@ public class ShoppingCartManager implements Serializable
             buyResult = shoppingCardController.buy();
 
             if(buyResult)
+            {
                 showSuccessBanner = true;
+            }
             else
+            {
+                purchaseFailure = purchaseFailureEdit;
                 showFailureBanner = true;
+            }
         }
         catch (NotEnoughStockException notEnoughStockException)
         {
             buyResult = false;
+            purchaseFailure = purchaseFailureTryAgain;
             showFailureBanner = true;
             //TODO go to error msg view og eyða út shoppingCartinu
         }

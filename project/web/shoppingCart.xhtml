@@ -38,48 +38,61 @@
                               value="Items: "
                               style="margin-bottom: 40px; font-size: large; font-style: italic"/>
 
-                <ul style="margin: 0 auto">
+                <ul style="margin: 0 auto" class="list-group">
                     <h:form rendered="#{!shoppingCartManager.shoppingCartEmpty}">
                         <ui:repeat value="#{shoppingCartManager.shoppingCartItems}" var="shoppingCartItem">
-                            <div id="Name" style="font-size: large; color: #2b542c; ">
-                                <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
-                                <h:outputText id="nameText" value="#{shoppingCartItem.item.SKU}"/>
-                            </div>
-                            <div id="Price" style="margin-left: 30px">
-                                <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
-                                <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>
-                            </div>
-                            <div id="Stock" style="margin-left: 30px; margin-top: -5px">
-                                <h:outputLabel for="stockText" value="Quantity: " style="margin-right: 5px"/>
-                                <h:outputText id="stockText" value="#{shoppingCartItem.quantity}"/>
-                            </div>
-                            <div id="Description" style="margin-left: 30px; margin-top: -5px">
-                                <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
-                                <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
-                            </div>
-                            <div style="margin-bottom: 10px">
-                                <h:commandButton class="btn btn-default"
-                                                 value="+"
-                                                 action="#{shoppingCartManager.increaseQuantity}"
-                                                 style="font-size: larger; width: 100px; border: none;">
-                                    <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
-                                </h:commandButton>
+                            <li class="list-group-item">
+                                <div id="Name" style="font-size: large; color: #2b542c; ">
+                                    <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
+                                    <h:outputText id="nameText" value="#{shoppingCartItem.item.SKU}"/>
+                                </div>
+                                <div id="Price" style="margin-left: 30px">
+                                    <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
+                                    <h:outputText id="priceText" value="#{shoppingCartItem.item.price}"/>
+                                </div>
+                                <div id="Stock" style="margin-left: 30px; margin-top: -5px">
+                                    <h:outputLabel for="stockText" value="Quantity: " style="margin-right: 5px"/>
+                                    <h:outputText id="stockText" value="#{shoppingCartItem.quantity}"/>
+                                </div>
+                                <div id="Description" style="margin-left: 30px; margin-top: -5px">
+                                    <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
+                                    <h:outputText id="descriptionText" value="#{shoppingCartItem.item.description}"/>
+                                </div>
+                                <div style="margin-bottom: 10px">
+                                    <h:commandButton class="btn btn-default"
+                                                     value="+"
+                                                     action="#{shoppingCartManager.increaseQuantity}"
+                                                     style="font-size: larger; width: 100px; border: none;">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
 
-                                <h:commandButton class="btn btn-default"
-                                                 value="-"
-                                                 action="#{shoppingCartManager.decreaseQuantity}"
-                                                 style="font-size: larger; width: 100px; border: none;">
-                                    <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
-                                </h:commandButton>
+                                    <h:commandButton class="btn btn-default"
+                                                     value="-"
+                                                     action="#{shoppingCartManager.decreaseQuantity}"
+                                                     style="font-size: larger; width: 100px; border: none;">
+                                        <f:setPropertyActionListener target="#{shoppingCartManager.shoppingCartItem}" value="#{shoppingCartItem}"/>
+                                    </h:commandButton>
 
-                            </div>
+                                </div>
+                            </li>
                         </ui:repeat>
+                        <div id="Total" style="margin-top: 20px">
+                            <h:outputLabel rendered="#{!shoppingCartManager.shoppingCartEmpty}"
+                                           for="totalText"
+                                           value="Total: "
+                                           style="margin-right: 5px;
+                                           font-size: large"/>
+                            <h:outputText rendered="#{!shoppingCartManager.shoppingCartEmpty}"
+                                          id="totalText"
+                                          value="#{shoppingCartManager.total}"/>
+                        </div>
+
                         <div>
                             <h:commandButton value="Buy"
                                              class="btn btn-success"
                                              action="#{shoppingCartManager.buy}"
                                              rendered="#{!shoppingCartManager.shoppingCartEmpty}"
-                                             style="margin-top: 20px; width: 100px"/>
+                                             style="margin-top: 10px; width: 100px"/>
                         </div>
                     </h:form>
                 </ul>

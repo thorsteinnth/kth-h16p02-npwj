@@ -39,9 +39,10 @@
                           value="Available gnomes: "
                           style="margin-bottom: 40px; font-size: large; font-style: italic"/>
 
-            <ul style="margin: 0 auto">
+            <ul style="margin: 0 auto" class = "list-group">
                 <h:form>
                     <ui:repeat value="#{homeManager.items}" var="item">
+                        <li class="list-group-item">
                             <div id="Name" style="font-size: large; color: #2b542c; ">
                                 <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
                                 <h:outputText id="nameText" value="#{item.SKU}"/>
@@ -76,6 +77,7 @@
                                 </h:link>
                                 -->
                             </div>
+                        </li>
                     </ui:repeat>
                 </h:form>
             </ul>

@@ -133,8 +133,6 @@ public class ShoppingCardController {
             for(ShoppingCartItem scItem : shoppingCartItems) {
                 Item item = em.find(Item.class, scItem.getItem().getSKU());
 
-                //hérna þurfum við eitthvað transaction til þess að geta rollbackað ef ekki allt heppnast
-
                 item.withdraw(scItem.getQuantity());
                 removeShoppingCartItemFromDatabase(scItem);
             }
