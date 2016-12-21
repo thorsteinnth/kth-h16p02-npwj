@@ -14,30 +14,47 @@
         </div>
 
         <h1>Current inventory:</h1>
+        <h:form>
+            <ul class = "list-group">
+                <ui:repeat value="#{adminManager.allItems}" var="inventoryItem">
+                    <li class = "list-group-item">
 
-        <ul class = "list-group">
-            <ui:repeat value="#{adminManager.allItems}" var="inventoryItem">
-                <li class = "list-group-item">
+                        <h4 class = "list-group-item-heading">
+                            #{inventoryItem.SKU}
+                        </h4>
 
-                    <h4 class = "list-group-item-heading">
-                        #{inventoryItem.SKU}
-                    </h4>
+                        <div class="list-group-item-text">
+                            <h:outputText id="inventoryItemDescription" value="#{inventoryItem.description}"/>
+                        </div>
 
-                    <div class="list-group-item-text">
-                        <h:outputText id="inventoryItemDescription" value="#{inventoryItem.description}"/>
-                    </div>
+                        <div class="list-group-item-text">
+                            <h:outputText id="inventoryItemPrice" value="Price: #{inventoryItem.price}"/>
+                        </div>
 
-                    <div class="list-group-item-text">
-                        <h:outputText id="inventoryItemPrice" value="Price: #{inventoryItem.price}"/>
-                    </div>
+                        <div class="list-group-item-text">
+                            <h:outputText id="inventoryItemStock" value="Stock: #{inventoryItem.stock}"/>
+                        </div>
 
-                    <div class="list-group-item-text">
-                        <h:outputText id="inventoryItemStock" value="Stock: #{inventoryItem.stock}"/>
-                    </div>
+                        <div style="margin-top: 10px;">
 
-                </li>
-            </ui:repeat>
-        </ul>
+                            <span style="margin-right: 5px;">
+                                <h:commandButton class="btn btn-warning" value="Edit" action="#{adminManager.editItem}">
+                                    <f:setPropertyActionListener target="#{adminManager.itemToDelete}" value="#{inventoryItem}"/>
+                                </h:commandButton>
+                            </span>
+
+                            <span style="margin-right: 5px;">
+                                <h:commandButton class="btn btn-danger" value="Delete" action="#{adminManager.deleteItem}">
+                                    <f:setPropertyActionListener target="#{adminManager.itemToDelete}" value="#{inventoryItem}"/>
+                                </h:commandButton>
+                            </span>
+
+                        </div>
+
+                    </li>
+                </ui:repeat>
+            </ul>
+        </h:form>
 
     </ui:define>
     </ui:composition>
