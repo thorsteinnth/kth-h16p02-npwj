@@ -14,6 +14,9 @@
         <f:view>
             <h:form id="registerForm">
                 <table style="margin: 0 auto">
+                    <tr style="margin-bottom: 100px">
+                        <th>Registration Page</th>
+                    </tr>
                     <tr>
                         <td><h:outputText value="Enter Your email:" /></td>
                         <td><h:inputText id="email"
@@ -24,6 +27,9 @@
                         <td><h:outputText value="Email syntax not correct"
                                           style="color:red"
                                           rendered="#{registerManager.showEmailError}"/></td>
+                        <td><h:outputText value="Email is already in use"
+                                          style="color:red"
+                                          rendered="#{registerManager.showEmailAlreadyInUse}"/></td>
                     </tr>
                     <tr>
                         <td><h:outputText value="Enter Password :" /></td>

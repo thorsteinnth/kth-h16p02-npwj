@@ -8,7 +8,7 @@ import apg.model.User;
 import apg.utils.SessionUtils;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
+import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
@@ -16,6 +16,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Stateful
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ShoppingCardController {
 
     User user;
@@ -124,10 +125,9 @@ public class ShoppingCardController {
         }
     }
 
-    public synchronized boolean buy() throws NotEnoughStockException
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean buy() throws NotEnoughStockException
     {
-        //TODO skoða synch vandamál
-
         if(checkInventory())
         {
             for(ShoppingCartItem scItem : shoppingCartItems) {
@@ -135,17 +135,8 @@ public class ShoppingCardController {
 
                 //hérna þurfum við eitthvað transaction til þess að geta rollbackað ef ekki allt heppnast
 
-                try {
-                    //tx = em.getTransaction();
-                    //tx.begin();
-                    item.withdraw(scItem.getQuantity());
-                    removeShoppingCartItemFromDatabase(scItem);
-                    //tx.commit();
-                }
-                catch (RuntimeException e) {
-                    if ( tx != null && tx.isActive() ) tx.rollback();
-                    throw e; // or display error message
-                }
+                item.withdraw(scItem.getQuantity());
+                removeShoppingCartItemFromDatabase(scItem);
             }
 
             refreshShoppingCardItems();
@@ -155,7 +146,6 @@ public class ShoppingCardController {
         {
             return false;
         }
-
     }
 
     public boolean checkInventory()

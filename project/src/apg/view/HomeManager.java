@@ -20,7 +20,7 @@ public class HomeManager implements Serializable
 
     private static final String successBannerTextModel = "You have: %1$d item(s) in your shopping cart" ;
     private static final String welcomeBannerTextNoUser = "Unknown user please log in or register";
-    private static final String welcomeBannerTextKnownUser = "%1$s please enjoy our selection of gnomes.";
+    private static final String welcomeBannerTextKnownUser = "Please enjoy our selection of gnomes.";
 
     private List<Item> items;
     private Item item;
@@ -76,7 +76,7 @@ public class HomeManager implements Serializable
     {
         if(isUserLoggedIn())
         {
-            welcomeBannerText = String.format(welcomeBannerTextKnownUser, homeController.getUsername());
+            welcomeBannerText = welcomeBannerTextKnownUser;
         }
         else
         {
@@ -125,6 +125,15 @@ public class HomeManager implements Serializable
         }
     }
 
+    public String getUsernameStringToPublish()
+    {
+        String username = homeController.getUsername();
+
+        if(username == SessionUtils.unknownUser)
+            return "";
+        else
+            return username;
+    }
     //endregion
 
     public String plusOnClickEventHandler()

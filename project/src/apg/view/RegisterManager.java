@@ -24,6 +24,7 @@ public class RegisterManager
     private String password;
 
     private Boolean showEmailError;
+    private Boolean showEmailAlreadyInUse;
     private Boolean showPasswordError;
 
     private final int minPasswordLength = 8;
@@ -69,6 +70,14 @@ public class RegisterManager
         this.showPasswordError = showPasswordError;
     }
 
+    public Boolean getShowEmailAlreadyInUse() {
+        return showEmailAlreadyInUse;
+    }
+
+    public void setShowEmailAlreadyInUse(Boolean showEmailAlreadyInUse) {
+        this.showEmailAlreadyInUse = showEmailAlreadyInUse;
+    }
+
     //endregion
 
     //region ########## Action Handlers ##########
@@ -86,7 +95,7 @@ public class RegisterManager
             }
             catch (UserAlreadyExistException userAlreadyExistException)
             {
-                //TODO handle that shit
+                showEmailAlreadyInUse = true;
                 return "registration-failure";
             }
             catch (Exception e)
