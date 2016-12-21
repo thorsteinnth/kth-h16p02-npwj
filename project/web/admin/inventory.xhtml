@@ -13,6 +13,10 @@
             <h:button class="btn btn-primary" value="Create item" outcome="/admin/createItem" />
         </div>
 
+        <h:panelGroup layout="block" class="alert alert-success" rendered="#{adminManager.itemDeleteSuccess}">
+            <h:outputText value="Item successfully deleted" />
+        </h:panelGroup>
+
         <h1>Current inventory:</h1>
         <h:form>
             <ul class = "list-group">

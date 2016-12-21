@@ -28,6 +28,7 @@ public class AdminManager implements Serializable
     private boolean newItemItemCreatedSuccess;
 
     private Item itemToDelete;
+    private boolean itemDeleteSuccess;
 
     //region Getters and setters
 
@@ -96,6 +97,11 @@ public class AdminManager implements Serializable
         this.itemToDelete = itemToDelete;
     }
 
+    public boolean isItemDeleteSuccess()
+    {
+        return itemDeleteSuccess;
+    }
+
     //endregion
 
     //region Methods
@@ -128,7 +134,8 @@ public class AdminManager implements Serializable
 
     public void deleteItem()
     {
-        System.out.println(itemToDelete);
+        this.controller.deleteItem(itemToDelete);
+        this.itemDeleteSuccess = true;
     }
 
     public List<Item> getAllItems()

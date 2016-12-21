@@ -44,4 +44,11 @@ public class AdminController
         Item newItem = new Item(sku, description, price, quantity);
         em.persist(newItem);
     }
+
+    public void deleteItem(Item item)
+    {
+        // Need to find the item, make sure that we have an attached instance of it
+        Item itemToRemove = em.getReference(Item.class, item.getSKU());
+        em.remove(itemToRemove);
+    }
 }
