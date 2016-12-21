@@ -4,8 +4,10 @@ import apg.model.Item;
 import apg.model.ShoppingCartItem;
 import apg.model.User;
 import apg.utils.SessionUtils;
+import org.eclipse.persistence.sessions.Session;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.SessionBean;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,7 +23,7 @@ public class HomeController
     @PersistenceContext(unitName = "apgPU")
     private EntityManager em;
 
-    public List<Item> getAllItems()
+    public List<Item> getItems()
     {
         Query query = em.createNamedQuery("getAllItems", Item.class);
         return query.getResultList();
@@ -45,6 +47,21 @@ public class HomeController
         }
     }
 
+    public int getNumberOfShoppingListItems()
+    {
+        Query query = em.createNamedQuery("findScItemsByEmail",ShoppingCartItem.class);
+        query.setParameter("email",user.getEmail());
+        List<ShoppingCartItem> shoppingCartItems = query.getResultList();
+        int i = 0;
+
+        for(ShoppingCartItem scItems: shoppingCartItems)
+        {
+            i = i + scItems.getQuantity();
+        }
+
+        return i;
+    }
+
     public User getUser(String email)
     {
         Query query = em.createNamedQuery("findUserWithoutPassword", User.class);
@@ -55,14 +72,33 @@ public class HomeController
         return user;
     }
 
+    public String getUsername()
+    {
+        String username = SessionUtils.getUsername();
+        return username;
+    }
+
     @PostConstruct
     public void init()
     {
-        if(user == null)
+        String username = SessionUtils.getUsername();
+
+        if(user == null && username != SessionUtils.unknownUser)
         {
             user = getUser(SessionUtils.getUsername());
         }
     }
 
+    public boolean isUserAdmin ()
+    {
+        if(user != null)
+        {
+            return user.isAdmin();
+        }
+        else
+        {
+            return false;
+        }
+    }
     //Get shoppingListForUser
 }

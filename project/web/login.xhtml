@@ -12,7 +12,7 @@
 
     <h:body>
         <f:view>
-            <h:form id="loginForm" >
+            <h:form id="loginForm"  rendered="#{!loginManager.userLoggedIn}">
                 <table style="margin: 0 auto">
                     <tr style="margin-bottom: 100px">
                         <th>Login Page</th>
@@ -44,9 +44,28 @@
                             <h:outputLink value="register.xhtml">Sign Up</h:outputLink>
                         </td>
                     </tr>
+                </table>
+            </h:form>
+        </f:view>
+    </h:body>
+    <h:body>
+        <f:view>
+            <h:form id="logoutForm"  rendered="#{loginManager.userLoggedIn}">
+                <table style="margin: 0 auto">
+                    <tr style="margin-bottom: 100px">
+                        <th>Are you sure you want to log out?</th>
+                    </tr>
                     <tr>
-                        <td><h:commandButton value="test"
-                                             action="#{loginManager.test}" /></td>
+                        <td>
+                            <h:commandButton value="Log out"
+                                             class ="btn btn-primary"
+                                             style="margin-top: 20px; margin-right: 10px"
+                                             action="#{loginManager.logout}" />
+                            <h:commandButton value="Cancel"
+                                             style="margin-top: 20px; margin-left: 10px;"
+                                             class ="btn btn-primary"
+                                             action="#{loginManager.cancel}" />
+                        </td>
                     </tr>
                 </table>
             </h:form>

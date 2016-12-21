@@ -10,6 +10,7 @@
             <from-action>#{loginManager.login}</from-action>
             <from-outcome>login-success</from-outcome>
             <to-view-id>/home.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
@@ -23,11 +24,32 @@
     </navigation-rule>
 
     <navigation-rule>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginManager.logout}</from-action>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginManager.cancel}</from-action>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
         <from-view-id>/register.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{registerManager.register}</from-action>
             <from-outcome>registration-success</from-outcome>
             <to-view-id>/home.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
@@ -39,5 +61,6 @@
             <to-view-id>/register.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
 </faces-config>
+
+

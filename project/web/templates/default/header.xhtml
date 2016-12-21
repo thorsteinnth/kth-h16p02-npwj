@@ -12,16 +12,22 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">APG Webstore</a>
+                <h:outputText class="navbar-brand" value="#{homeManager.usernameStringToPublish}" />
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><h:link value="Shopping cart" outcome="shoppingCart" /></li>
-                    <li><a href="#">Logout</a></li>
-                    <li><h:link value="Home" outcome="home" /></li>
+                    <li><h:link rendered="#{homeManager.userLoggedIn}" value="Shopping cart" outcome="shoppingCart" /></li>
+                   <!-- <li><h:link value="Home" outcome="home" /></li>-->
+                    <li><h:link rendered="#{homeManager.userAdmin}" value="Admin" outcome="home" /></li>
+                    <li><h:link rendered="#{!homeManager.userLoggedIn}" value="Log in" outcome="login" /></li>
+                    <li><h:link rendered="#{homeManager.userLoggedIn}" value="Log out" outcome="login" /></li>
+                    <!--<li>
+                        <h:form style="margin-right: 10px; margin-top: 15px">
+                            <h:commandLink rendered="#{homeManager.userLoggedIn}" value="Log out" action="#{bean.action}" />
+                        </h:form>
+                    </li>
+                    -->
                 </ul>
-                <!--<form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..." />
-                </form>-->
             </div>
         </div>
     </div>

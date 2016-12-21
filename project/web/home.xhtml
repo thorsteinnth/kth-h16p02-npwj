@@ -9,31 +9,65 @@
     <ui:composition template="/templates/default/main.xhtml">
     <ui:define name="content">
 
+        <div style="height: 80px; vertical-align: middle">
+            <h:panelGroup layout="block" class="alert alert-success" rendered="#{homeManager.showSuccessBanner}">
+                <h:outputLabel for="successText"
+                               value="Success! "
+                               style="margin-right: 10px; font-size: large"/>
+                <h:outputText id="successText" value="#{homeManager.successBannerText}" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" class="alert alert-danger" rendered="#{homeManager.showFailureBanner}">
+                <h:outputLabel for="failureText"
+                               value="Failure! "
+                               style="margin-right: 10px; font-size: large"/>
+                <h:outputText id="failureText" value="Sorry this item is not available at the moment" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{homeManager.showWelcomeBanner}">
+                <h3 style="margin: 0 auto">Welcome</h3>
+                <h:outputText id="welcomeText"
+                              value="#{homeManager.welcomeBannerText}"
+                              style="font-size: large" />
+            </h:panelGroup>
+
+        </div>
+
         <h:body>
 
-            <h3 style="margin: 0 auto">Available gnomes</h3>
+            <h:outputText id="AvailableGnomes"
+                          value="Available gnomes: "
+                          style="margin-bottom: 40px; font-size: large; font-style: italic"/>
 
-            <ul style="margin: 0 auto">
+            <ul style="margin: 0 auto" class = "list-group">
                 <h:form>
                     <ui:repeat value="#{homeManager.items}" var="item">
-                        <li>
-                            <div id="Price">
-                                <h:outputLabel for="priceText" value="Price: "/>
+                        <li class="list-group-item">
+                            <div id="Name" style="font-size: large; color: #2b542c; ">
+                                <h:outputLabel for="nameText" value="Name: " style="margin-right: 5px"/>
+                                <h:outputText id="nameText" value="#{item.SKU}"/>
+                            </div>
+                            <div id="Price" style="margin-left: 30px">
+                                <h:outputLabel for="priceText" value="Price: " style="margin-right: 5px"/>
                                 <h:outputText id="priceText" value="#{item.price}"/>
                             </div>
 
-                            <div id="Stock">
-                                <h:outputLabel for="stockText" value="Stock: "/>
+                            <div id="Stock" style="margin-left: 30px; margin-top: -5px">
+                                <h:outputLabel for="stockText" value="Stock: " style="margin-right: 5px"/>
                                 <h:outputText id="stockText" value="#{item.stock}"/>
                             </div>
 
-                            <div id="Description">
-                                <h:outputLabel for="descriptionText" value="Description: "/>
+                            <div id="Description" style="margin-left: 30px; margin-top: -5px">
+                                <h:outputLabel for="descriptionText" value="Description: " style="margin-right: 5px"/>
                                 <h:outputText id="descriptionText" value="#{item.description}"/>
                             </div>
 
-                            <div>
-                                <h:commandButton value="AddToBasket" action="#{homeManager.plusOnClickEventHandler}">
+                            <div style="margin-bottom: 10px">
+                                <h:commandButton class="btn btn-default"
+                                                 value="Add to shopping cart"
+                                                 action="#{homeManager.plusOnClickEventHandler}"
+                                                 rendered="#{homeManager.userLoggedIn}"
+                                                 style="border: none; color: #122b40">
                                     <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
                                 </h:commandButton>
 

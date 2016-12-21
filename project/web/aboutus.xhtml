@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/templates/default/main.xhtml">
+    <ui:define name="content">
+
+        <div style="height: 80px; vertical-align: middle">
+            <h:panelGroup layout="block" rendered="#{homeManager.showWelcomeBanner}">
+                <h3 style="margin: 0 auto">About us</h3>
+            </h:panelGroup>
+        </div>
+
+        <h:body>
+            <ul style="margin: 0 auto" class = "list-group">
+                <h:form>
+                    <li class="list-group-item">
+                        <div id="Name_G" style="font-size: large; color: #2b542c; ">
+                            <h:outputLabel for="nameText_G" value="Name: " style="margin-right: 5px"/>
+                            <h:outputText id="nameText_G" value="Gretar Atli Gretarsson"/>
+                        </div>
+                        <div id="Age_G" style="margin-left: 30px">
+                            <h:outputLabel for="ageText_G" value="Age: " style="margin-right: 5px"/>
+                            <h:outputText id="ageText_G" value="28 years old"/>
+                        </div>
+
+                        <div id="Nationality_G" style="margin-left: 30px; margin-top: -5px">
+                            <h:outputLabel for="nationalityText_G" value="nationality: " style="margin-right: 5px"/>
+                            <h:outputText id="nationalityText_G" value="Icelandic"/>
+                        </div>
+
+                        <div id="Description_G" style="margin-left: 30px; margin-top: -5px">
+                            <h:outputLabel for="descriptionText_G" value="Description: " style="margin-right: 5px"/>
+                            <h:outputText id="descriptionText_G" value="An engineering student from the Gardabaer"/>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div id="Name_T" style="font-size: large; color: #2b542c; ">
+                            <h:outputLabel for="nameText_T" value="Name: " style="margin-right: 5px"/>
+                            <h:outputText id="nameText_T" value="Þorsteinn Þorri Sigurðsson"/>
+                        </div>
+                        <div id="Age" style="margin-left: 30px">
+                            <h:outputLabel for="ageText_T" value="Age: " style="margin-right: 5px"/>
+                            <h:outputText id="ageText_T" value="28 years old"/>
+                        </div>
+
+                        <div id="Nationality_T" style="margin-left: 30px; margin-top: -5px">
+                            <h:outputLabel for="nationalityText_T" value="nationality: " style="margin-right: 5px"/>
+                            <h:outputText id="nationalityText_T" value="Icelandic"/>
+                        </div>
+
+                        <div id="Description_T" style="margin-left: 30px; margin-top: -5px">
+                            <h:outputLabel for="descriptionText_T" value="Description: " style="margin-right: 5px"/>
+                            <h:outputText id="descriptionText_T" value="An engineering student from the hood of iceland called Breidholt"/>
+                        </div>
+                    </li>
+                </h:form>
+            </ul>
+        </h:body>
+
+    </ui:define>
+</ui:composition>
+</html>
