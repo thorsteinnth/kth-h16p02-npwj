@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/templates/admin/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="editItemSku" value="#{adminManagerEditItem.itemToEdit}" converter="#{itemConverter}" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h1>Edit item</h1>
+
+        <h:form>
+
+            <h:outputLabel for="sku" value="SKU: "/>
+            <div style="margin-bottom: 10px;">
+                <h:outputText rows="1" cols="50" id="sku" value="#{adminManagerEditItem.sku}"/>
+            </div>
+
+            <h:outputLabel for="description" value="Description: "/>
+            <div style="margin-bottom: 10px;">
+                <h:inputTextarea rows="5" cols="50" id="description" value="#{adminManagerEditItem.description}"/>
+            </div>
+
+            <h:outputLabel for="price" value="Price: "/>
+            <div style="margin-bottom: 10px;">
+                <h:inputText id="price" value="#{adminManagerEditItem.price}"/>
+            </div>
+
+            <h:outputLabel for="stock" value="Stock: "/>
+            <div style="margin-bottom: 10px;">
+                <h:inputText id="stock" value="#{adminManagerEditItem.stock}"/>
+            </div>
+
+            <h:commandButton class="btn btn-success" value="Save" type="submit" action="#{adminManagerEditItem.save}"/>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+
+</html>

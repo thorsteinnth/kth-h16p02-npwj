@@ -127,11 +127,6 @@ public class AdminManager implements Serializable
         }
     }
 
-    public void editItem()
-    {
-        System.out.println(itemToDelete);
-    }
-
     public void deleteItem()
     {
         this.controller.deleteItem(itemToDelete);

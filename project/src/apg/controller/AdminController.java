@@ -51,4 +51,16 @@ public class AdminController
         Item itemToRemove = em.getReference(Item.class, item.getSKU());
         em.remove(itemToRemove);
     }
+
+    public void editItem(Item item, String newDescription, int newPrice, int newStock)
+    {
+        item.setDescription(newDescription);
+        item.setPrice(newPrice);
+        item.setStock(newStock);
+
+        if (!em.contains(item))
+        {
+            em.merge(item);
+        }
+    }
 }
