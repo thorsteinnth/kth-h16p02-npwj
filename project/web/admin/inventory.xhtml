@@ -42,9 +42,9 @@
                         <div style="margin-top: 10px;">
 
                             <span style="margin-right: 5px;">
-                                <h:commandButton class="btn btn-warning" value="Edit" action="#{adminManager.editItem}">
-                                    <f:setPropertyActionListener target="#{adminManager.itemToDelete}" value="#{inventoryItem}"/>
-                                </h:commandButton>
+                                <h:button class="btn btn-warning" value="Edit" outcome="/admin/editItem">
+                                    <f:param name="editItemSku" value="#{inventoryItem.SKU}"/>
+                                </h:button>
                             </span>
 
                             <span style="margin-right: 5px;">

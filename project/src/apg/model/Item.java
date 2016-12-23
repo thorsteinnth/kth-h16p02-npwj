@@ -60,9 +60,19 @@ public class Item implements Serializable
         return price;
     }
 
+    public void setPrice(int price)
+    {
+        this.price = price;
+    }
+
     public int getStock()
     {
         return stock;
+    }
+
+    public void setStock(int stock)
+    {
+        this.stock = stock;
     }
 
     public void withdraw(int amount) throws NotEnoughStockException
