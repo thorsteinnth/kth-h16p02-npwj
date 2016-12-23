@@ -3,11 +3,9 @@ package apg.view;
 import apg.controller.LoginController;
 import apg.model.User;
 import apg.utils.SessionUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -32,6 +30,8 @@ public class LoginManager implements Serializable
 
     public static final String userOrPasswordIncorrectErrorMSG = "Either username or password is incorrect";
     public static final String emailInvalidError = "Email invalid";
+
+    private Exception exception;
 
     //region ########## Getter and Setter ##########
 
@@ -76,21 +76,22 @@ public class LoginManager implements Serializable
         else
             return true;
     }
+
+    public boolean isShowError()
+    {
+        if(exception != null)
+            return true;
+        else
+            return false;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
     //endregion
 
     //region ########## Action Handler ##########
-
-    public void test()
-    {
-        try
-        {
-            User user = loginController.getUser("bla", "bla");
-        }
-        catch (Exception e)
-        {
-            System.err.println(e);
-        }
-    }
 
     public String login()
     {
@@ -99,9 +100,17 @@ public class LoginManager implements Serializable
             try
             {
                 User user = loginController.getUser(email, password);
-                HttpSession session = SessionUtils.getSession();
-                session.setAttribute("username", user.getEmail());
-                return "login-success";
+
+                if(!user.isBanned())
+                {
+                    HttpSession session = SessionUtils.getSession();
+                    session.setAttribute("username", user.getEmail());
+                    return "login-success";
+                }
+                else
+                {
+                    return "login-failure";
+                }
             }
             catch (javax.ejb.EJBException ejbException)
             {
@@ -120,6 +129,7 @@ public class LoginManager implements Serializable
             catch (Exception e)
             {
                 System.err.println(e);
+                handleException(e);
                 return "login-failure";
             }
         }
@@ -150,6 +160,12 @@ public class LoginManager implements Serializable
     {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
         return matcher.find();
+    }
+
+    private void handleException(Exception e)
+    {
+        e.printStackTrace(System.err);
+        exception = e;
     }
 
     //endregion

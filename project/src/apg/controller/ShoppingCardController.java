@@ -130,6 +130,9 @@ public class ShoppingCardController {
     {
         if(checkInventory())
         {
+            // Gætum lokað databasenum á meðan transaction á sér stað
+            // Gætum líka gert transactionið atomic
+            //em.lock();
             for(ShoppingCartItem scItem : shoppingCartItems) {
                 Item item = em.find(Item.class, scItem.getItem().getSKU());
 

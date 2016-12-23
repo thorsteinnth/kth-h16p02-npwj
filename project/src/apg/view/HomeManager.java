@@ -30,6 +30,8 @@ public class HomeManager implements Serializable
     private boolean showSuccessBanner;
     private boolean showFailureBanner;
 
+    private Exception exception;
+
     //region ########## Getter and Setter ##########
     public List<Item> getItems() {
         try
@@ -39,6 +41,7 @@ public class HomeManager implements Serializable
         catch (Exception e)
         {
             System.err.println(e);
+            handleException(e);
         }
         //TODO fara í controller og ná í items
         return items;
@@ -134,23 +137,50 @@ public class HomeManager implements Serializable
         else
             return username;
     }
+
+    public boolean isShowError()
+    {
+        if(exception != null)
+            return true;
+        else
+            return false;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
     //endregion
 
     public String plusOnClickEventHandler()
     {
         if(item.getStock() > 0)
         {
-            homeController.addShoppingCartItem(item);
-            int nrOfItems = homeController.getNumberOfShoppingListItems();
-            successBannerText = String.format(successBannerTextModel, nrOfItems);
-            showSuccessBanner = true;
-            return jsf22Bugfix();
+            try
+            {
+                homeController.addShoppingCartItem(item);
+                int nrOfItems = homeController.getNumberOfShoppingListItems();
+                successBannerText = String.format(successBannerTextModel, nrOfItems);
+                showSuccessBanner = true;
+                return jsf22Bugfix();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                handleException(e);
+                return jsf22Bugfix();
+            }
         }
         else
         {
             showFailureBanner = true;
             return jsf22Bugfix();
         }
+    }
+
+    private void handleException(Exception e)
+    {
+        e.printStackTrace(System.err);
+        exception = e;
     }
 
     /**

@@ -62,6 +62,42 @@
         </navigation-case>
     </navigation-rule>
 
+    <!-- Error handling -->
+
+    <navigation-rule>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <if>#{loginManager.showError}</if>
+            <to-view-id>/error/loginError.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/register.xhtml</from-view-id>
+        <navigation-case>
+            <if>#{registerManager.showError}</if>
+            <to-view-id>/error/registerError.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+    <navigation-rule>
+        <from-view-id>/home.xhtml</from-view-id>
+        <navigation-case>
+            <if>#{homeManager.showError}</if>
+            <to-view-id>/error/homeError.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+    <navigation-rule>
+        <from-view-id>/shoppingCart.xhtml</from-view-id>
+        <navigation-case>
+            <if>#{shoppingCartManager.showError}</if>
+            <to-view-id>/error/shoppingCartError.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>
 
 

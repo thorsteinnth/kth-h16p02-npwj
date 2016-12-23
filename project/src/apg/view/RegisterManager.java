@@ -32,6 +32,8 @@ public class RegisterManager
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
+    private Exception exception;
+
     //region ########## getters and setters ##########
 
     public String getEmail() {
@@ -78,6 +80,18 @@ public class RegisterManager
         this.showEmailAlreadyInUse = showEmailAlreadyInUse;
     }
 
+    public boolean isShowError()
+    {
+        if(exception != null)
+            return true;
+        else
+            return false;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
     //endregion
 
     //region ########## Action Handlers ##########
@@ -101,6 +115,7 @@ public class RegisterManager
             catch (Exception e)
             {
                 System.err.println(e);
+                handleException(e);
                 return "registration-failure";
             }
         }
@@ -139,6 +154,13 @@ public class RegisterManager
 
         return true;
     }
+
+    private void handleException(Exception e)
+    {
+        e.printStackTrace(System.err);
+        exception = e;
+    }
+
 
     //endregion
 }

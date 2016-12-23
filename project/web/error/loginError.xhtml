@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+    <title>Log in Failed</title>
+</h:head>
+<h:body>
+    <h1>Log in Failed</h1>
+    <c:choose>
+        <c:when test="#{loginManager.exception.cause != null}">
+            <h3><h:outputText value="#{loginManager.exception.cause.message}"/></h3>
+        </c:when>
+        <c:otherwise>
+            <h3><h:outputText value="#{loginManager.exception.message}"/></h3>
+        </c:otherwise>
+    </c:choose>
+</h:body>
+</html>
