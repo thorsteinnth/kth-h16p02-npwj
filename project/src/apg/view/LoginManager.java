@@ -23,6 +23,7 @@ public class LoginManager implements Serializable
     private String password;
 
     private Boolean showEmailError;
+    private boolean showFailureBanner;
     private String emailErrorMsg;
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -89,6 +90,20 @@ public class LoginManager implements Serializable
         return exception;
     }
 
+    public boolean isShowFailureBanner() {
+        return showFailureBanner;
+    }
+
+    public void setShowFailureBanner(boolean showFailureBanner) {
+        this.showFailureBanner = showFailureBanner;
+    }
+
+    public boolean isShowLoginBanner()
+    {
+        return !showFailureBanner && !isUserLoggedIn();
+    }
+
+
     //endregion
 
     //region ########## Action Handler ##########
@@ -109,6 +124,7 @@ public class LoginManager implements Serializable
                 }
                 else
                 {
+                    showFailureBanner = true;
                     return "login-failure";
                 }
             }

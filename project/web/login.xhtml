@@ -10,66 +10,103 @@
         <h:outputStylesheet library="css" name="style.css"  />
     </h:head>
 
-    <h:body>
-        <f:view>
-            <h:form id="loginForm"  rendered="#{!loginManager.userLoggedIn}">
-                <table style="margin: 0 auto">
-                    <tr style="margin-bottom: 100px">
-                        <th>Login Page</th>
-                    </tr>
-                    <tr>
-                        <td><h:outputText value="Enter Your email : " /></td>
-                        <td><h:inputText id="inputName"
-                                         value="#{loginManager.email}"
-                                         required="true"
-                                         requiredMessage="Email field must not be empty" />
-                        </td>
-                        <td><h:message for="inputName" style="color:red" /></td>
-                        <td><h:outputText value="#{loginManager.emailErrorMsg}"
-                                          style="color:red"
-                                          rendered="#{loginManager.showEmailError}"/></td>
-                    </tr>
-                    <tr>
-                        <td><h:outputText value="Enter password :" /></td>
-                        <td><h:inputSecret id="inputPassword"
-                                           value="#{loginManager.password}"
-                                           required="true"
-                                           requiredMessage="Password field must not be empty" /></td>
-                        <td><h:message for="inputPassword" style="color:red" /></td>
-                    </tr>
-                    <tr>
-                        <td><h:commandButton value="Sign In"
-                                             action="#{loginManager.login}" /></td>
-                        <td><h:outputText value="Not a User " />
-                            <h:outputLink value="register.xhtml">Sign Up</h:outputLink>
-                        </td>
-                    </tr>
-                </table>
-            </h:form>
-        </f:view>
-    </h:body>
 
-    <h:body>
-        <f:view>
-            <h:form id="logoutForm"  rendered="#{loginManager.userLoggedIn}">
-                <table style="margin: 0 auto">
-                    <tr style="margin-bottom: 100px">
-                        <th>Are you sure you want to log out?</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:commandButton value="Log out"
-                                             class ="btn btn-primary"
-                                             style="margin-top: 20px; margin-right: 10px"
-                                             action="#{loginManager.logout}" />
-                            <h:commandButton value="Cancel"
-                                             style="margin-top: 20px; margin-left: 10px;"
-                                             class ="btn btn-primary"
-                                             action="#{loginManager.cancel}" />
-                        </td>
-                    </tr>
-                </table>
-            </h:form>
-        </f:view>
-    </h:body>
+    <ui:composition template="/templates/default/main.xhtml">
+    <ui:define name="content">
+
+        <div style="height: 80px; vertical-align: middle">
+
+            <h:panelGroup layout="block" class="alert alert-danger" rendered="#{loginManager.showFailureBanner}">
+                <h:outputLabel for="failureText"
+                               value="Failure! "
+                               style="margin-right: 10px; font-size: large"/>
+                <h:outputText id="failureText"
+                              value="This user has been banned from the website" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{loginManager.showLoginBanner}">
+                <h3 style="margin: 0 auto">Welcome</h3>
+                <h:outputText id="LoginPage"
+                              value="Log in"
+                              style="font-size: large" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{loginManager.userLoggedIn}">
+                <h3 style="margin: 0 auto">Log out</h3>
+            </h:panelGroup>
+
+        </div>
+
+        <h:body>
+            <f:view>
+                <h:form id="loginForm"  rendered="#{!loginManager.userLoggedIn}">
+                    <table>
+                     <!--   <tr style="margin-bottom: 100px">
+                            <th>Login Page</th>
+                        </tr> -->
+                        <tr>
+                            <td><h:outputText value="Enter Your email : "
+                                              style="margin-right: 5px"/></td>
+                            <td><h:inputText id="inputName"
+                                             value="#{loginManager.email}"
+                                             required="true"
+                                             requiredMessage="Email field must not be empty"
+                                             style="width: 300px;
+                                             margin-right: 10px"/>
+                            </td>
+                            <td><h:message for="inputName" style="color:red"/></td>
+                            <td><h:outputText value="#{loginManager.emailErrorMsg}"
+                                              style="color:red"
+                                              rendered="#{loginManager.showEmailError}"/></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputText value="Enter password :"
+                                              style="margin-right: 5px"/></td>
+                            <td><h:inputSecret id="inputPassword"
+                                               value="#{loginManager.password}"
+                                               required="true"
+                                               requiredMessage="Password field must not be empty"
+                                               style="width: 300px;
+                                               margin-right: 10px" /></td>
+                            <td><h:message for="inputPassword" style="color:red" /></td>
+                        </tr>
+                        <tr>
+                            <td><h:commandButton value="Sign In"
+                                                 class ="btn btn-primary"
+                                                 style="margin-top: 20px"
+                                                 action="#{loginManager.login}" /></td>
+                            <td><h:outputText value="Not a User " style="margin-top: 20px"/>
+                                <h:outputLink value="register.xhtml" style="margin-top: 20px">Sign Up</h:outputLink>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </f:view>
+        </h:body>
+
+        <h:body>
+            <f:view>
+                <h:form id="logoutForm"  rendered="#{loginManager.userLoggedIn}">
+                    <table>
+                        <tr style="margin-bottom: 100px">
+                            <th>Are you sure you want to log out?</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:commandButton value="Log out"
+                                                 class ="btn btn-primary"
+                                                 style="margin-top: 20px; margin-right: 10px"
+                                                 action="#{loginManager.logout}" />
+                                <h:commandButton value="Cancel"
+                                                 style="margin-top: 20px; margin-left: 10px;"
+                                                 class ="btn btn-primary"
+                                                 action="#{loginManager.cancel}" />
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </f:view>
+        </h:body>
+    </ui:define>
+    </ui:composition>
 </html>
