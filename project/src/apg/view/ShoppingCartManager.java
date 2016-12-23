@@ -33,6 +33,8 @@ public class ShoppingCartManager implements Serializable
     private boolean showSuccessBanner;
     private boolean showFailureBanner;
 
+    private Exception exception;
+
     //region ########## Getter and Setter ##########
     public List<ShoppingCartItem> getShoppingCartItems() {
 
@@ -132,6 +134,19 @@ public class ShoppingCartManager implements Serializable
         return Integer.toString(total);
     }
 
+    public boolean isShowError()
+    {
+        if(exception != null)
+            return true;
+        else
+            return false;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+    //endregion
+
     //endregion
 
     //region ########## Action handler ##########
@@ -165,6 +180,7 @@ public class ShoppingCartManager implements Serializable
         {
             buyResult = false;
             showFailureBanner = false;
+            handleException(e);
         }
 
         return jsf22Bugfix();
@@ -173,14 +189,32 @@ public class ShoppingCartManager implements Serializable
     public String increaseQuantity()
     {
         hideBanner();
-        shoppingCardController.increaseQuantity(shoppingCartItem);
+        try
+        {
+            shoppingCardController.increaseQuantity(shoppingCartItem);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
+            handleException(e);
+            return jsf22Bugfix();
+        }
         return jsf22Bugfix();
     }
 
     public String decreaseQuantity()
     {
         hideBanner();
-        shoppingCardController.decreaseQuantity(shoppingCartItem);
+        try
+        {
+            shoppingCardController.decreaseQuantity(shoppingCartItem);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
+            handleException(e);
+            return jsf22Bugfix();
+        }
         return jsf22Bugfix();
     }
 
@@ -200,6 +234,12 @@ public class ShoppingCartManager implements Serializable
     {
         this.showSuccessBanner = false;
         this.showFailureBanner = false;
+    }
+
+    private void handleException(Exception e)
+    {
+        e.printStackTrace(System.err);
+        exception = e;
     }
 
     //endregion
