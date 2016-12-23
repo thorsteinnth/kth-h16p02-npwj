@@ -1,5 +1,5 @@
+/*
 package apg.controller;
-
 
 import apg.exceptions.NotEnoughStockException;
 import apg.model.Item;
@@ -247,3 +247,4 @@ public class ShoppingCardController2 {
         em.remove(scItem);
     }
 }
+*/

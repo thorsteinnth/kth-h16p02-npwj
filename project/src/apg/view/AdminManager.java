@@ -27,6 +27,9 @@ public class AdminManager implements Serializable
     private boolean newItemItemAlreadyExists;
     private boolean newItemItemCreatedSuccess;
 
+    private Item itemToDelete;
+    private boolean itemDeleteSuccess;
+
     //region Getters and setters
 
     public String getNewItemSKU()
@@ -84,6 +87,21 @@ public class AdminManager implements Serializable
         return newItemItemCreatedSuccess;
     }
 
+    public Item getItemToDelete()
+    {
+        return itemToDelete;
+    }
+
+    public void setItemToDelete(Item itemToDelete)
+    {
+        this.itemToDelete = itemToDelete;
+    }
+
+    public boolean isItemDeleteSuccess()
+    {
+        return itemDeleteSuccess;
+    }
+
     //endregion
 
     //region Methods
@@ -107,6 +125,17 @@ public class AdminManager implements Serializable
         {
             this.newItemItemAlreadyExists = true;
         }
+    }
+
+    public void editItem()
+    {
+        System.out.println(itemToDelete);
+    }
+
+    public void deleteItem()
+    {
+        this.controller.deleteItem(itemToDelete);
+        this.itemDeleteSuccess = true;
     }
 
     public List<Item> getAllItems()
