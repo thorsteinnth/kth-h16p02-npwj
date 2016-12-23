@@ -26,8 +26,6 @@ public class AdminManagerEditItem implements Serializable
     private String description;
     private int price;
     private int stock;
-    private boolean illegalSku;
-    private boolean itemAlreadyExists;
     private boolean editItemSuccess;
 
     public Item getItemToEdit()
@@ -79,16 +77,6 @@ public class AdminManagerEditItem implements Serializable
         this.stock = stock;
     }
 
-    public boolean isIllegalSku()
-    {
-        return illegalSku;
-    }
-
-    public boolean isItemAlreadyExists()
-    {
-        return itemAlreadyExists;
-    }
-
     public boolean isEditItemSuccess()
     {
         return editItemSuccess;
@@ -97,5 +85,6 @@ public class AdminManagerEditItem implements Serializable
     public void save()
     {
         this.controller.editItem(this.itemToEdit, this.description, this.price, this.stock);
+        this.editItemSuccess = true;
     }
 }

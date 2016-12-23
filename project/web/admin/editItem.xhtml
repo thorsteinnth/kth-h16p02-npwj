@@ -16,6 +16,10 @@
 
         <h1>Edit item</h1>
 
+        <h:panelGroup layout="block" class="alert alert-success" rendered="#{adminManagerEditItem.editItemSuccess}">
+            <h:outputText value="Success! Item successfully edited" />
+        </h:panelGroup>
+
         <h:form>
 
             <h:outputLabel for="sku" value="SKU: "/>
