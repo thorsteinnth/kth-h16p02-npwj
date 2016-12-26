@@ -90,7 +90,21 @@ public class AdminManagerEditItem implements Serializable
         this.editItemSuccess = true;
     }
 
-    public void validate(FacesContext context, UIComponent component, Object value)
+    public void validateParameters()
+    {
+        // Verify that we have the URL request parameter
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        String parameter = context.getExternalContext().getRequestParameterMap().get("editItemSku");
+
+        if (parameter == null || parameter.equals(""))
+        {
+            context.getExternalContext().setResponseStatus(404);
+            context.responseComplete();
+        }
+    }
+
+    public void validateObject(FacesContext context, UIComponent component, Object value)
     {
         // Gets called before serving page. Validate the object that will be displayed.
         // (URL request parameter -> converter -> object value)
