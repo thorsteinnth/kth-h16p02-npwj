@@ -9,7 +9,7 @@
 <ui:composition template="/templates/admin/main.xhtml">
 
     <f:metadata>
-        <f:viewParam name="editItemSku" value="#{adminManagerEditItem.itemToEdit}" converter="#{itemConverter}" />
+        <f:viewParam name="editItemSku" value="#{adminManagerEditItem.itemToEdit}" converter="#{itemConverter}" validator="#{adminManagerEditItem.validate}"/>
     </f:metadata>
 
     <ui:define name="content">

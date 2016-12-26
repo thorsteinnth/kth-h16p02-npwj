@@ -28,8 +28,8 @@ public class ItemConverter implements Converter
             return null;
         }
 
-        // TODO Handle if I can't find the item
-
+        // NOTE: There is no null check here for if we can't find the item.
+        // There is a special validator that handles that, and returns a 404 error if that happens.
         Item foundItem = em.find(Item.class, value);
         return foundItem;
     }

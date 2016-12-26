@@ -5,6 +5,8 @@ import apg.model.Item;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -86,5 +88,18 @@ public class AdminManagerEditItem implements Serializable
     {
         this.controller.editItem(this.itemToEdit, this.description, this.price, this.stock);
         this.editItemSuccess = true;
+    }
+
+    public void validate(FacesContext context, UIComponent component, Object value)
+    {
+        // Gets called before serving page. Validate the object that will be displayed.
+        // (URL request parameter -> converter -> object value)
+        // If the object is not valid, reply with 404 not found
+
+        if (value == null || !(value instanceof Item))
+        {
+            context.getExternalContext().setResponseStatus(404);
+            context.responseComplete();
+        }
     }
 }
