@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><h:link rendered="#{homeManager.userLoggedIn}" value="Shopping cart" outcome="shoppingCart" /></li>
                    <!-- <li><h:link value="Home" outcome="home" /></li>-->
-                    <li><h:link rendered="#{homeManager.userAdmin}" value="Admin" outcome="home" /></li>
+                    <li><h:link rendered="#{homeManager.userAdmin}" value="Admin" outcome="admin/inventory" /></li>
                     <li><h:link rendered="#{!homeManager.userLoggedIn}" value="Log in" outcome="login" /></li>
                     <li><h:link rendered="#{homeManager.userLoggedIn}" value="Log out" outcome="login" /></li>
                     <!--<li>
