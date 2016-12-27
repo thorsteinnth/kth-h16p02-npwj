@@ -4,14 +4,16 @@ import apg.controller.AdminController;
 import apg.model.Item;
 
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import javax.faces.bean.ViewScoped;
+import javax.faces.validator.ValidatorException;
 import java.io.Serializable;
 
-@Named("adminManagerEditItem")
-@RequestScoped
+@ManagedBean(name = "adminManagerEditItem")
+@ViewScoped
 public class AdminManagerEditItem implements Serializable
 {
     /*
@@ -86,6 +88,7 @@ public class AdminManagerEditItem implements Serializable
 
     public void save()
     {
+        this.editItemSuccess = false;
         this.controller.editItem(this.itemToEdit, this.description, this.price, this.stock);
         this.editItemSuccess = true;
     }
@@ -114,6 +117,21 @@ public class AdminManagerEditItem implements Serializable
         {
             context.getExternalContext().setResponseStatus(404);
             context.responseComplete();
+        }
+    }
+
+    public void validateNumberInput(FacesContext context, UIComponent comp, Object value)
+    {
+        if (value instanceof Long)
+        {
+            Long longValue = (Long)value;
+
+            if (longValue < 0)
+            {
+                FacesMessage msg = new FacesMessage("Number error", "Number should be positive");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
         }
     }
 }

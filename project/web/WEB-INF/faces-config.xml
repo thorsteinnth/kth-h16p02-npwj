@@ -62,6 +62,18 @@
         </navigation-case>
     </navigation-rule>
 
+    <!--
+    <navigation-rule>
+        <from-view-id>/admin/editItem.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{adminManagerEditItem.save}</from-action>
+            <from-outcome>edit-success</from-outcome>
+            <to-view-id>/admin/editItem.xhtml</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+    </navigation-rule>
+    -->
+
     <!-- Error handling -->
 
     <navigation-rule>
@@ -80,7 +92,6 @@
         </navigation-case>
     </navigation-rule>
 
-
     <navigation-rule>
         <from-view-id>/home.xhtml</from-view-id>
         <navigation-case>
@@ -89,7 +100,6 @@
         </navigation-case>
     </navigation-rule>
 
-
     <navigation-rule>
         <from-view-id>/shoppingCart.xhtml</from-view-id>
         <navigation-case>
@@ -97,8 +107,6 @@
             <to-view-id>/error/shoppingCartError.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
-
 
 </faces-config>
 

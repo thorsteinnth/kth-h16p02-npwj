@@ -35,15 +35,23 @@
 
             <h:outputLabel for="price" value="Price: "/>
             <div style="margin-bottom: 10px;">
-                <h:inputText id="price" value="#{adminManagerEditItem.price}"/>
+                <h:inputText id="price" value="#{adminManagerEditItem.price}" converterMessage="Should be a number" validator="#{adminManagerEditItem.validateNumberInput}">
+                    <f:convertNumber integerOnly="true" type="number" />
+                </h:inputText>
+                <h:message for="price" style="color:red" />
             </div>
 
             <h:outputLabel for="stock" value="Stock: "/>
             <div style="margin-bottom: 10px;">
-                <h:inputText id="stock" value="#{adminManagerEditItem.stock}"/>
+                <h:inputText id="stock" value="#{adminManagerEditItem.stock}" converterMessage="Should be a number" validator="#{adminManagerEditItem.validateNumberInput}">
+                    <f:convertNumber integerOnly="true" type="number" />
+                </h:inputText>
+                <h:message for="stock" style="color:red" />
             </div>
 
-            <h:commandButton class="btn btn-success" value="Save" type="submit" action="#{adminManagerEditItem.save}"/>
+            <h:commandButton class="btn btn-success" value="Save" type="submit" action="#{adminManagerEditItem.save}">
+                <f:param name="editItemSku" value="#{adminManagerEditItem.itemToEdit.SKU}" />
+            </h:commandButton>
 
         </h:form>
 
