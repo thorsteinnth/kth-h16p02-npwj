@@ -37,12 +37,18 @@
 
             <h:outputLabel for="newItemPrice" value="Price: "/>
             <div style="margin-bottom: 10px;">
-            <h:inputText id="newItemPrice" value="#{adminManager.newItemPrice}"/>
+                <h:inputText id="newItemPrice" value="#{adminManager.newItemPrice}" converterMessage="Should be a number" validator="#{adminManager.validateNumberInput}">
+                    <f:convertNumber integerOnly="true" type="number" />
+                </h:inputText>
+                <h:message for="newItemPrice" style="color:red" />
             </div>
 
             <h:outputLabel for="newItemStock" value="Stock: "/>
             <div style="margin-bottom: 10px;">
-            <h:inputText id="newItemStock" value="#{adminManager.newItemStock}"/>
+                <h:inputText id="newItemStock" value="#{adminManager.newItemStock}" converterMessage="Should be a number" validator="#{adminManager.validateNumberInput}">
+                    <f:convertNumber integerOnly="true" type="number" />
+                </h:inputText>
+                <h:message for="newItemStock" style="color:red" />
             </div>
 
             <h:commandButton class="btn btn-success" value="Create item" type="submit" action="#{adminManager.createNewItem}"/>

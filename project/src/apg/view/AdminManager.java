@@ -8,6 +8,10 @@ import apg.model.User;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -161,4 +165,19 @@ public class AdminManager implements Serializable
     }
 
     //endregion
+
+    public void validateNumberInput(FacesContext context, UIComponent comp, Object value)
+    {
+        if (value instanceof Long)
+        {
+            Long longValue = (Long)value;
+
+            if (longValue < 0)
+            {
+                FacesMessage msg = new FacesMessage("Number error", "Number should be positive");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+            }
+        }
+    }
 }
