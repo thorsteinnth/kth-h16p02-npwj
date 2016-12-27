@@ -177,6 +177,7 @@ public class HomeManager implements Serializable
         }
     }
 
+
     private void handleException(Exception e)
     {
         e.printStackTrace(System.err);
