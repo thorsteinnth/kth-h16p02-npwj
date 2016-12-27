@@ -35,7 +35,7 @@ public class LoginController
 
         if (users.size() == 0)
         {
-            User user = new User(email, password, true, false);
+            User user = new User(email, password, false, false);
             em.persist(user);
             return user;
         }
