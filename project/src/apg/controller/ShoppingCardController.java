@@ -1,7 +1,7 @@
 package apg.controller;
 
-
 import apg.exceptions.NotEnoughStockException;
+import apg.exceptions.UnknownUserException;
 import apg.model.Item;
 import apg.model.ShoppingCartItem;
 import apg.model.User;
@@ -19,6 +19,8 @@ import java.util.List;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ShoppingCardController {
 
+    private static final String unknownUserErrorText = "Unknown user does not have access rights to enter this site. Please log in or register to be able to use the shopping cart";
+
     User user;
     // I create cache of the items to avoid accessing the database to frequently
     List<ShoppingCartItem> shoppingCartItems;
@@ -27,8 +29,11 @@ public class ShoppingCardController {
     private EntityManager em;
     private EntityTransaction tx;
 
-    public List<ShoppingCartItem> getAllShoppingCartItemsForUser()
+    public List<ShoppingCartItem> getAllShoppingCartItemsForUser() throws UnknownUserException
     {
+        if(SessionUtils.getUsername() == SessionUtils.unknownUser)
+            throw new UnknownUserException(unknownUserErrorText);
+
         Query query;
 
         if(shoppingCartItems == null)
@@ -48,7 +53,6 @@ public class ShoppingCardController {
         this.shoppingCartItems = query.getResultList();
     }
 
-
     public User getUser(String email)
     {
         Query query = em.createNamedQuery("findUserWithoutPassword", User.class);
@@ -60,20 +64,28 @@ public class ShoppingCardController {
 
     public String getEmail()
     {
-        return user.getEmail();
+        if(user != null)
+            return user.getEmail();
+        else
+            return SessionUtils.unknownUser;
     }
 
     @PostConstruct
     public void init()
     {
-        if(user == null)
+        String username = SessionUtils.getUsername();
+
+        if(user == null && username != SessionUtils.unknownUser)
         {
             user = getUser(SessionUtils.getUsername());
         }
     }
 
-    public void increaseQuantity(ShoppingCartItem shoppingCartItem)
+    public void increaseQuantity(ShoppingCartItem shoppingCartItem) throws UnknownUserException
     {
+        if(SessionUtils.getUsername() == SessionUtils.unknownUser)
+            throw new UnknownUserException(unknownUserErrorText);
+
         ShoppingCartItem scItem = em.find(ShoppingCartItem.class, shoppingCartItem.getId());
         scItem.increaseQuantity();
 
@@ -86,18 +98,14 @@ public class ShoppingCardController {
             index++;
         }
 
-        //shoppingCartItems.get(index).increaseQuantity();
-        //ShoppingCartItem manageItem = shoppingCartItems.get(index);
-        //boolean isManage = em.contains(manageItem);
-        //boolean isManage2 = em.contains(shoppingCartItems.get(index));
-
-        //em.flush();
-
         shoppingCartItems.set(index,scItem);
     }
 
-    public void decreaseQuantity(ShoppingCartItem shoppingCartItem)
+    public void decreaseQuantity(ShoppingCartItem shoppingCartItem) throws UnknownUserException
     {
+        if(SessionUtils.getUsername() == SessionUtils.unknownUser)
+            throw new UnknownUserException(unknownUserErrorText);
+
         ShoppingCartItem scItem = em.find(ShoppingCartItem.class, shoppingCartItem.getId());
         scItem.decreaseQuantity();
 
@@ -109,9 +117,6 @@ public class ShoppingCardController {
                 break;
             index++;
         }
-
-        //shoppingCartItems.get(index).increaseQuantity();
-        //em.flush();
 
         // If the item is zero then we drop it out of the basket
         if (scItem.getQuantity() == 0)
@@ -126,13 +131,13 @@ public class ShoppingCardController {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean buy() throws NotEnoughStockException
+    public boolean buy() throws NotEnoughStockException, UnknownUserException
     {
+        if(SessionUtils.getUsername() == SessionUtils.unknownUser)
+            throw new UnknownUserException(unknownUserErrorText);
+
         if(checkInventory())
         {
-            // Gætum lokað databasenum á meðan transaction á sér stað
-            // Gætum líka gert transactionið atomic
-            //em.lock();
             for(ShoppingCartItem scItem : shoppingCartItems) {
                 Item item = em.find(Item.class, scItem.getItem().getSKU());
 
@@ -154,16 +159,9 @@ public class ShoppingCardController {
         boolean success = true;
 
         for (ShoppingCartItem scItem : shoppingCartItems) {
-
-            //Query query = em.createNamedQuery("findItemBySku", Item.class);
-            //query.setParameter("SKU", scItem.getItem().getSKU());
-            //TODO handle if item is not available anymore.
-            //Item item  = (Item) query.getSingleResult();
-
             Item item = em.find(Item.class, scItem.getItem().getSKU());
 
             if (item == null) {
-                //This should never happen
                 removeShoppingCartItemFromDatabase(scItem);
                 refreshShoppingCardItems();
                 success = false;

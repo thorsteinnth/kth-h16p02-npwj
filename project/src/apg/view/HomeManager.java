@@ -33,18 +33,9 @@ public class HomeManager implements Serializable
     private Exception exception;
 
     //region ########## Getter and Setter ##########
-    public List<Item> getItems() {
-        try
-        {
-            items = homeController.getItems();
-        }
-        catch (Exception e)
-        {
-            System.err.println(e);
-            handleException(e);
-        }
-        //TODO fara í controller og ná í items
-        return items;
+    public List<Item> getItems()
+    {
+        return homeController.getItems();
     }
 
     public void setItems(List<Item> items) {
@@ -151,6 +142,8 @@ public class HomeManager implements Serializable
     }
     //endregion
 
+    //region ########## Action handlers ##########
+
     public String plusOnClickEventHandler()
     {
         if(item.getStock() > 0)
@@ -183,6 +176,8 @@ public class HomeManager implements Serializable
         e.printStackTrace(System.err);
         exception = e;
     }
+
+    //endregion
 
     /**
      * This return value is needed because of a JSF 2.2 bug. Note 3 on page 7-10

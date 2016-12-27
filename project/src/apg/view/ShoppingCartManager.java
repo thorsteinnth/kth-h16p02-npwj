@@ -2,12 +2,15 @@ package apg.view;
 
 import apg.controller.ShoppingCardController;
 import apg.exceptions.NotEnoughStockException;
+import apg.exceptions.UnknownUserException;
 import apg.model.ShoppingCartItem;
+import apg.utils.SessionUtils;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,26 +32,34 @@ public class ShoppingCartManager implements Serializable
     private String username;
     private String purchaseFailure;
     private boolean isShoppingCartEmpty;
-    private boolean showPopUp;
     private boolean showSuccessBanner;
     private boolean showFailureBanner;
 
     private Exception exception;
 
     //region ########## Getter and Setter ##########
-    public List<ShoppingCartItem> getShoppingCartItems() {
-
-        shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
-
-        if(shoppingCartItems.size() == 0)
+    public List<ShoppingCartItem> getShoppingCartItems()
+    {
+        try
         {
-            isShoppingCartEmpty = true;
+            shoppingCartItems = shoppingCardController.getAllShoppingCartItemsForUser();
+
+            if(shoppingCartItems.size() == 0)
+            {
+                isShoppingCartEmpty = true;
+            }
+            else
+            {
+                isShoppingCartEmpty = false;
+            }
+            return shoppingCartItems;
         }
-        else
+        catch (UnknownUserException e)
         {
-            isShoppingCartEmpty = false;
+            handleException(e);
         }
-        return shoppingCartItems;
+
+        return null;
     }
 
     public void setShoppingCartItems(List<ShoppingCartItem> shoppingCartItems) {
@@ -63,7 +74,8 @@ public class ShoppingCartManager implements Serializable
         this.shoppingCartItem = shoppingCartItem;
     }
 
-    public String getUsername() {
+    public String getUsername()
+    {
         return shoppingCardController.getEmail();
     }
 
@@ -77,14 +89,6 @@ public class ShoppingCartManager implements Serializable
 
     public void setShoppingCartEmpty(boolean shoppingCartEmpty) {
         isShoppingCartEmpty = shoppingCartEmpty;
-    }
-
-    public boolean isShowPopUp() {
-        return showPopUp;
-    }
-
-    public void setShowPopUp(boolean showPopUp) {
-        this.showPopUp = showPopUp;
     }
 
     public boolean isShowSuccessBanner() {
@@ -109,14 +113,6 @@ public class ShoppingCartManager implements Serializable
             return true;
         else
             return false;
-    }
-
-    public String getPurchaseFailure() {
-        return purchaseFailure;
-    }
-
-    public void setPurchaseFailure(String purchaseFailure) {
-        this.purchaseFailure = purchaseFailure;
     }
 
     public String getTotal()
@@ -145,14 +141,12 @@ public class ShoppingCartManager implements Serializable
     public Exception getException() {
         return exception;
     }
-    //endregion
 
     //endregion
 
     //region ########## Action handler ##########
     public String buy()
     {
-        //showPopUp = true;
         hideBanner();
         boolean buyResult;
         try
@@ -174,7 +168,6 @@ public class ShoppingCartManager implements Serializable
             buyResult = false;
             purchaseFailure = purchaseFailureTryAgain;
             showFailureBanner = true;
-            //TODO go to error msg view og eyða út shoppingCartinu
         }
         catch (Exception e)
         {
@@ -218,22 +211,21 @@ public class ShoppingCartManager implements Serializable
         return jsf22Bugfix();
     }
 
-    public String popupYes()
-    {
-        showPopUp = false;
-        return jsf22Bugfix();
-    }
-
-    public String popupNo()
-    {
-        showPopUp = false;
-        return jsf22Bugfix();
-    }
-
     private void hideBanner()
     {
         this.showSuccessBanner = false;
         this.showFailureBanner = false;
+    }
+
+    public void validateUser()
+    {
+        if (getUsername() == SessionUtils.unknownUser)
+        {
+            FacesContext.getCurrentInstance()
+                    .getApplication()
+                    .getNavigationHandler()
+                    .handleNavigation(FacesContext.getCurrentInstance(), null, "login.xhtml");
+        }
     }
 
     private void handleException(Exception e)

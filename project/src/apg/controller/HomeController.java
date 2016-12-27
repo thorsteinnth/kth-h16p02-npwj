@@ -100,5 +100,4 @@ public class HomeController
             return false;
         }
     }
-    //Get shoppingListForUser
 }
