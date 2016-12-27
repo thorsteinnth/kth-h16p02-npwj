@@ -63,4 +63,14 @@ public class AdminController
             em.merge(item);
         }
     }
+
+    public void toggleBanUser(User user)
+    {
+        user.setBanned(!user.isBanned());
+
+        if (!em.contains(user))
+        {
+            em.merge(user);
+        }
+    }
 }

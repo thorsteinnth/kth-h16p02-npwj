@@ -30,6 +30,8 @@ public class AdminManager implements Serializable
     private Item itemToDelete;
     private boolean itemDeleteSuccess;
 
+    private User selectedUser;
+
     //region Getters and setters
 
     public String getNewItemSKU()
@@ -102,6 +104,16 @@ public class AdminManager implements Serializable
         return itemDeleteSuccess;
     }
 
+    public User getSelectedUser()
+    {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User selectedUser)
+    {
+        this.selectedUser = selectedUser;
+    }
+
     //endregion
 
     //region Methods
@@ -141,6 +153,11 @@ public class AdminManager implements Serializable
     public List<User> getAllUsers()
     {
         return this.controller.getAllUsers();
+    }
+
+    public void toggleUserBanned()
+    {
+        this.controller.toggleBanUser(selectedUser);
     }
 
     //endregion
