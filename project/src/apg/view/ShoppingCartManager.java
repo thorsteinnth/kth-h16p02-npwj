@@ -11,19 +11,20 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
-@ManagedBean
+@Named("shoppingCartManager")
 @RequestScoped
 public class ShoppingCartManager implements Serializable
 {
     @EJB
     ShoppingCardController shoppingCardController;
 
-    private final static String purchaseFailureEdit ="purchase did not go through." +
-            " Some items where not available in stock at the moment." +
-            " The basket has been modified to correspond to the inventory status. TODO laga orðalag";
+    private final static String purchaseFailureEdit ="Purchase did not go through." +
+            " Some items are not available in stock at the moment." +
+            " The basket has been modified to correspond to the inventory status.";
     private final static String purchaseFailureTryAgain = "Purchase did not go through." +
             "Something went wrong. Please try again.";
 
