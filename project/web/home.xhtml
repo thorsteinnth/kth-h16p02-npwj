@@ -62,12 +62,11 @@
                                 <h:outputText id="descriptionText" value="#{item.description}"/>
                             </div>
 
-                            <div style="margin-bottom: 10px">
-                                <h:commandButton class="btn btn-default"
+                            <div style="margin-top: 10px">
+                                <h:commandButton class="btn btn-primary"
                                                  value="Add to shopping cart"
                                                  action="#{homeManager.plusOnClickEventHandler}"
-                                                 rendered="#{homeManager.userLoggedIn}"
-                                                 style="border: none; color: #122b40">
+                                                 rendered="#{homeManager.userLoggedIn}">
                                     <f:setPropertyActionListener target="#{homeManager.item}" value="#{item}"/>
                                 </h:commandButton>
 
