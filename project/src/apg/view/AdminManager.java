@@ -24,6 +24,7 @@ public class AdminManager implements Serializable
     AdminController controller;
 
     private String newItemSKU;
+    private String newItemName;
     private String newItemDescription;
     private int newItemPrice;
     private int newItemStock;
@@ -46,6 +47,16 @@ public class AdminManager implements Serializable
     public void setNewItemSKU(String newItemSKU)
     {
         this.newItemSKU = newItemSKU;
+    }
+
+    public String getNewItemName()
+    {
+        return newItemName;
+    }
+
+    public void setNewItemName(String newItemName)
+    {
+        this.newItemName = newItemName;
     }
 
     public String getNewItemDescription()
@@ -130,7 +141,7 @@ public class AdminManager implements Serializable
 
         try
         {
-            this.controller.createNewItem(newItemSKU, newItemDescription, newItemPrice, newItemStock);
+            this.controller.createNewItem(newItemSKU, newItemName, newItemDescription, newItemPrice, newItemStock);
             this.newItemItemCreatedSuccess = true;
         }
         catch (IllegalSkuException ex)

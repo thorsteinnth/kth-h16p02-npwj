@@ -29,7 +29,7 @@ public class AdminController
         return query.getResultList();
     }
 
-    public void createNewItem(String sku, String description, int price, int quantity)
+    public void createNewItem(String sku, String name, String description, int price, int quantity)
             throws ItemAlreadyExistsException, IllegalSkuException
     {
         if (sku.equals(""))
@@ -41,7 +41,7 @@ public class AdminController
         if (itemsWithSameSku.size() > 0)
             throw new ItemAlreadyExistsException();
 
-        Item newItem = new Item(sku, description, price, quantity);
+        Item newItem = new Item(sku, name, description, price, quantity);
         em.persist(newItem);
     }
 
@@ -52,8 +52,9 @@ public class AdminController
         em.remove(itemToRemove);
     }
 
-    public void editItem(Item item, String newDescription, int newPrice, int newStock)
+    public void editItem(Item item, String newName, String newDescription, int newPrice, int newStock)
     {
+        item.setName(newName);
         item.setDescription(newDescription);
         item.setPrice(newPrice);
         item.setStock(newStock);

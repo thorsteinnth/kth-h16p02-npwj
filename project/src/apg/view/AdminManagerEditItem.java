@@ -27,6 +27,7 @@ public class AdminManagerEditItem implements Serializable
     private Item itemToEdit;
 
     private String sku;
+    private String name;
     private String description;
     private int price;
     private int stock;
@@ -41,6 +42,7 @@ public class AdminManagerEditItem implements Serializable
     {
         this.itemToEdit = itemToEdit;
         this.sku = itemToEdit.getSKU();
+        this.name = itemToEdit.getName();
         this.description = itemToEdit.getDescription();
         this.price = itemToEdit.getPrice();
         this.stock = itemToEdit.getStock();
@@ -49,6 +51,16 @@ public class AdminManagerEditItem implements Serializable
     public String getSku()
     {
         return sku;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public String getDescription()
@@ -89,7 +101,7 @@ public class AdminManagerEditItem implements Serializable
     public void save()
     {
         this.editItemSuccess = false;
-        this.controller.editItem(this.itemToEdit, this.description, this.price, this.stock);
+        this.controller.editItem(this.itemToEdit, this.name, this.description, this.price, this.stock);
         this.editItemSuccess = true;
     }
 

@@ -23,6 +23,8 @@ public class Item implements Serializable
     @Id
     @Column(name="SKU", nullable = false)
     private String SKU;
+    @Column(name="ITEMNAME", nullable = false)
+    private String name;
     @Column(name="DESCRIPTION", nullable = true)
     private String description;
     @Column(name="PRICE", nullable = false)
@@ -33,9 +35,10 @@ public class Item implements Serializable
     public Item()
     {}
 
-    public Item(String SKU, String description, int price, int stock)
+    public Item(String SKU, String name, String description, int price, int stock)
     {
         this.SKU = SKU;
+        this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
@@ -46,12 +49,23 @@ public class Item implements Serializable
         return SKU;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
     public String getDescription()
     {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
@@ -88,6 +102,7 @@ public class Item implements Serializable
     {
         return "Item{" +
                 "SKU='" + SKU + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", stock=" + stock +
