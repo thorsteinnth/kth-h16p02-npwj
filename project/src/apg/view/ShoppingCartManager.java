@@ -221,6 +221,7 @@ public class ShoppingCartManager implements Serializable
     {
         if (getUsername() == SessionUtils.unknownUser)
         {
+            // Unknown (not logged in) user. Redirect to login page.
             FacesContext.getCurrentInstance()
                     .getApplication()
                     .getNavigationHandler()
