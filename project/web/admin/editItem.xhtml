@@ -30,7 +30,8 @@
 
             <h:outputLabel for="name" value="Name: "/>
             <div style="margin-bottom: 10px;">
-                <h:inputTextarea rows="1" cols="50" id="name" value="#{adminManagerEditItem.name}"/>
+                <h:inputTextarea rows="1" cols="50" id="name" required="true" requiredMessage="Name is required" value="#{adminManagerEditItem.name}"/>
+                <h:message for="name" style="color:red" />
             </div>
 
             <h:outputLabel for="description" value="Description: "/>

@@ -27,12 +27,14 @@
 
             <h:outputLabel for="newItemSKU" value="SKU: "/>
             <div style="margin-bottom: 10px;">
-            <h:inputTextarea rows="1" cols="50" id="newItemSKU" value="#{adminManager.newItemSKU}"/>
+                <h:inputTextarea rows="1" cols="50" id="newItemSKU" required="true" requiredMessage="SKU is required" value="#{adminManager.newItemSKU}"/>
+                <h:message for="newItemSKU" style="color:red" />
             </div>
 
             <h:outputLabel for="newItemName" value="Name: "/>
             <div style="margin-bottom: 10px;">
-                <h:inputTextarea rows="1" cols="50" id="newItemName" value="#{adminManager.newItemName}"/>
+                <h:inputTextarea rows="1" cols="50" id="newItemName" required="true" requiredMessage="Name is required" value="#{adminManager.newItemName}"/>
+                <h:message for="newItemName" style="color:red" />
             </div>
 
             <h:outputLabel for="newItemDescription" value="Description: "/>
