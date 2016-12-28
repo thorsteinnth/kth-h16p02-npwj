@@ -143,6 +143,10 @@ public class ShoppingCartManager implements Serializable
         return exception;
     }
 
+    public String getPurchaseFailure() {
+        return purchaseFailure;
+    }
+
     //endregion
 
     //region ########## Action handler ##########
